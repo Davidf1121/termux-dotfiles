@@ -33,5 +33,3 @@ chsh -s zsh
 
 echo "✅ Installation Complete! Run 'exec zsh' to start."
 
-# Ensure colors are ready before running fastfetch
-(sleep 0.1 && fastfetch -c ~/.config/fastfetch/config.jsonc)

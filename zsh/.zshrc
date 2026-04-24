@@ -1,3 +1,4 @@
+fastfetch -c ~/.config/fastfetch/config.jsonc
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -135,5 +136,3 @@ fdown() {
 
 
 
-# Force terminal into color mode and run fastfetch
-[[ -t 1 ]] && printf "\e[0m" && fastfetch -c ~/.config/fastfetch/config.jsonc
