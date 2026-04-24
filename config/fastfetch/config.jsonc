@@ -1,9 +1,10 @@
 {
     "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
     "logo": {
-        "type": "small",
+        "source": "/data/data/com.termux/files/home/.config/fastfetch/logo.txt",
         "padding": {
-            "top": 1
+            "top": 1,
+            "right": 2
         }
     },
     "display": {
@@ -43,9 +44,29 @@
             "keyColor": "red"
         },
         {
+            "type": "cpu",
+            "key": "󰻠 CPU",
+            "keyColor": "yellow"
+        },
+        {
+            "type": "gpu",
+            "key": "󰢮 GPU",
+            "keyColor": "blue"
+        },
+        {
             "type": "memory",
             "key": "󰍛 Memory",
-            "keyColor": "yellow"
+            "keyColor": "magenta"
+        },
+        {
+            "type": "disk",
+            "key": "󰋊 Disk",
+            "keyColor": "cyan"
+        },
+        {
+            "type": "battery",
+            "key": "󰁹 Battery",
+            "keyColor": "green"
         },
         "break",
         "colors"
