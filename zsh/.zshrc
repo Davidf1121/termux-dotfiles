@@ -133,5 +133,7 @@ fdown() {
   fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'
 }
 
-# Ensure colors are ready before running fastfetch
-(sleep 0.1 && fastfetch -c ~/.config/fastfetch/config.jsonc)
+
+
+# Force terminal into color mode and run fastfetch
+[[ -t 1 ]] && printf "\e[0m" && fastfetch -c ~/.config/fastfetch/config.jsonc
