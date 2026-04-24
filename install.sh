@@ -4,7 +4,6 @@ echo "🚀 Starting God-Tier Termux Installation..."
 
 # 1. Update and Install Packages
 pkg update -y
-pkg install zsh fastfetch -c ~/.config/fastfetch/config.jsonc git curl lsd bat zoxide fzf cmatrix tmux -y
 
 # 2. Setup Zsh & Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -25,8 +24,6 @@ fi
 # 5. Apply Configs from Repo
 cd ~/termux-dotfiles
 cp zsh/.zshrc ~/.zshrc
-mkdir -p ~/.config/fastfetch -c ~/.config/fastfetch/config.jsonc
-cp config/fastfetch -c ~/.config/fastfetch/config.jsonc/config.jsonc ~/.config/fastfetch -c ~/.config/fastfetch/config.jsonc/config.jsonc
 mkdir -p ~/.termux
 cp termux/colors.properties ~/.termux/colors.properties
 cp tmux/.tmux.conf.local ~/.tmux.conf.local
@@ -35,3 +32,6 @@ termux-reload-settings
 chsh -s zsh
 
 echo "✅ Installation Complete! Run 'exec zsh' to start."
+
+# Ensure colors are ready before running fastfetch
+(sleep 0.1 && fastfetch -c ~/.config/fastfetch/config.jsonc)

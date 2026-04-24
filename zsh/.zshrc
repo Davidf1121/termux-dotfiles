@@ -109,7 +109,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-fastfetch -c ~/.config/fastfetch/config.jsonc
 alias ls='lsd'
 alias l='ls -l'
 alias la='ls -a'
@@ -133,3 +132,6 @@ bindkey '^R' fzf-history-widget
 fdown() {
   fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'
 }
+
+# Ensure colors are ready before running fastfetch
+(sleep 0.1 && fastfetch -c ~/.config/fastfetch/config.jsonc)
