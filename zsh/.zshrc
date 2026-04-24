@@ -109,7 +109,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-fastfetch --color always
+fastfetch
 alias ls='lsd'
 alias l='ls -l'
 alias la='ls -a'
