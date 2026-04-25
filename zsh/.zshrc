@@ -191,3 +191,10 @@ function y() {
 # Initialize Tools
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
+
+# Custom clear behavior
+function cls() {
+    clear
+    fastfetch -c ~/.config/fastfetch/config.jsonc
+}
+alias clear='cls'
