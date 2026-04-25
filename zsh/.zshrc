@@ -136,3 +136,58 @@ fdown() {
 
 
 
+# Modern replacements
+alias ls='eza'
+alias ll='eza -lah'
+alias la='eza -a'
+alias lt='eza --tree --level=2'
+alias cat='bat'
+
+# Fancy system tools
+alias top='btop'
+alias fm='ranger'
+alias ff='fastfetch'
+alias mux='tmux'
+
+# Search / utility
+alias findf='fzf'
+alias cls='clear'
+
+# Quick config reload
+alias zrc='source ~/.zshrc'
+
+# Edit config
+alias ezrc='nano ~/.zshrc'
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		cd "$cwd"
+	fi
+	rm -f "$tmp"
+}
+
+# --- Updated Aliases & Tools ---
+alias ls='eza'
+alias ll='eza -lah'
+alias la='eza -a'
+alias lt='eza --tree --level=2'
+alias top='btop'
+alias fm='ranger'
+alias ff='fastfetch'
+alias mux='tmux'
+alias zrc='source ~/.zshrc'
+alias ezrc='nano ~/.zshrc'
+alias cls='clear'
+alias y='yazi'
+
+function y() {
+    local tmp="/tmp/yazi-cwd.$$"
+    yazi "$@" --cwd-file="$tmp"
+    [ -f "$tmp" ] && cd "$(cat "$tmp")"
+    rm -f "$tmp"
+}
+
+# Initialize Tools
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
