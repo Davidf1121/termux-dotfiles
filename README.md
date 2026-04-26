@@ -31,6 +31,9 @@ High-performance Termux environment with modern CLI tools.
 | `ezrc` | `nano ~/.zshrc` (edit config) |
 | `cls` | `clear` (clear screen) |
 
+## Example image
+![alt text](Screenshot_2026-04-25-20-50-34-473-edit_com.termux.jpg)
+![alt text](Screenshot_2026-04-25-13-18-07-766-edit_com.termux.jpg)
 ## Installation
 Run the `install.sh` script to deploy the full environment.
 EOF
