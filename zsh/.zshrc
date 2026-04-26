@@ -1,6 +1,8 @@
 # --- Startup ---
 # Display system info
-fastfetch -c ~/.config/fastfetch/config.jsonc
+if command -v fastfetch > /dev/null 2>&1; then
+    fastfetch -c ~/.config/fastfetch/config.jsonc
+fi
 
 # --- Oh My Zsh Configuration ---
 export ZSH="$HOME/.oh-my-zsh"
@@ -10,12 +12,19 @@ plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
 
 # --- Tool Initializations ---
-eval "$(starship init zsh)"
-eval "$(zoxide init zsh)"
-source <(fzf --zsh)
+[[ -x "$(command -v starship)" ]] && eval "$(starship init zsh)"
+[[ -x "$(command -v zoxide)" ]] && eval "$(zoxide init zsh)"
+if command -v fzf > /dev/null 2>&1; then
+    # Use modern fzf initialization if available (fzf 0.48+)
+    fzf --zsh > /dev/null 2>&1 && source <(fzf --zsh) || source /usr/share/doc/fzf/examples/key-bindings.zsh 2>/dev/null
+fi
 
 # --- Aliases ---
 # Modern replacements
+if command -v batcat > /dev/null 2>&1; then
+    alias bat='batcat'
+fi
+
 alias ls='eza'
 alias ll='eza -lah'
 alias la='eza -a'
@@ -38,13 +47,25 @@ alias ezrc='nano ~/.zshrc'
 # Custom clear behavior: clear screen and show fastfetch
 function cls() {
     command clear
-    fastfetch -c ~/.config/fastfetch/config.jsonc
+    if command -v fastfetch > /dev/null 2>&1; then
+        fastfetch -c ~/.config/fastfetch/config.jsonc
+    fi
 }
 alias clear='cls'
 
 # Search files and preview with bat
 function fdown() {
-  fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'
+  if command -v fzf > /dev/null 2>&1; then
+    if command -v bat > /dev/null 2>&1; then
+      fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'
+    elif command -v batcat > /dev/null 2>&1; then
+      fzf --preview 'batcat --style=numbers --color=always --line-range :500 {}'
+    else
+      fzf --preview 'cat {}'
+    fi
+  else
+    echo "fzf is not installed."
+  fi
 }
 
 # Yazi with auto-cd on exit

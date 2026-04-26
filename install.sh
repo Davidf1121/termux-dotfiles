@@ -3,11 +3,93 @@
 # Get the directory where the script is located
 DOTFILES_DIR=$(cd "$(dirname "$0")" && pwd)
 
-echo "🚀 Deploying God-Tier Termux Environment..."
+echo "🚀 Deploying God-Tier Environment..."
 
-# Update and install all tools
-pkg update -y && pkg upgrade -y
-pkg install zsh git curl starship eza bat ranger yazi fzf tmux fastfetch zoxide cmatrix -y
+# OS Detection
+IF_TERMUX=false
+if [ -d "/data/data/com.termux" ]; then
+    IF_TERMUX=true
+    PKGER="pkg"
+    UPDATE="pkg update -y && pkg upgrade -y"
+    INSTALL="pkg install -y"
+else
+    PKGER="sudo apt"
+    UPDATE="sudo apt update"
+    INSTALL="sudo apt install -y"
+fi
+
+echo "Detected environment: $([ "$IF_TERMUX" = true ] && echo "Termux" || echo "Standard Linux")"
+
+# Update package list
+echo "Updating packages..."
+eval $UPDATE
+
+# Essential dependencies
+echo "Installing essential dependencies..."
+if [ "$IF_TERMUX" = true ]; then
+    $INSTALL zsh git curl wget tmux fzf btop cmatrix
+else
+    # On Linux, some tools might need extra steps or have different names
+    $INSTALL zsh git curl wget tmux fzf btop cmatrix software-properties-common gpg
+fi
+
+# Install Fastfetch
+if ! command -v fastfetch > /dev/null 2>&1; then
+    if [ "$IF_TERMUX" = true ]; then
+        $INSTALL fastfetch
+    else
+        echo "Installing Fastfetch via PPA..."
+        sudo add-apt-repository ppa:zhangsongcui3371/fastfetch -y
+        sudo apt update
+        $INSTALL fastfetch
+    fi
+fi
+
+# Install Starship
+if ! command -v starship > /dev/null 2>&1; then
+    echo "Installing Starship..."
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
+fi
+
+# Install Eza
+if ! command -v eza > /dev/null 2>&1; then
+    if [ "$IF_TERMUX" = true ]; then
+        $INSTALL eza
+    else
+        echo "Installing Eza..."
+        sudo mkdir -p /etc/apt/keyrings
+        wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+        sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+        sudo apt update
+        $INSTALL eza
+    fi
+fi
+
+# Install Bat
+if ! command -v bat > /dev/null 2>&1 && ! command -v batcat > /dev/null 2>&1; then
+    $INSTALL bat
+fi
+
+# Install Zoxide
+if ! command -v zoxide > /dev/null 2>&1; then
+    if [ "$IF_TERMUX" = true ]; then
+        $INSTALL zoxide
+    else
+        curl -sS https://zoxide.xyz/install.sh | bash
+    fi
+fi
+
+# Install Ranger/Yazi
+$INSTALL ranger
+if ! command -v yazi > /dev/null 2>&1; then
+    if [ "$IF_TERMUX" = true ]; then
+        $INSTALL yazi
+    else
+        echo "Attempting to install yazi..."
+        $INSTALL yazi || echo "Could not install yazi automatically. Please install it manually: https://yazi-rs.github.io/docs/installation"
+    fi
+fi
 
 # Setup Zsh & Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -30,7 +112,6 @@ fi
 
 # Create necessary directories
 mkdir -p ~/.config/fastfetch
-mkdir -p ~/.termux
 
 # Apply Configs using symlinks
 echo "Applying configurations..."
@@ -41,16 +122,25 @@ for file in "$DOTFILES_DIR/config/fastfetch/"*; do
     [ -f "$file" ] && ln -sf "$file" "$HOME/.config/fastfetch/$(basename "$file")"
 done
 
-ln -sf "$DOTFILES_DIR/termux/colors.properties" "$HOME/.termux/colors.properties"
 ln -sf "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
+
+# Termux-specific configurations
+if [ "$IF_TERMUX" = true ]; then
+    echo "Applying Termux-specific settings..."
+    mkdir -p ~/.termux
+    ln -sf "$DOTFILES_DIR/termux/colors.properties" "$HOME/.termux/colors.properties"
+    termux-reload-settings
+fi
 
 # Disable login message
 touch ~/.hushlogin
 
-# Reload Termux settings
-termux-reload-settings
-
 # Change default shell to zsh
-chsh -s zsh
+echo "Changing default shell to zsh..."
+if [ "$IF_TERMUX" = true ]; then
+    chsh -s zsh
+else
+    sudo chsh -s $(which zsh) $USER
+fi
 
 echo "✅ Deployment Successful! Run 'exec zsh' to start."
