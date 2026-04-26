@@ -1,0 +1,15 @@
+# Zsh
+.zcompdump*
+.zsh_history
+
+# Fastfetch
+# (None usually needed)
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
