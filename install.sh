@@ -7,7 +7,7 @@ echo "🚀 Deploying God-Tier Termux Environment..."
 
 # Update and install all tools
 pkg update -y && pkg upgrade -y
-pkg install zsh git curl starship eza bat btop ranger yazi fzf tmux fastfetch zoxide cmatrix -y
+pkg install zsh git curl starship eza bat ranger yazi fzf tmux fastfetch zoxide cmatrix -y
 
 # Setup Zsh & Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
