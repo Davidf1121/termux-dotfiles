@@ -21,6 +21,16 @@ fi
 
 echo "Detected environment: $([ "$IF_TERMUX" = true ] && echo "Termux" || echo "Standard Linux")"
 
+# Robust deployment function
+deploy() {
+    local src="$1"
+    local dest="$2"
+    echo "Linking $src -> $dest"
+    rm -rf "$dest"
+    mkdir -p "$(dirname "$dest")"
+    ln -sf "$src" "$dest"
+}
+
 # Update package list
 echo "Updating packages..."
 eval $UPDATE
@@ -109,29 +119,26 @@ echo "Installing Zsh plugins..."
 if [ ! -d "$HOME/.tmux" ]; then
     echo "Setting up Oh My Tmux..."
     git clone https://github.com/gpakosz/.tmux.git "$HOME/.tmux"
-    ln -sf "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
+    deploy "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
 fi
-
-# Create necessary directories
-mkdir -p "$HOME/.config/fastfetch"
-mkdir -p "$HOME/.termux"
 
 # Apply Configs using absolute paths
 echo "Applying configurations..."
-ln -sf "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
-ln -sf "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
+deploy "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
+deploy "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
 
 # Handle fastfetch configs specially for absolute logo path
+mkdir -p "$HOME/.config/fastfetch"
 for file in "$DOTFILES_DIR/config/fastfetch/"*; do
     if [ -f "$file" ]; then
         filename=$(basename "$file")
         if [ "$filename" = "config.jsonc" ]; then
             echo "Configuring Fastfetch with absolute logo path..."
-            cp "$file" "$HOME/.config/fastfetch/$filename"
-            # Replace ~/.config/fastfetch/logo.txt with the actual absolute path
-            sed -i "s|~/.config/fastfetch/logo.txt|$HOME/.config/fastfetch/logo.txt|g" "$HOME/.config/fastfetch/$filename"
+            rm -f "$HOME/.config/fastfetch/$filename"
+            # Use sed to replace ~ with actual $HOME while copying
+            sed "s|~/.config/fastfetch/logo.txt|$HOME/.config/fastfetch/logo.txt|g" "$file" > "$HOME/.config/fastfetch/$filename"
         else
-            ln -sf "$file" "$HOME/.config/fastfetch/$filename"
+            deploy "$file" "$HOME/.config/fastfetch/$filename"
         fi
     fi
 done
@@ -139,7 +146,7 @@ done
 # Termux-specific configurations
 if [ "$IF_TERMUX" = true ]; then
     echo "Applying Termux-specific settings..."
-    ln -sf "$DOTFILES_DIR/termux/colors.properties" "$HOME/.termux/colors.properties"
+    deploy "$DOTFILES_DIR/termux/colors.properties" "$HOME/.termux/colors.properties"
     termux-reload-settings
 fi
 
@@ -148,7 +155,11 @@ touch "$HOME/.hushlogin"
 
 # Change default shell to zsh
 echo "Changing default shell to zsh..."
-chsh -s "$(which zsh)"
+if [ "$IF_TERMUX" = true ]; then
+    chsh -s "$(command -v zsh)"
+else
+    sudo chsh -s "$(command -v zsh)" "$USER"
+fi
 
 echo "✅ Deployment Successful! Switching to zsh..."
-exec zsh -l
+exec "$(command -v zsh)" -l

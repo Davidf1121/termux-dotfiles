@@ -1,5 +1,3 @@
 #!/bin/bash
-# Enable verbose logging for debugging
-set -x
-# Run the main installation script
-./install.sh "$@"
+# Wrapper to run the install script in debug mode
+bash -x "$(dirname "$0")/install.sh" "$@"
