@@ -95,12 +95,23 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
     CHSH=no RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
-# Install plugins
+# Install plugins and themes
 ZSH_CUSTOM=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}
 mkdir -p "$ZSH_CUSTOM/plugins"
-msg "🔌 Setting up Zsh plugins..."
+mkdir -p "$ZSH_CUSTOM/themes"
+
+msg "🔌 Setting up Zsh plugins & themes..."
+msg "📥 Downloading Powerlevel10k..."
+git_clone_or_update "https://github.com/romkatv/powerlevel10k.git" "$ZSH_CUSTOM/themes/powerlevel10k"
+
+msg "📥 Downloading plugins..."
 git_clone_or_update "https://github.com/zsh-users/zsh-syntax-highlighting.git" "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-git_clone_or_update "https://github.com/zsh-users/zsh-autosuggestions" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+git_clone_or_update "https://github.com/zsh-users/zsh-autosuggestions.git" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+
+# Setup Font for Powerlevel10k
+msg "📥 Downloading Meslo Nerd Font for Termux..."
+mkdir -p "$HOME/.termux"
+curl -fLo "$HOME/.termux/font.ttf" "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf"
 
 # Setup Tmux
 msg "🪟 Setting up Oh My Tmux..."
