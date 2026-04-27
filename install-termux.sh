@@ -9,20 +9,11 @@ set -o pipefail # Return the exit code of the last command in the pipe that fail
 LOG_FILE="install.log"
 VERBOSE=${VERBOSE:-false}
 
-# Save original stdout to FD 3
-exec 3>&1
+# Redirect stdout and stderr to the log file and show progress live
+exec > >(tee -i "$LOG_FILE") 2>&1
 
-# Redirect stdout and stderr to the log file
-# If VERBOSE is true, also tee to stdout
-if [ "$VERBOSE" = true ]; then
-    exec > >(tee -i "$LOG_FILE") 2>&1
-else
-    exec > "$LOG_FILE" 2>&1
-fi
-
-# Function to print messages to the terminal (via FD 3) and the log file
+# Function to print messages
 msg() {
-    echo -e "$1" >&3
     echo -e "$1"
 }
 
@@ -35,7 +26,7 @@ msg "📝 Logging all output to $LOG_FILE"
 # Ensure coreutils for realpath
 if ! command -v realpath > /dev/null 2>&1; then
     msg "Installing coreutils..."
-    apt update && apt install -y coreutils
+    pkg update && pkg install -y coreutils
 fi
 
 # Robust deployment function with absolute paths
@@ -48,8 +39,9 @@ deploy() {
         return 0 # Return 0 to prevent set -e from stopping the script during "skips"
     fi
 
-    # Convert to absolute path
+    # Convert to absolute paths
     src=$(realpath "$src")
+    dest=$(realpath -m "$dest")
 
     msg "🔗 Linking $src -> $dest"
     
@@ -76,14 +68,14 @@ git_clone_or_update() {
     fi
 }
 
-# Update package list using apt
+# Update package list using pkg
 msg "🔄 Updating package lists..."
-apt update
-apt upgrade -y
+pkg update
+pkg upgrade -y
 
 # Force re-installation/update of core tools (btop removed)
 msg "🛠️ Installing/Updating core tools..."
-apt install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch starship eza bat zoxide ranger yazi
+pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch starship eza bat zoxide ranger yazi
 
 # Refresh command hash
 hash -r

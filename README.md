@@ -4,10 +4,15 @@ High-performance Termux environment with modern CLI tools.
 
 ## Core Toolset
 - **Shell**: Zsh + Oh My Zsh
-- **Prompt**: Starship
+- **Prompt**: Powerlevel10k
 - **Navigation**: Zoxide, Yazi (file manager), Ranger
 - **System**: Fastfetch, Tmux
 - **Utils**: Eza (modern ls), Bat (syntax cat), FZF
+
+## Font Requirement
+This setup uses Powerlevel10k, which requires a Nerd Font for icons to display correctly.
+- **Termux**: The installer automatically downloads and sets up `MesloLGS NF Regular.ttf` in `~/.termux/font.ttf`.
+- **Desktop Linux**: You should manually install a Nerd Font (like MesloLGS NF) and set it in your terminal settings.
 
 ## Commands and Aliases
 
