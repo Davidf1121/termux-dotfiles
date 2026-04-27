@@ -16,7 +16,6 @@ This document outlines the systematic transformation of a stock Termux installat
 - **File System**: Replaced `ls` with `eza` (including aliases: `ls`, `ll`, `la`, `lt`) and `cat` with `bat` (syntax-highlighted).
 - **Navigation**: Implemented `Zoxide` (intelligent directory jumping) and integrated `FZF` (fuzzy finder) for history and file searching.
 - **File Management**: Installed `ranger` and `yazi` (wrapped with a shell function for automatic directory switching).
-- **System Monitoring**: Replaced standard utilities with `btop`.
 - **Multiplexing**: Installed and configured `tmux` with an "Oh My Tmux" dashboard status bar.
 - **Environment**: Initialized `starship` as a fallback/secondary prompt engine.
 

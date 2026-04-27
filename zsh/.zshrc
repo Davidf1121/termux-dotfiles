@@ -53,10 +53,6 @@ elif command -v bat > /dev/null 2>&1; then
     alias cat='bat'
 fi
 
-if command -v btop > /dev/null 2>&1; then
-    alias top='btop'
-fi
-
 if command -v ranger > /dev/null 2>&1; then
     alias fm='ranger'
 fi
