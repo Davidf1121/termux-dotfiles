@@ -30,21 +30,18 @@ DOTFILES_DIR=$(cd "$(dirname "$0")" && pwd)
 
 echo "🛰️  Starting Environment Detection..."
 
-# OS Detection
+# OS Detection and Execution
 if [ -d "/data/data/com.termux" ]; then
+    INSTALLER="$DOTFILES_DIR/install-termux.sh"
     echo "📱 Detected Termux environment."
-    chmod +x "$DOTFILES_DIR/install-termux.sh"
-    if [ "$VERBOSE" = true ]; then
-        bash -x "$DOTFILES_DIR/install-termux.sh"
-    else
-        "$DOTFILES_DIR/install-termux.sh"
-    fi
 else
+    INSTALLER="$DOTFILES_DIR/install-linux.sh"
     echo "💻 Detected Linux environment."
-    chmod +x "$DOTFILES_DIR/install-linux.sh"
-    if [ "$VERBOSE" = true ]; then
-        bash -x "$DOTFILES_DIR/install-linux.sh"
-    else
-        "$DOTFILES_DIR/install-linux.sh"
-    fi
+fi
+
+chmod +x "$INSTALLER"
+if [ "$VERBOSE" = true ]; then
+    bash -x "$INSTALLER"
+else
+    "$INSTALLER"
 fi
