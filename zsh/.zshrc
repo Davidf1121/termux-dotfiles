@@ -1,4 +1,6 @@
 # --- Startup ---
+export PATH="$HOME/.local/bin:$PATH"
+
 # Display system info
 if command -v fastfetch > /dev/null 2>&1; then
     fastfetch -c ~/.config/fastfetch/config.jsonc
@@ -95,7 +97,7 @@ function fdown() {
   fi
 }
 
-# Yazi with auto-cd on exit
+# --- Yazi with auto-cd on exit ---
 if command -v yazi > /dev/null 2>&1; then
     function y() {
         local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
@@ -105,9 +107,4 @@ if command -v yazi > /dev/null 2>&1; then
         fi
         rm -f "$tmp"
     }
-fi
-
-# --- Keybindings ---
-if command -v fzf > /dev/null 2>&1; then
-    bindkey '^R' fzf-history-widget
 fi
