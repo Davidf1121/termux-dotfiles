@@ -35,5 +35,19 @@ High-performance Termux environment with modern CLI tools.
 ![alt text](Screenshot_2026-04-25-20-50-34-473-edit_com.termux.jpg)
 ![alt text](Screenshot_2026-04-25-13-18-07-766-edit_com.termux.jpg)
 ## Installation
-Run the `install.sh` script to deploy the full environment.
-EOF
+
+Run the following command to deploy the full environment:
+
+```bash
+bash install.sh
+```
+
+## Troubleshooting
+
+If you encounter any issues during installation, use the debug installer for full visibility:
+
+```bash
+bash debug-install.sh
+```
+
+This will provide detailed logs and system information to help diagnose the problem.

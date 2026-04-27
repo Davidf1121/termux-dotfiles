@@ -1,3 +1,6 @@
+# Logs
+install.log
+
 # Zsh
 .zcompdump*
 .zsh_history
