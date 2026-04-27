@@ -6,11 +6,7 @@ set -u          # Treat unset variables as an error
 set -o pipefail # Return the exit code of the last command in the pipe that failed
 
 # Logging setup
-LOG_FILE="install.log"
 VERBOSE=${VERBOSE:-false}
-
-# Redirect stdout and stderr to the log file and show progress live
-exec > >(tee -i "$LOG_FILE") 2>&1
 
 # Function to print messages
 msg() {
@@ -21,7 +17,6 @@ msg() {
 DOTFILES_DIR=$(cd "$(dirname "$0")" && pwd)
 
 msg "🚀 Deploying God-Tier Environment for Termux..."
-msg "📝 Logging all output to $LOG_FILE"
 
 # Ensure coreutils for realpath
 if ! command -v realpath > /dev/null 2>&1; then
@@ -100,11 +95,6 @@ msg "📥 Downloading plugins..."
 git_clone_or_update "https://github.com/zsh-users/zsh-syntax-highlighting.git" "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
 git_clone_or_update "https://github.com/zsh-users/zsh-autosuggestions.git" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 
-# Setup Font for Powerlevel10k
-msg "📥 Downloading Meslo Nerd Font for Termux..."
-mkdir -p "$HOME/.termux"
-curl -fLo "$HOME/.termux/font.ttf" "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf"
-
 # Setup Tmux
 msg "🪟 Setting up Oh My Tmux..."
 git_clone_or_update "https://github.com/gpakosz/.tmux.git" "$HOME/.tmux"
@@ -149,4 +139,3 @@ chsh -s zsh
 
 msg "✨ Termux Deployment Successful!"
 msg "👉 Please restart Termux or type 'zsh' to begin."
-msg "📜 Check $LOG_FILE for details."
