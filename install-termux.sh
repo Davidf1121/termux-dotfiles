@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Termux installation script with enhanced error handling and visibility
-set -e          # Exit immediately if a command exits with a non-zero status
+# set -e          # Removed for better recovery
 set -u          # Treat unset variables as an error
 set -o pipefail # Return the exit code of the last command in the pipe that failed
 
@@ -24,31 +24,6 @@ if ! command -v realpath > /dev/null 2>&1; then
     pkg update && pkg install -y coreutils
 fi
 
-# Robust deployment function with absolute paths
-deploy() {
-    local src="$1"
-    local dest="$2"
-
-    if [ ! -e "$src" ]; then
-        msg "⚠️  Source $src does not exist, skipping..."
-        return 0 # Return 0 to prevent set -e from stopping the script during "skips"
-    fi
-
-    # Convert to absolute paths
-    src=$(realpath "$src")
-    dest=$(realpath -m "$dest")
-
-    msg "🔗 Linking $src -> $dest"
-    
-    # Ensure parent directory exists
-    mkdir -p "$(dirname "$dest")"
-    
-    # Remove existing destination safely
-    rm -rf "$dest"
-    ln -sf "$src" "$dest"
-    msg "✅ Successfully linked $src"
-}
-
 # Git helper function
 git_clone_or_update() {
     local repo_url="$1"
@@ -68,7 +43,7 @@ msg "🔄 Updating package lists..."
 pkg update
 pkg upgrade -y
 
-# Force re-installation/update of core tools (btop removed)
+# Force re-installation/update of core tools
 msg "🛠️ Installing/Updating core tools..."
 pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch starship eza bat zoxide ranger yazi
 
@@ -78,12 +53,11 @@ hash -r
 # Setup Zsh & Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     msg "🐚 Installing Oh My Zsh..."
-    # Oh My Zsh installation can fail if not handled properly in non-interactive environments
     CHSH=no RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
 # Install plugins and themes
-ZSH_CUSTOM=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}
+ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
 mkdir -p "$ZSH_CUSTOM/plugins"
 mkdir -p "$ZSH_CUSTOM/themes"
 
@@ -93,20 +67,20 @@ git_clone_or_update "https://github.com/romkatv/powerlevel10k.git" "$ZSH_CUSTOM/
 
 msg "📥 Downloading plugins..."
 git_clone_or_update "https://github.com/zsh-users/zsh-syntax-highlighting.git" "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-git_clone_or_update "https://github.com/zsh-users/zsh-autosuggestions.git" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+git_clone_or_update "https://github.com/zsh-users/zsh-autosuggestions" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 
 # Setup Tmux
 msg "🪟 Setting up Oh My Tmux..."
 git_clone_or_update "https://github.com/gpakosz/.tmux.git" "$HOME/.tmux"
-deploy "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
+ln -sf "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
 
 # Apply Configs using absolute paths
 msg "⚙️ Applying configurations..."
-deploy "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
-deploy "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
+ln -sf "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
+ln -sf "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
 
-# Fastfetch standard location explanation
-msg "ℹ️ Fastfetch configurations are located in $HOME/.config/fastfetch/ (standard location)"
+# Fastfetch standard location
+msg "ℹ️ Configuring Fastfetch..."
 mkdir -p "$HOME/.config/fastfetch"
 for file in "$DOTFILES_DIR/config/fastfetch/"*; do
     if [ -f "$file" ]; then
@@ -114,17 +88,39 @@ for file in "$DOTFILES_DIR/config/fastfetch/"*; do
         target="$HOME/.config/fastfetch/$filename"
         if [ "$filename" = "config.jsonc" ]; then
             msg "🔧 Configuring Fastfetch with absolute logo path..."
-            # Use sed to replace ~ with actual $HOME while copying
             sed "s|~/.config/fastfetch/logo.txt|$HOME/.config/fastfetch/logo.txt|g" "$file" > "$target"
         else
-            deploy "$file" "$target"
+            ln -sf "$(realpath "$file")" "$target"
         fi
     fi
 done
 
 # Termux-specific configurations
 msg "📱 Applying Termux-specific settings..."
-deploy "$DOTFILES_DIR/termux/colors.properties" "$HOME/.termux/colors.properties"
+mkdir -p "$HOME/.termux"
+cat <<EOF > "$HOME/.termux/colors.properties"
+# Neon Theme
+background: #1a1b26
+foreground: #a9b1d6
+cursor: #c0caf5
+color0: #15161e
+color1: #f7768e
+color2: #9ece6a
+color3: #e0af68
+color4: #7aa2f7
+color5: #bb9af7
+color6: #7dcfff
+color7: #a9b1d6
+color8: #414868
+color9: #f7768e
+color10: #9ece6a
+color11: #e0af68
+color12: #7aa2f7
+color13: #bb9af7
+color14: #7dcfff
+color15: #c0caf5
+EOF
+
 if command -v termux-reload-settings > /dev/null 2>&1; then
     msg "♻️ Reloading Termux settings..."
     termux-reload-settings
