@@ -11,8 +11,7 @@ High-performance Termux environment with modern CLI tools.
 
 ## Font Requirement
 This setup uses Powerlevel10k, which requires a Nerd Font for icons to display correctly.
-- **Termux**: The installer automatically downloads and sets up `MesloLGS NF Regular.ttf` in `~/.termux/font.ttf`.
-- **Desktop Linux**: You should manually install a Nerd Font (like MesloLGS NF) and set it in your terminal settings.
+- **Termux/Linux**: Run `p10k configure` upon first launch. Powerlevel10k will offer to install the recommended MesloLGS NF font for you. Follow the on-screen instructions to complete the setup.
 
 ## Commands and Aliases
 
