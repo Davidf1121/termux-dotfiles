@@ -10,7 +10,7 @@ VERBOSE=${VERBOSE:-false}
 
 # Function to print messages
 msg() {
-    echo -e "$1"
+    echo -e "$1" >&1
 }
 
 # Get the directory where the script is located (absolute path)
@@ -18,24 +18,27 @@ DOTFILES_DIR=$(cd "$(dirname "$0")" && pwd)
 
 msg "🚀 Deploying God-Tier Environment for Termux..."
 
-# Ensure coreutils for realpath
+# Ensure coreutils for realpath (though we're moving away from its dependency in deploy)
 if ! command -v realpath > /dev/null 2>&1; then
     msg "Installing coreutils..."
     pkg update && pkg install -y coreutils
 fi
 
-# Deployment function using realpath
+# Deployment function - Aggressive cleaning and absolute paths
 deploy() {
     local src="$1"
     local dest="$2"
     
     msg "🔗 Symlinking $(basename "$src") -> $dest"
+    
+    # Aggressively remove whatever is currently at the target path
+    rm -f "$dest" || rm -rf "$dest"
+    
+    # Ensure parent directory exists
     mkdir -p "$(dirname "$dest")"
     
-    # Remove if it exists to avoid nested links or errors
-    rm -rf "$dest"
-    
-    ln -sf "$(realpath "$src")" "$dest"
+    # Use paths directly (expected to be absolute)
+    ln -sf "$src" "$dest"
 }
 
 # Git helper function
@@ -93,13 +96,30 @@ msg "⚙️ Applying configurations..."
 deploy "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
 deploy "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
 
-# Fastfetch standard location
+# Fastfetch standard location - Handle with loop and sed for logo path
 msg "ℹ️ Configuring Fastfetch..."
-deploy "$DOTFILES_DIR/config/fastfetch" "$HOME/.config/fastfetch"
+mkdir -p "$HOME/.config/fastfetch"
+for file in "$DOTFILES_DIR/config/fastfetch/"*; do
+    if [ -f "$file" ]; then
+        filename=$(basename "$file")
+        target="$HOME/.config/fastfetch/$filename"
+        # Ensure any existing config or broken link is removed
+        rm -f "$target" || rm -rf "$target"
+        if [ "$filename" = "config.jsonc" ]; then
+            msg "🔧 Configuring Fastfetch with absolute logo path..."
+            # Use sed to replace ~ with actual $HOME
+            sed "s|~/.config/fastfetch/logo.txt|$HOME/.config/fastfetch/logo.txt|g" "$file" > "$target"
+        else
+            deploy "$file" "$target"
+        fi
+    fi
+done
 
 # Termux-specific configurations - Direct write Neon theme
 msg "📱 Applying Termux-specific settings..."
 mkdir -p "$HOME/.termux"
+# Ensure any existing file or broken link is removed
+rm -f "$HOME/.termux/colors.properties" || rm -rf "$HOME/.termux/colors.properties"
 cat <<EOF > "$HOME/.termux/colors.properties"
 # Neon Theme
 background: #1a1b26

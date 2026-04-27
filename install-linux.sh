@@ -95,12 +95,6 @@ if ! command -v eza > /dev/null 2>&1; then
     sudo apt-get install -yq eza
 fi
 
-# Install Starship
-if ! command -v starship > /dev/null 2>&1; then
-    echo "📥 Installing Starship..."
-    curl -sS https://starship.rs/install.sh | sh -s -- -y
-fi
-
 # Install Bat
 if ! command -v bat > /dev/null 2>&1 && ! command -v batcat > /dev/null 2>&1; then
     echo "📥 Installing bat..."
