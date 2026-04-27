@@ -134,13 +134,18 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
     fi
 fi
 
-# Install plugins
+# Install plugins and themes
 if [ -d "$HOME/.oh-my-zsh" ]; then
     ZSH_CUSTOM=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}
     mkdir -p "$ZSH_CUSTOM/plugins"
-    echo "🔌 Setting up Zsh plugins..."
+    mkdir -p "$ZSH_CUSTOM/themes"
+    echo "🔌 Setting up Zsh plugins & themes..."
+    echo "📥 Downloading Powerlevel10k..."
+    git_clone_or_update "https://github.com/romkatv/powerlevel10k.git" "$ZSH_CUSTOM/themes/powerlevel10k"
+    echo "📥 Downloading plugins..."
     git_clone_or_update "https://github.com/zsh-users/zsh-syntax-highlighting.git" "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-    git_clone_or_update "https://github.com/zsh-users/zsh-autosuggestions" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+    git_clone_or_update "https://github.com/zsh-users/zsh-autosuggestions.git" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+    echo "ℹ️  NOTE: Please install a Nerd Font (e.g., MesloLGS NF) on your Linux system to see icons correctly."
 fi
 
 # Setup Tmux
