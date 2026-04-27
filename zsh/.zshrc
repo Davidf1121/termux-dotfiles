@@ -9,29 +9,56 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="" # Let Starship handle the prompt
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
 
-source $ZSH/oh-my-zsh.sh
+# Load Oh My Zsh if it exists
+if [ -f "$ZSH/oh-my-zsh.sh" ]; then
+    source "$ZSH/oh-my-zsh.sh"
+fi
 
 # --- Tool Initializations ---
-[[ -x "$(command -v starship)" ]] && eval "$(starship init zsh)"
-[[ -x "$(command -v zoxide)" ]] && eval "$(zoxide init zsh)"
+if command -v starship > /dev/null 2>&1; then
+    eval "$(starship init zsh)"
+fi
+
+if command -v zoxide > /dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+fi
+
 if command -v fzf > /dev/null 2>&1; then
     # Use modern fzf initialization if available (fzf 0.48+)
-    fzf --zsh > /dev/null 2>&1 && source <(fzf --zsh) || source /usr/share/doc/fzf/examples/key-bindings.zsh 2>/dev/null
+    if fzf --zsh > /dev/null 2>&1; then
+        source <(fzf --zsh)
+    else
+        # Fallback to standard locations
+        [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+        [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+        [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+    fi
 fi
 
 # --- Aliases ---
 # Modern replacements
-if command -v batcat > /dev/null 2>&1; then
-    alias bat='batcat'
+if command -v eza > /dev/null 2>&1; then
+    alias ls='eza'
+    alias ll='eza -lah'
+    alias la='eza -a'
+    alias lt='eza --tree --level=2'
 fi
 
-alias ls='eza'
-alias ll='eza -lah'
-alias la='eza -a'
-alias lt='eza --tree --level=2'
-alias cat='bat'
-alias top='btop'
-alias fm='ranger'
+if command -v batcat > /dev/null 2>&1; then
+    alias bat='batcat'
+    alias cat='batcat'
+elif command -v bat > /dev/null 2>&1; then
+    alias cat='bat'
+fi
+
+if command -v btop > /dev/null 2>&1; then
+    alias top='btop'
+fi
+
+if command -v ranger > /dev/null 2>&1; then
+    alias fm='ranger'
+fi
+
 alias ff='fastfetch'
 alias mux='tmux'
 
@@ -53,30 +80,34 @@ function cls() {
 }
 alias clear='cls'
 
-# Search files and preview with bat
+# Search files and preview with bat/cat
 function fdown() {
   if command -v fzf > /dev/null 2>&1; then
-    if command -v bat > /dev/null 2>&1; then
-      fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'
-    elif command -v batcat > /dev/null 2>&1; then
-      fzf --preview 'batcat --style=numbers --color=always --line-range :500 {}'
-    else
-      fzf --preview 'cat {}'
+    local preview_cmd="cat {}"
+    if command -v batcat > /dev/null 2>&1; then
+      preview_cmd="batcat --style=numbers --color=always --line-range :500 {}"
+    elif command -v bat > /dev/null 2>&1; then
+      preview_cmd="bat --style=numbers --color=always --line-range :500 {}"
     fi
+    fzf --preview "$preview_cmd"
   else
     echo "fzf is not installed."
   fi
 }
 
 # Yazi with auto-cd on exit
-function y() {
-    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-    yazi "$@" --cwd-file="$tmp"
-    if cwd="$(cat "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-        cd "$cwd"
-    fi
-    rm -f "$tmp"
-}
+if command -v yazi > /dev/null 2>&1; then
+    function y() {
+        local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+        yazi "$@" --cwd-file="$tmp"
+        if cwd="$(cat "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+            cd "$cwd"
+        fi
+        rm -f "$tmp"
+    }
+fi
 
 # --- Keybindings ---
-bindkey '^R' fzf-history-widget
+if command -v fzf > /dev/null 2>&1; then
+    bindkey '^R' fzf-history-widget
+fi
