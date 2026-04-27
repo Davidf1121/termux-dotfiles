@@ -8,6 +8,7 @@ set -u
 set -o pipefail
 
 VERBOSE=false
+export VERBOSE
 
 # Simple argument parsing
 for arg in "$@"; do

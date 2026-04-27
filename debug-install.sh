@@ -5,10 +5,21 @@
 echo "🔍 Starting Debug Installation..."
 echo "=========================================="
 echo "📊 System Information:"
+echo "Date: $(date)"
 echo "OS: $(uname -a)"
+if command -v termux-info > /dev/null 2>&1; then
+    echo "Termux Info:"
+    termux-info
+fi
 echo "Uptime: $(uptime)"
 echo "Disk Usage:"
-df -h . | grep -v "Filesystem"
+df -h .
+echo "Memory Info:"
+if command -v free > /dev/null 2>&1; then
+    free -m
+else
+    echo "free command not available"
+fi
 echo "User: $(whoami)"
 echo "Shell: $SHELL"
 echo "Termux check: $([ -d /data/data/com.termux ] && echo "Yes" || echo "No")"

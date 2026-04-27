@@ -7,17 +7,34 @@ set -o pipefail # Return the exit code of the last command in the pipe that fail
 
 # Logging setup
 LOG_FILE="install.log"
-exec > >(tee -i "$LOG_FILE") 2>&1
+VERBOSE=${VERBOSE:-false}
+
+# Save original stdout to FD 3
+exec 3>&1
+
+# Redirect stdout and stderr to the log file
+# If VERBOSE is true, also tee to stdout
+if [ "$VERBOSE" = true ]; then
+    exec > >(tee -i "$LOG_FILE") 2>&1
+else
+    exec > "$LOG_FILE" 2>&1
+fi
+
+# Function to print messages to the terminal (via FD 3) and the log file
+msg() {
+    echo -e "$1" >&3
+    echo -e "$1"
+}
 
 # Get the directory where the script is located (absolute path)
 DOTFILES_DIR=$(cd "$(dirname "$0")" && pwd)
 
-echo "🚀 Deploying God-Tier Environment for Termux..."
-echo "📝 Logging to $LOG_FILE"
+msg "🚀 Deploying God-Tier Environment for Termux..."
+msg "📝 Logging all output to $LOG_FILE"
 
 # Ensure coreutils for realpath
 if ! command -v realpath > /dev/null 2>&1; then
-    echo "Installing coreutils..."
+    msg "Installing coreutils..."
     apt update && apt install -y coreutils
 fi
 
@@ -27,14 +44,14 @@ deploy() {
     local dest="$2"
 
     if [ ! -e "$src" ]; then
-        echo "⚠️  Source $src does not exist, skipping..."
-        return 1
+        msg "⚠️  Source $src does not exist, skipping..."
+        return 0 # Return 0 to prevent set -e from stopping the script during "skips"
     fi
 
     # Convert to absolute path
     src=$(realpath "$src")
 
-    echo "🔗 Linking $src -> $dest"
+    msg "🔗 Linking $src -> $dest"
     
     # Ensure parent directory exists
     mkdir -p "$(dirname "$dest")"
@@ -42,7 +59,7 @@ deploy() {
     # Remove existing destination safely
     rm -rf "$dest"
     ln -sf "$src" "$dest"
-    echo "✅ Successfully linked $src"
+    msg "✅ Successfully linked $src"
 }
 
 # Git helper function
@@ -51,29 +68,29 @@ git_clone_or_update() {
     local target_dir="$2"
     
     if [ -d "$target_dir" ]; then
-        echo "🔄 Updating $target_dir..."
-        git -C "$target_dir" pull || (echo "⚠️ Failed to update $target_dir, continuing..." && return 0)
+        msg "🔄 Updating $target_dir..."
+        git -C "$target_dir" pull || (msg "⚠️ Failed to update $target_dir, continuing..." && return 0)
     else
-        echo "📥 Cloning $repo_url into $target_dir..."
+        msg "📥 Cloning $repo_url into $target_dir..."
         git clone --depth 1 "$repo_url" "$target_dir"
     fi
 }
 
 # Update package list using apt
-echo "🔄 Updating package lists..."
+msg "🔄 Updating package lists..."
 apt update
 apt upgrade -y
 
-# Force re-installation/update of core tools
-echo "🛠️ Installing/Updating core tools..."
-apt install -y --reinstall zsh git curl wget tmux fzf btop cmatrix fastfetch starship eza bat zoxide ranger yazi
+# Force re-installation/update of core tools (btop removed)
+msg "🛠️ Installing/Updating core tools..."
+apt install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch starship eza bat zoxide ranger yazi
 
 # Refresh command hash
 hash -r
 
 # Setup Zsh & Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    echo "🐚 Installing Oh My Zsh..."
+    msg "🐚 Installing Oh My Zsh..."
     # Oh My Zsh installation can fail if not handled properly in non-interactive environments
     CHSH=no RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
@@ -81,29 +98,29 @@ fi
 # Install plugins
 ZSH_CUSTOM=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}
 mkdir -p "$ZSH_CUSTOM/plugins"
-echo "🔌 Setting up Zsh plugins..."
+msg "🔌 Setting up Zsh plugins..."
 git_clone_or_update "https://github.com/zsh-users/zsh-syntax-highlighting.git" "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
 git_clone_or_update "https://github.com/zsh-users/zsh-autosuggestions" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 
 # Setup Tmux
-echo "🪟 Setting up Oh My Tmux..."
+msg "🪟 Setting up Oh My Tmux..."
 git_clone_or_update "https://github.com/gpakosz/.tmux.git" "$HOME/.tmux"
 deploy "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
 
 # Apply Configs using absolute paths
-echo "⚙️ Applying configurations..."
+msg "⚙️ Applying configurations..."
 deploy "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
 deploy "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
 
 # Fastfetch standard location explanation
-echo "ℹ️ Fastfetch configurations are located in $HOME/.config/fastfetch/ (standard location)"
+msg "ℹ️ Fastfetch configurations are located in $HOME/.config/fastfetch/ (standard location)"
 mkdir -p "$HOME/.config/fastfetch"
 for file in "$DOTFILES_DIR/config/fastfetch/"*; do
     if [ -f "$file" ]; then
         filename=$(basename "$file")
         target="$HOME/.config/fastfetch/$filename"
         if [ "$filename" = "config.jsonc" ]; then
-            echo "🔧 Configuring Fastfetch with absolute logo path..."
+            msg "🔧 Configuring Fastfetch with absolute logo path..."
             # Use sed to replace ~ with actual $HOME while copying
             sed "s|~/.config/fastfetch/logo.txt|$HOME/.config/fastfetch/logo.txt|g" "$file" > "$target"
         else
@@ -113,10 +130,10 @@ for file in "$DOTFILES_DIR/config/fastfetch/"*; do
 done
 
 # Termux-specific configurations
-echo "📱 Applying Termux-specific settings..."
+msg "📱 Applying Termux-specific settings..."
 deploy "$DOTFILES_DIR/termux/colors.properties" "$HOME/.termux/colors.properties"
 if command -v termux-reload-settings > /dev/null 2>&1; then
-    echo "♻️ Reloading Termux settings..."
+    msg "♻️ Reloading Termux settings..."
     termux-reload-settings
 fi
 
@@ -124,9 +141,9 @@ fi
 touch "$HOME/.hushlogin"
 
 # Change default shell to zsh
-echo "🐚 Changing default shell to zsh..."
+msg "🐚 Changing default shell to zsh..."
 chsh -s zsh
 
-echo "✨ Termux Deployment Successful!"
-echo "👉 Please restart Termux or type 'zsh' to begin."
-echo "📜 Check $LOG_FILE for details."
+msg "✨ Termux Deployment Successful!"
+msg "👉 Please restart Termux or type 'zsh' to begin."
+msg "📜 Check $LOG_FILE for details."
