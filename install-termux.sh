@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Termux installation script with enhanced error handling and visibility
-# set -e          # Removed for better recovery
+# set -e          # Removed for maximum robustness as requested
 set -u          # Treat unset variables as an error
 set -o pipefail # Return the exit code of the last command in the pipe that failed
 
@@ -24,6 +24,20 @@ if ! command -v realpath > /dev/null 2>&1; then
     pkg update && pkg install -y coreutils
 fi
 
+# Deployment function using realpath
+deploy() {
+    local src="$1"
+    local dest="$2"
+    
+    msg "🔗 Symlinking $(basename "$src") -> $dest"
+    mkdir -p "$(dirname "$dest")"
+    
+    # Remove if it exists to avoid nested links or errors
+    rm -rf "$dest"
+    
+    ln -sf "$(realpath "$src")" "$dest"
+}
+
 # Git helper function
 git_clone_or_update() {
     local repo_url="$1"
@@ -43,9 +57,9 @@ msg "🔄 Updating package lists..."
 pkg update
 pkg upgrade -y
 
-# Force re-installation/update of core tools
+# Force re-installation/update of core tools (btop and starship removed)
 msg "🛠️ Installing/Updating core tools..."
-pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch starship eza bat zoxide ranger yazi
+pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi
 
 # Refresh command hash
 hash -r
@@ -72,30 +86,18 @@ git_clone_or_update "https://github.com/zsh-users/zsh-autosuggestions" "$ZSH_CUS
 # Setup Tmux
 msg "🪟 Setting up Oh My Tmux..."
 git_clone_or_update "https://github.com/gpakosz/.tmux.git" "$HOME/.tmux"
-ln -sf "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
+deploy "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
 
-# Apply Configs using absolute paths
+# Apply Configs
 msg "⚙️ Applying configurations..."
-ln -sf "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
-ln -sf "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
+deploy "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
+deploy "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
 
 # Fastfetch standard location
 msg "ℹ️ Configuring Fastfetch..."
-mkdir -p "$HOME/.config/fastfetch"
-for file in "$DOTFILES_DIR/config/fastfetch/"*; do
-    if [ -f "$file" ]; then
-        filename=$(basename "$file")
-        target="$HOME/.config/fastfetch/$filename"
-        if [ "$filename" = "config.jsonc" ]; then
-            msg "🔧 Configuring Fastfetch with absolute logo path..."
-            sed "s|~/.config/fastfetch/logo.txt|$HOME/.config/fastfetch/logo.txt|g" "$file" > "$target"
-        else
-            ln -sf "$(realpath "$file")" "$target"
-        fi
-    fi
-done
+deploy "$DOTFILES_DIR/config/fastfetch" "$HOME/.config/fastfetch"
 
-# Termux-specific configurations
+# Termux-specific configurations - Direct write Neon theme
 msg "📱 Applying Termux-specific settings..."
 mkdir -p "$HOME/.termux"
 cat <<EOF > "$HOME/.termux/colors.properties"
