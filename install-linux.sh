@@ -74,7 +74,7 @@ hash -r
 
 # Essential dependencies
 echo "🛠️ Installing essential dependencies..."
-sudo apt-get install -yq zsh git curl wget tmux fzf btop cmatrix software-properties-common gpg which
+sudo apt-get install -yq zsh git curl wget tmux fzf cmatrix software-properties-common gpg which
 
 # Install Fastfetch via PPA
 if ! command -v fastfetch > /dev/null 2>&1; then
@@ -144,7 +144,7 @@ if [ -d "$HOME/.oh-my-zsh" ]; then
     git_clone_or_update "https://github.com/romkatv/powerlevel10k.git" "$ZSH_CUSTOM/themes/powerlevel10k"
     echo "📥 Downloading plugins..."
     git_clone_or_update "https://github.com/zsh-users/zsh-syntax-highlighting.git" "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-    git_clone_or_update "https://github.com/zsh-users/zsh-autosuggestions.git" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+    git_clone_or_update "https://github.com/zsh-users/zsh-autosuggestions" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
     echo "ℹ️  NOTE: Please install a Nerd Font (e.g., MesloLGS NF) on your Linux system to see icons correctly."
 fi
 

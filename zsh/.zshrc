@@ -19,10 +19,8 @@ export ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
-# Load Oh My Zsh if it exists
-if [ -f "$ZSH/oh-my-zsh.sh" ]; then
-    source "$ZSH/oh-my-zsh.sh"
-fi
+# Load Oh My Zsh
+source $ZSH/oh-my-zsh.sh
 
 # --- Tool Initializations ---
 # Starship disabled in favor of Powerlevel10k
