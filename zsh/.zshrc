@@ -99,7 +99,7 @@ function cls() {
     echo -e "\e[1;34m󰀵 \e[0m\e[1;36mWelcome back, $MY_USER \e[0m\e[1;34m󰀵\e[0m"
     echo -e "\e[3;90mEnvironment active and ready...\e[0m\n"
     if command -v fastfetch > /dev/null 2>&1; then
-        fastfetch -c ~/.config/fastfetch/config.jsonc
+        fastfetch -c ~/.config/fastfetch/config.jsonc --pipe false
     fi
 }
 alias clear='cls'
@@ -134,8 +134,6 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# --- Post-Initialization Branding ---
-# Final foreground delay to ensure colors are ready
-sleep 0.2
-cls
+# Simple interactive branding
+[[ $- == *i* ]] && cls
 
