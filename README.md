@@ -5,6 +5,7 @@ A modern, fast, and good-looking Termux environment. This setup is built for pro
 ## Example Preview
 ![Main Terminal](Screenshot_2026-04-25-20-50-34-473-edit_com.termux.jpg)
 ![File Manager](Screenshot_2026-04-25-13-18-07-766-edit_com.termux.jpg)
+![new update](Screenshot_2026-05-01-00-20-43-504-edit_com.termux)
 
 ## What's inside?
 - **Shell**: `zsh` with Oh My Zsh.
