@@ -62,7 +62,7 @@ pkg upgrade -y
 
 # Force re-installation/update of core tools (btop and starship removed)
 msg "🛠️ Installing/Updating core tools..."
-pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi
+pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi figlet
 
 # Refresh command hash
 hash -r

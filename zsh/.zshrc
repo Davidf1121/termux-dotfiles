@@ -5,12 +5,42 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# --- User Identity ---
+# Load custom name if it exists, otherwise default to davidf1121
+USER_NAME_FILE="$HOME/.user_name"
+if [ -f "$USER_NAME_FILE" ]; then
+    export MY_USER=$(cat "$USER_NAME_FILE")
+else
+    export MY_USER="davidf1121"
+fi
+
+# Function to change your displayed name
+function setname() {
+    if [ -n "$1" ]; then
+        echo "$1" > "$HOME/.user_name"
+        export MY_USER="$1"
+        echo "User name updated to: $1"
+        source ~/.zshrc
+    else
+        echo "Usage: setname <new_name>"
+    fi
+}
+
 # --- Startup ---
 export PATH="$HOME/.local/bin:$PATH"
 
+# Fancy Welcome Message
+if command -v figlet > /dev/null 2>&1; then
+    echo -e "\e[1;34m" # Blue Bold
+    figlet -f slant "GOD - TIER"
+    echo -e "\e[0m\e[1;36mWelcome back, $MY_USER! \e[0m"
+    echo -e "\e[3;90mEnvironment active and ready for deployment...\e[0m\n"
+fi
+
 # Display system info
 if command -v fastfetch > /dev/null 2>&1; then
-    fastfetch -c ~/.config/fastfetch/config.jsonc
+    # Pass the custom name to fastfetch
+    fastfetch -c ~/.config/fastfetch/config.jsonc --title-fqdn "$MY_USER@termux"
 fi
 
 # --- Oh My Zsh Configuration ---
@@ -70,11 +100,17 @@ alias zrc='source ~/.zshrc'
 alias ezrc='nano ~/.zshrc'
 
 # --- Functions ---
-# Custom clear behavior: clear screen and show fastfetch
+# Custom clear behavior: clear screen and show welcome + fastfetch
 function cls() {
     command clear
+    if command -v figlet > /dev/null 2>&1; then
+        echo -e "\e[1;34m"
+        figlet -f slant "GOD - TIER"
+        echo -e "\e[0m\e[1;36mWelcome back, $MY_USER! \e[0m"
+        echo -e "\e[3;90mEnvironment active and ready for deployment...\e[0m\n"
+    fi
     if command -v fastfetch > /dev/null 2>&1; then
-        fastfetch -c ~/.config/fastfetch/config.jsonc
+        fastfetch -c ~/.config/fastfetch/config.jsonc --title-fqdn "$MY_USER@termux"
     fi
 }
 alias clear='cls'
