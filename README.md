@@ -1,56 +1,43 @@
-# Termux Dotfiles: God-Tier Setup
+# Termux Dotfiles: Davidf's Personal Setup
 
-High-performance Termux environment with modern CLI tools.
+A modern, fast, and good-looking Termux environment. This setup is built for productivity and aesthetics, focusing on a clean CLI experience.
 
-## Core Toolset
-- **Shell**: Zsh + Oh My Zsh
-- **Prompt**: Powerlevel10k
-- **Navigation**: Zoxide, Yazi (file manager), Ranger
-- **System**: Fastfetch, Tmux
-- **Utils**: Eza (modern ls), Bat (syntax cat), FZF
+## What's inside?
+- **Shell**: `zsh` with Oh My Zsh.
+- **Theme**: Powerlevel10k (the one with all the cool icons).
+- **File Managers**: `yazi` (super fast) and `ranger` (classic).
+- **Multiplexer**: `tmux` with a custom Tokyo Night theme.
+- **Modern Tools**: `eza` for listing files, `bat` for reading them, and `zoxide` to jump around directories instantly.
 
-## Font Requirement
-This setup uses Powerlevel10k, which requires a Nerd Font for icons to display correctly.
-- **Termux/Linux**: **Crucial step!** Run `p10k configure` upon first launch. Powerlevel10k will automatically handle the download and installation of the recommended **MesloLGS NF** font for you. Follow the on-screen instructions and restart your terminal for the changes to take effect.
+## Cool Features
+- **Dynamic Identity**: Change your CLI name anytime with the `setname` command. It updates your greeting, Fastfetch, and Tmux status bar all at once.
+- **Fast Navigation**: Use `y` to open the Yazi file manager. When you quit, you'll automatically `cd` into the last folder you were looking at.
+- **Fancy Status**: A custom Tokyo Night Tmux bar with Powerline symbols and floating pane titles.
+- **Smart Clear**: The `cls` (or `clear`) command doesn't just empty the screen—it gives you a fresh greeting and system overview.
 
-## Commands and Aliases
+## Quick Shortcuts (Aliases)
 
-| Command | Action |
+| Command | What it does |
 | :--- | :--- |
-| `ls` | `eza` (directory listing) |
-| `ll` | `eza -lah` (long listing with hidden files) |
-| `la` | `eza -a` (all files) |
-| `lt` | `eza --tree --level=2` (tree view) |
-| `cat` | `bat` (syntax-highlighted cat) |
-| `fm` | `ranger` (file manager) |
-| `y` / `yazi` | `yazi` (fast file manager with auto-cd) |
-| `ff` | `fastfetch` (system overview) |
-| `mux` | `tmux` (terminal multiplexer) |
-| `z <dir>` | `zoxide` (intelligent directory navigation) |
-| `matrix` | `cmatrix` (hacker-style rain) |
-| `weather` | `wttr.in` (terminal weather report) |
-| `fdown` | Search files with live `bat` preview |
-| `zrc` | `source ~/.zshrc` (reload shell) |
-| `ezrc` | `nano ~/.zshrc` (edit config) |
-| `cls` | `clear` (clear screen) |
+| `ls` / `ll` | Modern file listing with icons (`eza`) |
+| `cat` | Syntax highlighted file preview (`bat`) |
+| `ff` | Show system info (`fastfetch`) |
+| `mux` | Start/Attach Tmux |
+| `z <dir>` | Jump to any folder you've visited before |
+| `y` | Fast file manager with auto-cd |
+| `setname` | Update your display name everywhere |
+| `zrc` | Reload your shell config |
 
-## Example image
-![alt text](Screenshot_2026-04-25-20-50-34-473-edit_com.termux.jpg)
-![alt text](Screenshot_2026-04-25-13-18-07-766-edit_com.termux.jpg)
-## Installation
-
-Run the following command to deploy the full environment:
-
+## How to Install
+Just run the main installer and let it do its thing:
 ```bash
 bash install.sh
 ```
 
+*Note: Make sure to use a Nerd Font (like MesloLGS NF) in your terminal settings so all the icons show up correctly!*
+
 ## Troubleshooting
-
-If you encounter any issues during installation, use the debug installer for full visibility:
-
+If something breaks during installation, you can run the debug script to see exactly what's going wrong:
 ```bash
 bash debug-install.sh
 ```
-
-This will provide detailed logs and system information to help diagnose the problem.
