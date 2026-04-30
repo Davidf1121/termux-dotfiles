@@ -2,6 +2,10 @@
 
 A modern, fast, and good-looking Termux environment. This setup is built for productivity and aesthetics, focusing on a clean CLI experience.
 
+## Example Preview
+![Main Terminal](Screenshot_2026-04-25-20-50-34-473-edit_com.termux.jpg)
+![File Manager](Screenshot_2026-04-25-13-18-07-766-edit_com.termux.jpg)
+
 ## What's inside?
 - **Shell**: `zsh` with Oh My Zsh.
 - **Theme**: Powerlevel10k (the one with all the cool icons).
@@ -15,18 +19,27 @@ A modern, fast, and good-looking Termux environment. This setup is built for pro
 - **Fancy Status**: A custom Tokyo Night Tmux bar with Powerline symbols and floating pane titles.
 - **Smart Clear**: The `cls` (or `clear`) command doesn't just empty the screen—it gives you a fresh greeting and system overview.
 
-## Quick Shortcuts (Aliases)
+## Commands and Aliases
 
-| Command | What it does |
+| Command | Action |
 | :--- | :--- |
-| `ls` / `ll` | Modern file listing with icons (`eza`) |
-| `cat` | Syntax highlighted file preview (`bat`) |
-| `ff` | Show system info (`fastfetch`) |
-| `mux` | Start/Attach Tmux |
-| `z <dir>` | Jump to any folder you've visited before |
-| `y` | Fast file manager with auto-cd |
+| `ls` | `eza` (modern directory listing) |
+| `ll` | `eza -lah` (long listing with hidden files) |
+| `la` | `eza -a` (all files) |
+| `lt` | `eza --tree --level=2` (tree view) |
+| `cat` | `bat` (syntax-highlighted preview) |
+| `fm` | `ranger` (classic file manager) |
+| `y` / `yazi` | `yazi` (fast file manager with auto-cd) |
+| `ff` | `fastfetch` (system overview) |
+| `mux` | `tmux` (start/attach multiplexer) |
+| `z <dir>` | `zoxide` (intelligent navigation) |
+| `matrix` | `cmatrix` (hacker-style rain) |
+| `weather` | `wttr.in` (terminal weather report) |
+| `fdown` | Search files with live `bat` preview |
 | `setname` | Update your display name everywhere |
-| `zrc` | Reload your shell config |
+| `zrc` | `source ~/.zshrc` (reload shell) |
+| `ezrc` | `nano ~/.zshrc` (edit config) |
+| `cls` | `clear` (clear screen + greeting) |
 
 ## How to Install
 Just run the main installer and let it do its thing:
@@ -37,7 +50,7 @@ bash install.sh
 *Note: Make sure to use a Nerd Font (like MesloLGS NF) in your terminal settings so all the icons show up correctly!*
 
 ## Troubleshooting
-If something breaks during installation, you can run the debug script to see exactly what's going wrong:
+If something breaks during installation, use the debug script:
 ```bash
 bash debug-install.sh
 ```
