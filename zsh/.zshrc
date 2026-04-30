@@ -5,20 +5,25 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# --- Environment Setup ---
+export TERM="xterm-256color"
+export COLORTERM="truecolor"
+
 # --- User Identity ---
-# Load custom name if it exists, otherwise default to davidf1121
 USER_NAME_FILE="$HOME/.user_name"
 if [ -f "$USER_NAME_FILE" ]; then
     export MY_USER=$(cat "$USER_NAME_FILE")
 else
     export MY_USER="davidf1121"
 fi
+export FASTFETCH_TITLE_FQDN="$MY_USER@termux"
 
 # Function to change your displayed name
 function setname() {
     if [ -n "$1" ]; then
         echo "$1" > "$HOME/.user_name"
         export MY_USER="$1"
+        export FASTFETCH_TITLE_FQDN="$1@termux"
         echo "User name updated to: $1"
         source ~/.zshrc
     else
@@ -29,20 +34,7 @@ function setname() {
 # --- Startup ---
 export PATH="$HOME/.local/bin:$PATH"
 
-# Fancy Welcome Message
-if command -v figlet > /dev/null 2>&1; then
-    echo -e "\e[1;34m" # Blue Bold
-    figlet -f slant "GOD - TIER"
-    echo -e "\e[0m\e[1;36mWelcome back, $MY_USER! \e[0m"
-    echo -e "\e[3;90mEnvironment active and ready for deployment...\e[0m\n"
-fi
 
-# Display system info
-if command -v fastfetch > /dev/null 2>&1; then
-    # Use environment variable for the title to avoid unsupported flag errors
-    export FASTFETCH_TITLE_FQDN="$MY_USER@termux"
-    fastfetch -c ~/.config/fastfetch/config.jsonc
-fi
 
 # --- Oh My Zsh Configuration ---
 export ZSH="$HOME/.oh-my-zsh"
@@ -104,14 +96,9 @@ alias ezrc='nano ~/.zshrc'
 # Custom clear behavior: clear screen and show welcome + fastfetch
 function cls() {
     command clear
-    if command -v figlet > /dev/null 2>&1; then
-        echo -e "\e[1;34m"
-        figlet -f slant "GOD - TIER"
-        echo -e "\e[0m\e[1;36mWelcome back, $MY_USER! \e[0m"
-        echo -e "\e[3;90mEnvironment active and ready for deployment...\e[0m\n"
-    fi
+    echo -e "\e[1;34m󰀵 \e[0m\e[1;36mWelcome back, $MY_USER \e[0m\e[1;34m󰀵\e[0m"
+    echo -e "\e[3;90mEnvironment active and ready...\e[0m\n"
     if command -v fastfetch > /dev/null 2>&1; then
-        export FASTFETCH_TITLE_FQDN="$MY_USER@termux"
         fastfetch -c ~/.config/fastfetch/config.jsonc
     fi
 }
@@ -146,3 +133,9 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# --- Post-Initialization Branding ---
+# Final foreground delay to ensure colors are ready
+sleep 0.2
+cls
+
