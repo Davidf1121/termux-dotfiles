@@ -39,8 +39,9 @@ fi
 
 # Display system info
 if command -v fastfetch > /dev/null 2>&1; then
-    # Pass the custom name to fastfetch
-    fastfetch -c ~/.config/fastfetch/config.jsonc --title-fqdn "$MY_USER@termux"
+    # Use environment variable for the title to avoid unsupported flag errors
+    export FASTFETCH_TITLE_FQDN="$MY_USER@termux"
+    fastfetch -c ~/.config/fastfetch/config.jsonc
 fi
 
 # --- Oh My Zsh Configuration ---
@@ -110,7 +111,8 @@ function cls() {
         echo -e "\e[3;90mEnvironment active and ready for deployment...\e[0m\n"
     fi
     if command -v fastfetch > /dev/null 2>&1; then
-        fastfetch -c ~/.config/fastfetch/config.jsonc --title-fqdn "$MY_USER@termux"
+        export FASTFETCH_TITLE_FQDN="$MY_USER@termux"
+        fastfetch -c ~/.config/fastfetch/config.jsonc
     fi
 }
 alias clear='cls'

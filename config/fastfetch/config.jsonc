@@ -11,7 +11,10 @@
         "separator": " ➜  "
     },
     "modules": [
-        "title",
+        {
+            "type": "title",
+            "fqdn": true
+        },
         "separator",
         {
             "type": "os",
