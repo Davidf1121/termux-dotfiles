@@ -10,6 +10,7 @@ A collection of configuration files to set up a modern and functional terminal e
 ## Core Components
 - **Shell**: `zsh` managed with Oh My Zsh.
 - **Theme**: Powerlevel10k for a detailed and responsive prompt.
+- **Editor**: `neovim` with a modular Lua configuration (LSP, Autocomplete, Treesitter).
 - **File Managers**: `yazi` and `ranger`.
 - **Multiplexer**: `tmux` with a custom Tokyo Night color scheme.
 - **Tools**: Includes `eza` for directory listings, `bat` for file viewing, and `zoxide` for navigation.

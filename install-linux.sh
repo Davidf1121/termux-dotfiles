@@ -74,7 +74,7 @@ hash -r
 
 # Essential dependencies
 echo "🛠️ Installing essential dependencies..."
-sudo apt-get install -yq zsh git curl wget tmux fzf cmatrix software-properties-common gpg which
+sudo apt-get install -yq zsh git curl wget tmux fzf cmatrix software-properties-common gpg which neovim ripgrep
 
 # Install Fastfetch via PPA
 if ! command -v fastfetch > /dev/null 2>&1; then
@@ -151,6 +151,7 @@ deploy "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
 echo "⚙️ Applying configurations..."
 deploy "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
 deploy "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
+deploy "$DOTFILES_DIR/config/nvim" "$HOME/.config/nvim"
 
 # Handle fastfetch configs specially for absolute logo path
 echo "ℹ️ Configuring Fastfetch..."

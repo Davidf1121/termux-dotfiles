@@ -60,9 +60,9 @@ msg "🔄 Updating package lists..."
 pkg update
 pkg upgrade -y
 
-# Force re-installation/update of core tools (btop and starship removed)
+# Force re-installation/update of core tools
 msg "🛠️ Installing/Updating core tools..."
-pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi figlet
+pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi figlet neovim ripgrep
 
 # Refresh command hash
 hash -r
@@ -95,6 +95,7 @@ deploy "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
 msg "⚙️ Applying configurations..."
 deploy "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
 deploy "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
+deploy "$DOTFILES_DIR/config/nvim" "$HOME/.config/nvim"
 
 # Fastfetch standard location - Handle with loop and sed for logo path
 msg "ℹ️ Configuring Fastfetch..."
