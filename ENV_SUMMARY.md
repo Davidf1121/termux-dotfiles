@@ -21,9 +21,14 @@ This document outlines the systematic transformation of a stock Termux installat
 
 ## 4. Visuals and Branding
 - **Fastfetch**: Configured as the system dashboard. Uses a custom, pre-rendered high-density logo (`logo.txt`) generated via `chafa` (vhalf block symbols, 256 colors) to ensure optimal sharpness and color consistency on Termux.
-- **Startup**: `fastfetch` is explicitly called at the top of `.zshrc` to ensure correct color rendering and system initialization.
+- **Startup Optimization**: Implemented the `cls` command to handle terminal clearing with a clean greeting and Fastfetch overview. This is gated by an interactive shell guard (`[[ $- == *i* ]]`) to prevent issues with non-interactive scripts and ensure compatibility with P10k instant prompt.
 
-## 5. Automation and Version Control
+## 5. Automation and Modular Architecture
 - **Dotfiles Repo**: Centralized configuration in `~/termux-dotfiles/` to track settings (`zsh`, `tmux`, `fastfetch`, `termux`).
-- **Install Script**: Created `install.sh` to automate environment deployment (package installation, framework setup, configuration symlinking).
+- **Modular Installer**: Re-engineered `install.sh` as a dispatcher that detects the environment (Termux vs. standard Linux) and delegates to OS-specific scripts (`install-termux.sh` or `install-linux.sh`).
+- **Robust Deployment**: Enhanced the `deploy` function to use absolute paths and aggressive cleaning, ensuring symlinks are reliable across different directory structures.
 - **Git Sync**: Integrated `gh` (GitHub CLI) for secure, passwordless authentication and remote repository management.
+
+## 6. Dynamic Identity
+- **Persistence**: Implemented a naming system using `~/.user_name` to store a custom user identity that persists across sessions.
+- **System-Wide Sync**: Created the `setname` command which updates the identity file and immediately synchronizes the change across the Zsh prompt, Fastfetch header, and Tmux status bar without requiring a manual restart.

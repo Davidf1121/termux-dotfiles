@@ -1,6 +1,6 @@
-# Termux Dotfiles: Davidf's Personal Setup
+# Termux & Linux Dotfiles: God-Tier CLI
 
-A modern, fast, and good-looking Termux environment. This setup is built for productivity and aesthetics, focusing on a clean CLI experience.
+A modern, fast, and good-looking terminal environment optimized for Termux and modern Linux distributions. This setup is built for productivity and aesthetics, focusing on a clean, responsive CLI experience.
 
 ## Example Preview
 ![Main Terminal](Screenshot_2026-04-25-20-50-34-473-edit_com.termux.jpg)
@@ -20,6 +20,7 @@ A modern, fast, and good-looking Termux environment. This setup is built for pro
 - **Fancy Status**: A custom Tokyo Night Tmux bar with Powerline symbols, floating pane titles, and live system metrics.
 - **Live System Monitoring**: The Tmux status bar now tracks battery percentage, CPU usage, RAM, and temperature in real-time using optimized Termux API integration.
 - **Smart Clear**: The `cls` (or `clear`) command doesn't just empty the screen—it gives you a fresh greeting and system overview.
+- **Modular Installation**: A single `install.sh` entry point that intelligently detects your environment and deploys the appropriate configurations for either Termux or standard Linux (Ubuntu/Debian).
 
 ## Commands and Aliases
 
@@ -56,3 +57,10 @@ If something breaks during installation, use the debug script:
 ```bash
 bash debug-install.sh
 ```
+
+## Recent Evolution
+The project has recently moved from a Termux-only focus to a modular, cross-platform architecture. Key milestones include:
+- **Modularized Installers**: Split installation logic into OS-specific scripts for better maintainability.
+- **Performance Caching**: Introduced asynchronous background caching for Tmux status metrics to eliminate UI stutter.
+- **Identity System**: Unified the `setname` mechanism to sync user identity across all shell components.
+- **Startup Optimization**: Implemented interactive shell guards to ensure P10k compatibility and fast startup times.
