@@ -16,7 +16,7 @@ msg() {
 # Get the directory where the script is located (absolute path)
 DOTFILES_DIR=$(cd "$(dirname "$0")" && pwd)
 
-msg "🚀 Deploying God-Tier Environment for Termux..."
+msg "🚀 Deploying Environment for Termux..."
 
 # Ensure coreutils for realpath (though we're moving away from its dependency in deploy)
 if ! command -v realpath > /dev/null 2>&1; then

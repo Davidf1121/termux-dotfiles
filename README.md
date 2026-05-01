@@ -1,4 +1,4 @@
-# Termux & Linux Dotfiles: God-Tier CLI
+# Termux & Linux Dotfiles: Advanced CLI
 
 A modern, fast, and good-looking terminal environment optimized for Termux and modern Linux distributions. This setup is built for productivity and aesthetics, focusing on a clean, responsive CLI experience.
 

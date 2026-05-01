@@ -1,5 +1,5 @@
 #!/bin/bash
-# God-Tier Environment Troubleshooting & Debug Installer
+# Environment Troubleshooting & Debug Installer
 # This script collects system information and runs the installer with full verbosity.
 
 echo "🔍 Starting Debug Installation..."
