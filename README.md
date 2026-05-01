@@ -1,66 +1,66 @@
-# Termux & Linux Dotfiles: Advanced CLI
+# My Termux & Linux Setup
 
-A modern, fast, and good-looking terminal environment optimized for Termux and modern Linux distributions. This setup is built for productivity and aesthetics, focusing on a clean, responsive CLI experience.
+Yo! This is my personal collection of dotfiles. It makes Termux and Linux look awesome and work even better. If you want a fast, clean terminal with all the cool icons, you're in the right place.
 
-## Example Preview
+## Check it out
 ![Main Terminal](Screenshot_2026-04-25-20-50-34-473-edit_com.termux.jpg)
 ![File Manager](Screenshot_2026-04-25-13-18-07-766-edit_com.termux.jpg)
-![new update](Screenshot_2026-05-01-00-20-43-504-edit_com.termux.jpg)
+![Latest Update](Screenshot_2026-05-01-00-20-43-504-edit_com.termux.jpg)
 
-## What's inside?
-- **Shell**: `zsh` with Oh My Zsh.
-- **Theme**: Powerlevel10k (the one with all the cool icons).
-- **File Managers**: `yazi` (super fast) and `ranger` (classic).
-- **Multiplexer**: `tmux` with a custom Tokyo Night theme.
-- **Modern Tools**: `eza` for listing files, `bat` for reading them, and `zoxide` to jump around directories instantly.
+## The Goods
+- **Shell**: `zsh` with Oh My Zsh (because plain bash is boring).
+- **Theme**: Powerlevel10k (the one with all the sweet icons).
+- **File Managers**: `yazi` (blazing fast) and `ranger` (the classic).
+- **Multiplexer**: `tmux` with a custom Tokyo Night vibe.
+- **Modern Tools**: `eza` for lists, `bat` for reading, and `zoxide` to jump around folders instantly.
 
-## Cool Features
-- **Dynamic Identity**: Change your CLI name anytime with the `setname` command. It updates your greeting, Fastfetch, and Tmux status bar all at once.
-- **Fast Navigation**: Use `y` to open the Yazi file manager. When you quit, you'll automatically `cd` into the last folder you were looking at.
-- **Fancy Status**: A custom Tokyo Night Tmux bar with Powerline symbols, floating pane titles, and live system metrics.
-- **Live System Monitoring**: The Tmux status bar now tracks battery percentage, CPU usage, RAM, and temperature in real-time using optimized Termux API integration.
-- **Smart Clear**: The `cls` (or `clear`) command doesn't just empty the screen—it gives you a fresh greeting and system overview.
-- **Modular Installation**: A single `install.sh` entry point that intelligently detects your environment and deploys the appropriate configurations for either Termux or standard Linux (Ubuntu/Debian).
+## Sweet Features
+- **Change your name**: Use the `setname` command to update your CLI handle everywhere—greeting, Fastfetch, and Tmux.
+- **Easy navigation**: Hit `y` to open Yazi. When you quit, you'll land right in the folder you were just looking at.
+- **Fancy Status Bar**: A custom Tokyo Night Tmux bar with live stats like battery, CPU, RAM, and temp.
+- **Live Monitoring**: The status bar stays updated in real-time without slowing anything down.
+- **Smart Clear**: Running `cls` or `clear` gives you a fresh greeting and system overview instead of just a blank screen.
+- **Works Everywhere**: One installer for both Termux and standard Linux (like Ubuntu/Debian).
 
-## Commands and Aliases
+## Handy Shortcuts
 
-| Command | Action |
+| Command | What it does |
 | :--- | :--- |
-| `ls` | `eza` (modern directory listing) |
-| `ll` | `eza -lah` (long listing with hidden files) |
-| `la` | `eza -a` (all files) |
-| `lt` | `eza --tree --level=2` (tree view) |
-| `cat` | `bat` (syntax-highlighted preview) |
-| `fm` | `ranger` (classic file manager) |
-| `y` / `yazi` | `yazi` (fast file manager with auto-cd) |
-| `ff` | `fastfetch` (system overview) |
-| `mux` | `tmux` (start/attach multiplexer) |
-| `z <dir>` | `zoxide` (intelligent navigation) |
-| `matrix` | `cmatrix` (hacker-style rain) |
-| `weather` | `wttr.in` (terminal weather report) |
-| `fdown` | Search files with live `bat` preview |
-| `setname` | Update your display name everywhere |
-| `zrc` | `source ~/.zshrc` (reload shell) |
-| `ezrc` | `nano ~/.zshrc` (edit config) |
-| `cls` | `clear` (clear screen + greeting) |
+| `ls` | `eza` (modern file listing) |
+| `ll` | `eza -lah` (long list with hidden files) |
+| `la` | `eza -a` (show everything) |
+| `lt` | `eza --tree` (neat tree view) |
+| `cat` | `bat` (reading with syntax highlighting) |
+| `fm` | `ranger` (old school file manager) |
+| `y` / `yazi` | `yazi` (super fast manager with auto-cd) |
+| `ff` | `fastfetch` (quick system info) |
+| `mux` | `tmux` (start or attach to a session) |
+| `z <dir>` | `zoxide` (jump to a folder) |
+| `matrix` | `cmatrix` (hacker mode) |
+| `weather` | See what the weather is like outside |
+| `fdown` | Search files with a live preview |
+| `setname` | Update your name across the whole setup |
+| `zrc` | Reload your config |
+| `ezrc` | Edit your config in nano |
+| `cls` | Clear screen + fresh greeting |
 
-## How to Install
-Just run the main installer and let it do its thing:
+## How to get it
+Just run the installer and let it do the work:
 ```bash
 bash install.sh
 ```
 
-*Note: Make sure to use a Nerd Font (like MesloLGS NF) in your terminal settings so all the icons show up correctly!*
+*Note: You'll need a Nerd Font (like MesloLGS NF) in your terminal settings for all the icons to show up!*
 
-## Troubleshooting
-If something breaks during installation, use the debug script:
+## If things go wrong
+If the install hits a snag, try the debug script:
 ```bash
 bash debug-install.sh
 ```
 
-## Recent Evolution
-The project has recently moved from a Termux-only focus to a modular, cross-platform architecture. Key milestones include:
-- **Modularized Installers**: Split installation logic into OS-specific scripts for better maintainability.
-- **Performance Caching**: Introduced asynchronous background caching for Tmux status metrics to eliminate UI stutter.
-- **Identity System**: Unified the `setname` mechanism to sync user identity across all shell components.
-- **Startup Optimization**: Implemented interactive shell guards to ensure P10k compatibility and fast startup times.
+## What's new
+I've been busy making this thing better:
+- **Modular Installers**: Cleaner scripts for different systems.
+- **No More Lag**: Fixed the Tmux status bar so it doesn't stutter.
+- **Identity Sync**: Your `setname` now carries over everywhere.
+- **Fast Startup**: Optimized everything so your shell opens instantly.
