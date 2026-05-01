@@ -115,33 +115,11 @@ for file in "$DOTFILES_DIR/config/fastfetch/"*; do
     fi
 done
 
-# Termux-specific configurations - Direct write Neon theme
+# Termux-specific configurations
 msg "📱 Applying Termux-specific settings..."
 mkdir -p "$HOME/.termux"
-# Ensure any existing file or broken link is removed
-rm -f "$HOME/.termux/colors.properties" || rm -rf "$HOME/.termux/colors.properties"
-cat <<EOF > "$HOME/.termux/colors.properties"
-# Neon Theme
-background: #1a1b26
-foreground: #a9b1d6
-cursor: #c0caf5
-color0: #15161e
-color1: #f7768e
-color2: #9ece6a
-color3: #e0af68
-color4: #7aa2f7
-color5: #bb9af7
-color6: #7dcfff
-color7: #a9b1d6
-color8: #414868
-color9: #f7768e
-color10: #9ece6a
-color11: #e0af68
-color12: #7aa2f7
-color13: #bb9af7
-color14: #7dcfff
-color15: #c0caf5
-EOF
+deploy "$DOTFILES_DIR/termux/termux.properties" "$HOME/.termux/termux.properties"
+deploy "$DOTFILES_DIR/termux/colors.properties" "$HOME/.termux/colors.properties"
 
 if command -v termux-reload-settings > /dev/null 2>&1; then
     msg "♻️ Reloading Termux settings..."
