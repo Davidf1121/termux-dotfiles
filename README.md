@@ -1,58 +1,65 @@
-# Termux Dotfiles: Davidf's Personal Setup
+# Termux & Linux Dotfiles
 
-A modern, fast, and good-looking Termux environment. This setup is built for productivity and aesthetics, focusing on a clean CLI experience.
+A collection of configuration files to set up a modern and functional terminal environment on Termux and Linux. This setup focuses on providing a clean interface with useful productivity tools.
 
-## Example Preview
+## Preview
 ![Main Terminal](Screenshot_2026-04-25-20-50-34-473-edit_com.termux.jpg)
 ![File Manager](Screenshot_2026-04-25-13-18-07-766-edit_com.termux.jpg)
-![new update](Screenshot_2026-05-01-00-20-43-504-edit_com.termux.jpg)
+![Latest Update](Screenshot_2026-05-01-00-20-43-504-edit_com.termux.jpg)
 
-## What's inside?
-- **Shell**: `zsh` with Oh My Zsh.
-- **Theme**: Powerlevel10k (the one with all the cool icons).
-- **File Managers**: `yazi` (super fast) and `ranger` (classic).
-- **Multiplexer**: `tmux` with a custom Tokyo Night theme.
-- **Modern Tools**: `eza` for listing files, `bat` for reading them, and `zoxide` to jump around directories instantly.
+## Core Components
+- **Shell**: `zsh` managed with Oh My Zsh.
+- **Theme**: Powerlevel10k for a detailed and responsive prompt.
+- **File Managers**: `yazi` and `ranger`.
+- **Multiplexer**: `tmux` with a custom Tokyo Night color scheme.
+- **Tools**: Includes `eza` for directory listings, `bat` for file viewing, and `zoxide` for navigation.
 
-## Cool Features
-- **Dynamic Identity**: Change your CLI name anytime with the `setname` command. It updates your greeting, Fastfetch, and Tmux status bar all at once.
-- **Fast Navigation**: Use `y` to open the Yazi file manager. When you quit, you'll automatically `cd` into the last folder you were looking at.
-- **Fancy Status**: A custom Tokyo Night Tmux bar with Powerline symbols, floating pane titles, and live system metrics.
-- **Live System Monitoring**: The Tmux status bar now tracks battery percentage, CPU usage, RAM, and temperature in real-time using optimized Termux API integration.
-- **Smart Clear**: The `cls` (or `clear`) command doesn't just empty the screen—it gives you a fresh greeting and system overview.
+## Key Features
+- **Dynamic Identity**: Use the `setname` command to update your user handle across the shell, Fastfetch, and Tmux status bar.
+- **Integrated Navigation**: `y` command opens Yazi and automatically changes the shell directory to the last visited path upon exit.
+- **System Metrics**: The Tmux status bar displays real-time information including battery status, CPU usage, RAM, and temperature.
+- **Optimized Performance**: Status bar metrics are cached in the background to ensure terminal responsiveness.
+- **Custom Greeting**: The `cls` (or `clear`) command provides a clean screen along with a personalized greeting and system overview.
+- **Cross-Platform**: A unified installer supports both Termux and standard Linux distributions (Debian/Ubuntu).
 
 ## Commands and Aliases
 
-| Command | Action |
+| Command | Description |
 | :--- | :--- |
-| `ls` | `eza` (modern directory listing) |
-| `ll` | `eza -lah` (long listing with hidden files) |
-| `la` | `eza -a` (all files) |
-| `lt` | `eza --tree --level=2` (tree view) |
-| `cat` | `bat` (syntax-highlighted preview) |
-| `fm` | `ranger` (classic file manager) |
-| `y` / `yazi` | `yazi` (fast file manager with auto-cd) |
-| `ff` | `fastfetch` (system overview) |
-| `mux` | `tmux` (start/attach multiplexer) |
-| `z <dir>` | `zoxide` (intelligent navigation) |
-| `matrix` | `cmatrix` (hacker-style rain) |
-| `weather` | `wttr.in` (terminal weather report) |
-| `fdown` | Search files with live `bat` preview |
-| `setname` | Update your display name everywhere |
-| `zrc` | `source ~/.zshrc` (reload shell) |
-| `ezrc` | `nano ~/.zshrc` (edit config) |
-| `cls` | `clear` (clear screen + greeting) |
+| `ls` | `eza` (modern replacement for ls) |
+| `ll` | `eza -lah` (detailed list with hidden files) |
+| `la` | `eza -a` (list all files) |
+| `lt` | `eza --tree` (hierarchical tree view) |
+| `cat` | `bat` (file viewer with syntax highlighting) |
+| `fm` | `ranger` (file manager) |
+| `y` / `yazi` | `yazi` (file manager with auto-cd) |
+| `ff` | `fastfetch` (system information display) |
+| `mux` | `tmux` (terminal multiplexer) |
+| `z <dir>` | `zoxide` (directory jumping) |
+| `matrix` | `cmatrix` (terminal screensaver) |
+| `weather` | Display current weather information |
+| `fdown` | Search files with a live preview window |
+| `setname` | Update your display name across the environment |
+| `zrc` | Reload Zsh configuration |
+| `ezrc` | Edit Zsh configuration |
+| `cls` | Clear terminal and show greeting |
 
-## How to Install
-Just run the main installer and let it do its thing:
+## Installation
+To install the dotfiles, run the following command:
 ```bash
 bash install.sh
 ```
 
-*Note: Make sure to use a Nerd Font (like MesloLGS NF) in your terminal settings so all the icons show up correctly!*
+*Note: A Nerd Font (such as MesloLGS NF) is required to correctly display icons and symbols.*
 
 ## Troubleshooting
-If something breaks during installation, use the debug script:
+If you encounter issues during installation, you can use the debug script:
 ```bash
 bash debug-install.sh
 ```
+
+## Recent Updates
+- **Modular Installer**: Separate scripts for Termux and Linux for better maintenance.
+- **Performance Fixes**: Asynchronous caching for system metrics in Tmux.
+- **Unified Identity**: Improved synchronization for the `setname` system.
+- **Startup Speed**: Optimized Zsh initialization using interactive shell guards.

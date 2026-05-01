@@ -14,7 +14,7 @@ DOTFILES_DIR=$(cd "$(dirname "$0")" && pwd)
 
 export DEBIAN_FRONTEND=noninteractive
 
-echo "🚀 Deploying God-Tier Environment for Linux..."
+echo "🚀 Deploying Environment for Linux..."
 
 # Pre-seed debconf for non-interactive keyboard-configuration
 if command -v debconf-set-selections > /dev/null 2>&1; then

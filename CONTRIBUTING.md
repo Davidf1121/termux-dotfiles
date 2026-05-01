@@ -25,7 +25,8 @@ To ensure stability and compatibility with Powerlevel10k's instant prompt:
 
 ### Fastfetch Configuration
 - **Version Compatibility**: Avoid using deprecated command-line flags. Prefer passing overrides via environment variables (e.g., `FASTFETCH_TITLE_FQDN`) or the `-S` structure flag.
-- **Logo Paths**: Use absolute paths in `config.jsonc` to avoid resolution issues when the shell starts in different directories.
+- **Logo Paths**: Use the `~` placeholder for logo paths in `config.jsonc` (e.g., `~/.config/fastfetch/logo.txt`).
+- **Config Sync**: The installers use `sed` to replace the `~` placeholder with the actual absolute path to the user's home directory during deployment. This ensures that the logo is correctly resolved regardless of the shell's working directory or the host OS (Termux vs. Linux).
 
 ### Tmux Styling
 - The Tokyo Night theme is enforced via direct `set -g` commands in the `user customizations` section of `.tmux.conf.local` to override framework defaults reliably.

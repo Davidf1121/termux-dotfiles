@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Main entry point for the God-Tier dotfiles installation
+# Main entry point for the dotfiles installation
 # Supports -v/--verbose and -d/--debug flags
 
 export VERBOSE=false
