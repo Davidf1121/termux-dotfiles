@@ -17,7 +17,8 @@ A modern, fast, and good-looking Termux environment. This setup is built for pro
 ## Cool Features
 - **Dynamic Identity**: Change your CLI name anytime with the `setname` command. It updates your greeting, Fastfetch, and Tmux status bar all at once.
 - **Fast Navigation**: Use `y` to open the Yazi file manager. When you quit, you'll automatically `cd` into the last folder you were looking at.
-- **Fancy Status**: A custom Tokyo Night Tmux bar with Powerline symbols and floating pane titles.
+- **Fancy Status**: A custom Tokyo Night Tmux bar with Powerline symbols, floating pane titles, and live system metrics.
+- **Live System Monitoring**: The Tmux status bar now tracks battery percentage, CPU usage, RAM, and temperature in real-time using optimized Termux API integration.
 - **Smart Clear**: The `cls` (or `clear`) command doesn't just empty the screen—it gives you a fresh greeting and system overview.
 
 ## Commands and Aliases

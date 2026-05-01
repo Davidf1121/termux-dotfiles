@@ -136,4 +136,3 @@ fi
 
 # Simple interactive branding
 [[ $- == *i* ]] && cls
-

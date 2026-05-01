@@ -304,8 +304,10 @@ set -as terminal-overrides ',xterm*:Tc:sitm=\E[3m'
 set -g status-style "bg=#1a1b26,fg=#c0caf5"
 set -g status-left-length 50
 set -g status-left "#[bg=#e0af68,fg=#1a1b26,bold] 󰀵 #S #[bg=#1a1b26,fg=#e0af68]"
-set -g status-right-length 100
-set -g status-right "#[fg=#24283b]#[bg=#24283b,fg=#7aa2f7] 󰀉 #$MY_USER #[fg=#414868]#[bg=#414868,fg=#c0caf5] 󰒋 termux #[fg=#7aa2f7]#[bg=#7aa2f7,fg=#1a1b26,bold] %R "
+
+set -g status-right-length 200
+set -g status-right "#[fg=#24283b]#[bg=#24283b,fg=#7aa2f7] #(cut -c3- ~/.tmux.conf.local | sh -s battery_status) #(cut -c3- ~/.tmux.conf.local | sh -s battery_level)%% #[fg=#414868]#[bg=#414868,fg=#bb9af7] 󰻠 #(cut -c3- ~/.tmux.conf.local | sh -s cpu_usage) #[fg=#24283b]#[bg=#24283b,fg=#c0caf5] 󰍛 #(cut -c3- ~/.tmux.conf.local | sh -s ram_usage) #[fg=#414868]#[bg=#414868,fg=#e0af68] 󰏈 #(cut -c3- ~/.tmux.conf.local | sh -s cpu_temp) #[fg=#24283b]#[bg=#24283b,fg=#7aa2f7] 󰀉 #(cut -c3- ~/.tmux.conf.local | sh -s my_user) #[fg=#414868]#[bg=#414868,fg=#c0caf5] 󰒋 #(cut -c3- ~/.tmux.conf.local | sh -s my_host) #[fg=#7aa2f7]#[bg=#7aa2f7,fg=#1a1b26,bold] %R "
+
 set -g window-status-current-format "#[fg=#1a1b26,bg=#7aa2f7]#[fg=#1a1b26,bg=#7aa2f7,bold] #I  #W #[fg=#7aa2f7,bg=#1a1b26]"
 set -g window-status-format "#[fg=#1a1b26,bg=#24283b]#[fg=#a9b1d6,bg=#24283b] #I  #W #[fg=#24283b,bg=#1a1b26]"
 set -g status-interval 2
@@ -401,6 +403,96 @@ tmux_conf_uninstall_plugins_on_reload=true
 #   url="https://api.github.com/repos/${repository:-gpakosz/.tmux}"
 #   curl -s "$url" | perl -MJSON::PP=decode_json -CO -0777 -E '$response = decode_json(readline *STDIN); say ($response->{stargazers_count})'
 #   sleep 300                                         # sleep for 5 minutes, throttle network requests whatever the value of status-interval
+# }
+#
+# # usage: #{battery_level}
+# battery_level() {
+#   _update_battery_cache
+#   [ -f ~/.tmux_battery_cache ] && cat ~/.tmux_battery_cache | jq -r '.percentage' || printf "..."
+# }
+#
+# # usage: #{battery_status}
+# battery_status() {
+#   _update_battery_cache
+#   if [ -f ~/.tmux_battery_cache ]; then
+#     status=$(cat ~/.tmux_battery_cache | jq -r '.status')
+#     case "$status" in
+#       "CHARGING") printf "󱐋" ;;
+#       "DISCHARGING") printf "󰂄" ;;
+#       *) printf "󰁹" ;;
+#     esac
+#   else
+#     printf "󰁹"
+#   fi
+# }
+#
+# # usage: #{cpu_temp}
+# cpu_temp() {
+#   _update_battery_cache
+#   [ -f ~/.tmux_battery_cache ] && cat ~/.tmux_battery_cache | jq -r '.temperature' | awk '{printf "%.1f°C", $1}' || printf "..."
+# }
+#
+# _update_battery_cache() {
+#   cache_file="$HOME/.tmux_battery_cache"
+#   now=$(date +%s)
+#   last_update=$(stat -c %Y "$cache_file" 2>/dev/null || echo 0)
+#   if [ $((now - last_update)) -gt 30 ]; then
+#     (termux-battery-status > "$cache_file" &)
+#   fi
+# }
+#
+# # usage: #{ram_usage}
+# ram_usage() {
+#   free -m | awk '/Mem:/ { printf "%dMB", $3 }'
+# }
+#
+# # usage: #{cpu_usage}
+# cpu_usage() {
+#   if [ -r /proc/stat ]; then
+#     read -r line < /proc/stat
+#     set -- $line
+#     user=$2; nice=$3; system=$4; idle=$5; iowait=$6; irq=$7; softirq=$8
+#     total=$((user + nice + system + idle + iowait + irq + softirq))
+#
+#     tmp_file="/data/data/com.termux/files/home/.tmux_cpu_stats"
+#     if [ -f "$tmp_file" ]; then
+#       read -r prev_total prev_idle < "$tmp_file"
+#       diff_total=$((total - prev_total))
+#       diff_idle=$((idle - prev_idle))
+#       if [ "$diff_total" -gt 0 ]; then
+#         usage=$((100 * (diff_total - diff_idle) / diff_total))
+#         printf "%d%%" "$usage"
+#       else
+#         printf "0%%"
+#       fi
+#     else
+#       printf "..."
+#     fi
+#     echo "$total $idle" > "$tmp_file"
+#   else
+#     idle=$(top -n 1 | grep -o "[0-9]*%idle" | head -n 1 | sed 's/%idle//')
+#     cores=$(nproc)
+#     if [ -n "$idle" ] && [ -n "$cores" ]; then
+#       usage=$(( 100 - (idle / cores) ))
+#       printf "%d%%" "$usage"
+#     else
+#       printf "..."
+#     fi
+#   fi
+# }
+#
+# # usage: #{my_user}
+# my_user() {
+#   if [ -f "$HOME/.user_name" ]; then
+#     cat "$HOME/.user_name"
+#   else
+#     whoami
+#   fi
+# }
+#
+# # usage: #{my_host}
+# my_host() {
+#   hostname
 # }
 #
 # "$@"

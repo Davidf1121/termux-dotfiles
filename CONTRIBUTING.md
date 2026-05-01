@@ -30,6 +30,7 @@ To ensure stability and compatibility with Powerlevel10k's instant prompt:
 ### Tmux Styling
 - The Tokyo Night theme is enforced via direct `set -g` commands in the `user customizations` section of `.tmux.conf.local` to override framework defaults reliably.
 - **Icons**: Uses Nerd Font glyphs (ensure a compatible font is active).
+- **Status Bar Caching**: To prevent UI lag when calling `termux-api` (e.g., for battery or temp), a background caching mechanism is used. The `_update_battery_cache` function runs every 30 seconds as a background process, ensuring the status bar remains responsive.
 
 ## Workflow for Changes
 1. **Symlinks**: Always use absolute paths for symlinks to prevent broken references in Termux's unique directory structure.
