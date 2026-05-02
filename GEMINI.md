@@ -41,7 +41,7 @@ This document takes absolute precedence over general workflows. It defines the a
 
 ## 4. Maintenance & Evolution
 - **Package Management**: Use `pkg` for Termux and `apt` for Linux. Always check for tool existence before aliasing.
-- **Version Control**: Use conventional commits (`feat:`, `fix:`, `docs:`).
+- **Version Control**: Use conventional commits (`feat:`, `fix:`, `docs:`). Local commits are the default; **NEVER** push to the remote repository unless explicitly commanded by the user.
 - **Environment Detection**: Always use the dispatcher pattern (`install.sh`) to detect the OS before running sub-installers.
 
 ---

@@ -8,6 +8,7 @@ fi
 # --- Environment Setup ---
 export TERM="xterm-256color"
 export COLORTERM="truecolor"
+export XDG_CONFIG_HOME="$HOME/.config"
 export DOTFILES_DIR="$HOME/termux-dotfiles"
 
 # --- User Identity ---

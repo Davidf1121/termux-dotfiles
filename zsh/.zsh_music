@@ -14,12 +14,13 @@ mplay() {
         return 1
     fi
     local target="$1"
+    local config="$HOME/.config/mpv/mpv.conf"
     if [ -d "$target" ]; then
-        mpv --profile=music -- "$target"/*
+        mpv --config-file="$config" --profile=music -- "$target"/*
     elif [ -f "$target" ]; then
-        mpv --profile=music -- "$target"
+        mpv --config-file="$config" --profile=music -- "$target"
     else
-        mpv --profile=music -- "$target"
+        mpv --config-file="$config" --profile=music -- "$target"
     fi
 }
 
