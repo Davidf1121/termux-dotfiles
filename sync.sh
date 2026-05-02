@@ -66,15 +66,8 @@ if confirm "Sync music app (bin/music.py)?"; then
     msg "Synced music app"
 fi
 
-# 7. Zsh music helper
-if confirm "Sync Zsh music helper (~/.zsh_music)?"; then
-    [ -f "$HOME/.zsh_music" ] && cp "$HOME/.zsh_music" "$DOTFILES_DIR/zsh/.zsh_music"
-    # Also allow syncing from the dotfiles path if linked
-    [ -f "$HOME/termux-dotfiles/zsh/.zsh_music" ] && cp "$HOME/termux-dotfiles/zsh/.zsh_music" "$DOTFILES_DIR/zsh/.zsh_music"
-    msg "Synced Zsh music helper"
-fi
-
 # 5. Termux Properties
+
 if confirm "Sync Termux properties?"; then
     cp "$HOME/.termux/termux.properties" "$DOTFILES_DIR/termux/termux.properties"
     cp "$HOME/.termux/colors.properties" "$DOTFILES_DIR/termux/colors.properties"

@@ -501,12 +501,14 @@ tmux_conf_uninstall_plugins_on_reload=true
 #   hostname
 # }
 #
-# # usage: #{now_playing} - reads from cache
-# now_playing() {
-#   if [ -f "$HOME/.cache/music_current" ]; then
-#     cat "$HOME/.cache/music_current" | cut -c1-25
-#   fi
-# }
+# usage: #{now_playing} - reads from cache
+now_playing() {
+  _update_music_cache
+  if [ -f "$HOME/.cache/music_current" ]; then
+    cat "$HOME/.cache/music_current" | cut -c1-25
+  fi
+}
+
 #
 # _update_music_cache() {
 #   cache_file="$HOME/.cache/music_current"

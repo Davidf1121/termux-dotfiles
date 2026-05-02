@@ -84,11 +84,7 @@ if confirm "Music player (bin/music.py)"; then
     deploy_link "$DOTFILES_DIR/bin/music.py" "$HOME/termux-dotfiles/bin/music.py"
 fi
 
-# 8. Zsh music helper
-if confirm "Zsh music helper (~/.zsh_music)"; then
-    deploy_link "$DOTFILES_DIR/zsh/.zsh_music" "$HOME/.zsh_music"
-fi
-
 echo "------------------------------------------------"
 msg "Selective symlinking complete!"
+
 msg "Files you skipped remain as physical copies (safe from auto-sync)."

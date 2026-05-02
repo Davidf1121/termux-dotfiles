@@ -66,16 +66,6 @@ def get_title_from_url(url):
         pass
     # Fallback - extract from URL
     return url.split('/')[-1].replace('-', ' ')[:50] if '/' in url else url[:50]
-    try:
-        result = subprocess.run(
-            ["yt-dlp", "--flat-playlist", "--print", "%title", url],
-            capture_output=True, text=True, timeout=10
-        )
-        if result.stdout.strip():
-            return result.stdout.strip()[:50]
-    except:
-        pass
-    return None
 
 def get_title_from_file(path):
     if not path:
@@ -156,11 +146,23 @@ def play(target):
     print(f"▶ {title}")
 
 def pause_toggle():
-    title = get_mpv_title()
-    if title:
-        print(f"⏸ {title}")
-    else:
+    if not os.path.exists(MPV_SOCKET):
         print("No music playing")
+        return
+
+    try:
+        # Toggle pause
+        subprocess.run(
+            ["socat", "-", MPV_SOCKET],
+            input=b"cycle pause\n",
+            capture_output=True, timeout=2
+        )
+        # Show status
+        title = get_mpv_title()
+        if title:
+            print(f"⏯ {title}")
+    except:
+        print("Failed to toggle pause")
 
 def stop():
     subprocess.run(["pkill", "mpv"], capture_output=True)
