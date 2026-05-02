@@ -32,7 +32,6 @@ def get_mpv_title():
     return None
 
 def get_title_from_url(url):
-    """Try to get title using yt-dlp if available."""
     if not url.startswith("http"):
         return None
     try:
@@ -66,7 +65,6 @@ def get_title_from_file(path):
             return result.stdout.strip()[:50]
     except:
         pass
-    # Fallback: use filename
     return Path(path).stem[:50]
 
 def play(target):
@@ -91,11 +89,9 @@ def play(target):
     
     title = get_title_from_file(str(Path(target).resolve()))
     
-    # Kill existing mpv
     subprocess.run(["pkill", "mpv"], capture_output=True)
     time.sleep(0.5)
     
-    # Start mpv with IPC socket
     mpv_args = [
         "mpv",
         "--profile=music",
@@ -111,13 +107,11 @@ def play(target):
         stderr=subprocess.DEVNULL
     )
     
-    # Wait for mpv to load and get metadata
     time.sleep(2)
     real_title = get_mpv_title()
     if real_title and real_title != title:
         title = real_title
     
-    # Write cache for tmux
     os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
     with open(CACHE_FILE, "w") as f:
         f.write(title)
