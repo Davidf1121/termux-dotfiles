@@ -312,7 +312,7 @@ set -g status-left-length 50
 set -g status-left "#[bg=#e0af68,fg=#1a1b26,bold] 󰀵 #S #[bg=#1a1b26,fg=#e0af68]"
 
 set -g status-right-length 240
-set -g status-right "#[fg=#24283b]#[bg=#24283b,fg=#7aa2f7] #(cut -c3- ~/.tmux.conf.local | sh -s battery_status) #(cut -c3- ~/.tmux.conf.local | sh -s battery_level)%% #[fg=#414868,bg=#24283b]#[bg=#414868,fg=#bb9af7] 󰻠 #(cut -c3- ~/.tmux.conf.local | sh -s cpu_usage) #[fg=#24283b,bg=#414868]#[bg=#24283b,fg=#c0caf5] 󰍛 #(cut -c3- ~/.tmux.conf.local | sh -s ram_usage) #[fg=#414868,bg=#24283b]#[bg=#414868,fg=#e0af68] 󰏈 #(cut -c3- ~/.tmux.conf.local | sh -s cpu_temp) #[fg=#24283b,bg=#414868]#[bg=#24283b,fg=#7aa2f7] 󰀉 #(cut -c3- ~/.tmux.conf.local | sh -s my_user) #[fg=#414868,bg=#24283b]#[bg=#414868,fg=#c0caf5] 󰒋 #(cut -c3- ~/.tmux.conf.local | sh -s my_host) #(cut -c3- ~/.tmux.conf.local | sh -s now_playing) #[fg=#7aa2f7,bg=#24283b]#[bg=#7aa2f7,fg=#1a1b26,bold] %R "
+set -g status-right "#[fg=#24283b]#[bg=#24283b,fg=#7aa2f7] #(cut -c3- ~/.tmux.conf.local | sh -s battery_status) #(cut -c3- ~/.tmux.conf.local | sh -s battery_level)%% #[fg=#414868,bg=#24283b]#[bg=#414868,fg=#bb9af7] 󰻠 #(cut -c3- ~/.tmux.conf.local | sh -s cpu_usage) #[fg=#24283b,bg=#414868]#[bg=#24283b,fg=#c0caf5] 󰍛 #(cut -c3- ~/.tmux.conf.local | sh -s ram_usage) #[fg=#414868,bg=#24283b]#[bg=#414868,fg=#e0af68] 󰏈 #(cut -c3- ~/.tmux.conf.local | sh -s cpu_temp) #[fg=#24283b,bg=#414868]#[bg=#24283b,fg=#7aa2f7] 󰀉 #(cut -c3- ~/.tmux.conf.local | sh -s my_user) #[fg=#414868,bg=#24283b]#[bg=#414868,fg=#c0caf5] 󰒋 #(cut -c3- ~/.tmux.conf.local | sh -s my_host) #(cut -c3- ~/.tmux.conf.local | sh -s now_playing)#[bg=#7aa2f7,fg=#1a1b26,bold] %R "
 
 set -g window-status-current-format "#[fg=#1a1b26,bg=#7aa2f7]#[fg=#1a1b26,bg=#7aa2f7,bold] #I  #W #[fg=#7aa2f7,bg=#1a1b26]"
 set -g window-status-format "#[fg=#1a1b26,bg=#24283b]#[fg=#a9b1d6,bg=#24283b] #I  #W #[fg=#24283b,bg=#1a1b26]"
@@ -506,10 +506,14 @@ tmux_conf_uninstall_plugins_on_reload=true
 #   _update_music_cache
 #   if [ -f "$HOME/.cache/music_current" ]; then
 #     title=$(cat "$HOME/.cache/music_current" | cut -c1-25)
-#     if [ -n "$title" ]; then
-#       printf "#[fg=#24283b,bg=#414868]#[bg=#24283b,fg=#9ece6a] 󰝚 %s " "$title"
+#     if [ -n "$title" ] && [ "$title" != "null" ]; then
+#       # Transition from Host (414868) to Music (24283b), then Music to Time (7aa2f7)
+#       printf "#[fg=#24283b,bg=#414868]#[bg=#24283b,fg=#9ece6a] 󰝚 %s #[fg=#7aa2f7,bg=#24283b]" "$title"
+#       return
 #     fi
 #   fi
+#   # No music: Transition directly from Host (414868) to Time (7aa2f7)
+#   printf "#[fg=#7aa2f7,bg=#414868]"
 # }
 #
 # _update_music_cache() {
