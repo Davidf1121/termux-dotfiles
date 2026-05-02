@@ -533,14 +533,13 @@ tmux_conf_uninstall_plugins_on_reload=true
 #       [ "$filled" -gt "$bar_size" ] && filled=$bar_size
 #       empty=$((bar_size - filled))
 #       
-# Pip-style bar (heavy horizontal line with specific tip)
-bar=""
-for i in $(seq 1 $filled); do bar="${bar}━"; done
-if [ "$filled" -lt "$bar_size" ]; then
-  bar="${bar%?}╸" # Add the tip
-fi
-for i in $(seq 1 $empty); do bar="${bar}─"; done
-
+#       # Pip-style bar (heavy horizontal line with specific tip)
+#       bar=""
+#       for i in $(seq 1 $filled); do bar="${bar}━"; done
+#       if [ "$filled" -lt "$bar_size" ]; then
+#         bar="${bar%?}╸" # Add the tip
+#       fi
+#       for i in $(seq 1 $empty); do bar="${bar}─"; done
 #
 #       # Format time
 #       p_min=$(( (pos / 60) % 60 )); p_sec=$(( pos % 60 ))
