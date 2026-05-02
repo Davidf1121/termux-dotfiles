@@ -101,6 +101,10 @@ deploy "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
 deploy "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
 deploy "$DOTFILES_DIR/config/nvim" "$HOME/.config/nvim"
 deploy "$DOTFILES_DIR/config/mpv" "$HOME/.config/mpv"
+
+# Create bin directory if needed and deploy music.py
+msg "🎵 Setting up music player..."
+mkdir -p "$HOME/termux-dotfiles/bin"
 deploy "$DOTFILES_DIR/bin/music.py" "$HOME/termux-dotfiles/bin/music.py"
 chmod +x "$HOME/termux-dotfiles/bin/music.py"
 
