@@ -24,7 +24,7 @@ def get_mpv_title():
         return None
     try:
         result = subprocess.run(
-            ["socat", "-", MPVSOCKET],
+            ["socat", "-", MPV_SOCKET],
             input=b"get_property media-title\n",
             capture_output=True, timeout=2
         )
@@ -82,7 +82,7 @@ def play(target):
     
     # Start mpv with IPC
     proc = subprocess.Popen(
-        ["mpv", "--profile=music", "--input-ipc-server=" + MPVSOCKET, "--no-video", "--", target],
+        ["mpv", "--profile=music", "--input-ipc-server=" + MPV_SOCKET, "--no-video", "--", target],
         stdin=subprocess.DEVNULL,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
