@@ -29,7 +29,7 @@ if ! command -v realpath > /dev/null 2>&1; then
     sudo apt-get update && sudo apt-get install -y coreutils
 fi
 
-# Robust deployment function with absolute paths
+# Robust deployment function - Copying instead of symlinking for manual control
 deploy() {
     local src="$1"
     local dest="$2"
@@ -39,18 +39,21 @@ deploy() {
         return 1
     fi
 
-    # Convert to absolute path
-    src=$(realpath "$src")
-
-    echo "🔗 Linking $src -> $dest"
+    echo "📁 Copying $src -> $dest"
     
     # Ensure parent directory exists
     mkdir -p "$(dirname "$dest")"
     
     # Remove existing destination safely
     rm -rf "$dest"
-    ln -sf "$src" "$dest"
-    echo "✅ Successfully linked $src"
+    
+    # Use copy for files, copy -r for directories
+    if [ -d "$src" ]; then
+        cp -r "$src" "$dest"
+    else
+        cp "$src" "$dest"
+    fi
+    echo "✅ Successfully deployed $src"
 }
 
 # Git helper function

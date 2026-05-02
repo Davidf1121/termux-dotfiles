@@ -24,12 +24,12 @@ if ! command -v realpath > /dev/null 2>&1; then
     pkg update && pkg install -y coreutils
 fi
 
-# Deployment function - Aggressive cleaning and absolute paths
+# Deployment function - Copying instead of symlinking for manual control
 deploy() {
     local src="$1"
     local dest="$2"
     
-    msg "🔗 Symlinking $(basename "$src") -> $dest"
+    msg "📁 Copying $(basename "$src") -> $dest"
     
     # Aggressively remove whatever is currently at the target path
     rm -f "$dest" || rm -rf "$dest"
@@ -37,8 +37,12 @@ deploy() {
     # Ensure parent directory exists
     mkdir -p "$(dirname "$dest")"
     
-    # Use paths directly (expected to be absolute)
-    ln -sf "$src" "$dest"
+    # Use copy for files, copy -r for directories
+    if [ -d "$src" ]; then
+        cp -r "$src" "$dest"
+    else
+        cp "$src" "$dest"
+    fi
 }
 
 # Git helper function

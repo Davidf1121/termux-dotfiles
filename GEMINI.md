@@ -27,9 +27,13 @@ This document takes absolute precedence over general workflows. It defines the a
 
 ## 3. Deployment Protocol
 
-### Symlinking (The `deploy` Function)
-- **Absolute Paths**: Always use absolute paths for symlinks to prevent broken references in Termux's unique file system.
-- **Aggressive Cleaning**: Installers must `rm -rf` the target before symlinking to ensure a clean state.
+### Deployment (The `deploy` Function)
+- **Copying**: Configuration files must be **copied** from the repository to the target location, NOT symlinked. This prevents active local edits (which might contain secrets) from being automatically tracked by the repository.
+- **Aggressive Cleaning**: Installers must `rm -rf` the target before deploying to ensure a clean state.
+
+### Manual Synchronization
+- **`sync.sh`**: Use the dedicated sync script to manually back up local configuration changes into the repository.
+- **Safety**: Always audit files for private tokens or sensitive data before running `sync.sh`.
 
 ### Fastfetch Sync
 - **Logo Resolution**: Fastfetch configs must use a `~` placeholder for logo paths. The installer is responsible for using `sed` to replace this with the actual `$HOME` path during deployment.

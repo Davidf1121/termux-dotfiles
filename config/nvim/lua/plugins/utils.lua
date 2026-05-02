@@ -31,7 +31,7 @@ return {
       require("termuxcord").setup({
         -- NOTE: You must join their Discord server for this to work.
         -- See: https://github.com/lipeedev/termuxcord.nvim
-        token = "", -- Your Discord user token
+        -- token = "YOUR_DISCORD_TOKEN_HERE", -- Your Discord user token (DO NOT COMMIT SECRETS)
         application_id = "1098418041926225960", -- Default ID
         title = "Termux Neovim",
         state = "Coding in %w",
