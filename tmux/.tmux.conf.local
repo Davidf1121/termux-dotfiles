@@ -288,8 +288,8 @@ set -g history-limit 10000
 # start with mouse mode enabled
 set -g mouse on
 
-# move status line to top
-set -g status-position top
+# move status line to bottom
+set -g status-position bottom
 
 # -- floating popup windows ---------------------------------------------------
 # Open a floating terminal with prefix + g
@@ -298,7 +298,7 @@ bind g display-popup -E -w 80% -h 80% "zsh"
 bind B display-popup -E -w 80% -h 80% "btop"
 
 # -- fancy enhancements --------------------------------------------------------
-set -g pane-border-status top
+set -g pane-border-status bottom
 set -g pane-border-format " [ ###P #W ] "
 set -g pane-active-border-style "fg=#7aa2f7"
 set -g pane-border-style "fg=#24283b"
@@ -316,7 +316,7 @@ set -g status-right "#[fg=#24283b]#[bg=#24283b,fg=#7aa2f7] #(cut -c3- ~/.tmux
 
 # Enable 2 status lines and configure the second one for music
 set -g status 2
-set -g status-format[1] "#[bg=#1a1b26,fg=#9ece6a] #(cut -c3- ~/.tmux.conf.local | sh -s music_bar)"
+set -g status-format[1] "#(cut -c3- ~/.tmux.conf.local | sh -s music_bar)"
 
 set -g window-status-current-format "#[fg=#1a1b26,bg=#7aa2f7]#[fg=#1a1b26,bg=#7aa2f7,bold] #I  #W #[fg=#7aa2f7,bg=#1a1b26]"
 set -g window-status-format "#[fg=#1a1b26,bg=#24283b]#[fg=#a9b1d6,bg=#24283b] #I  #W #[fg=#24283b,bg=#1a1b26]"
@@ -524,7 +524,7 @@ tmux_conf_uninstall_plugins_on_reload=true
 #       [ -z "$dur" ] && dur=1
 #
 #       # Calculate progress
-#       bar_size=40
+#       bar_size=50
 #       if [ "$dur" -gt 0 ]; then
 #         filled=$(( pos * bar_size / dur ))
 #       else
@@ -533,15 +533,26 @@ tmux_conf_uninstall_plugins_on_reload=true
 #       [ "$filled" -gt "$bar_size" ] && filled=$bar_size
 #       empty=$((bar_size - filled))
 #       
-#       bar=""
-#       for i in $(seq 1 $filled); do bar="${bar}█"; done
-#       for i in $(seq 1 $empty); do bar="${bar}░"; done
+# Pip-style bar (heavy horizontal line with specific tip)
+bar=""
+for i in $(seq 1 $filled); do bar="${bar}━"; done
+if [ "$filled" -lt "$bar_size" ]; then
+  bar="${bar%?}╸" # Add the tip
+fi
+for i in $(seq 1 $empty); do bar="${bar}─"; done
+
 #
 #       # Format time
 #       p_min=$(( (pos / 60) % 60 )); p_sec=$(( pos % 60 ))
 #       d_min=$(( (dur / 60) % 60 )); d_sec=$(( dur % 60 ))
 #       
-#       printf " 󰝚  %s  #[fg=#7aa2f7]%s#[fg=#9ece6a] %02d:%02d / %02d:%02d " "$(echo "$title" | cut -c1-50)" "$bar" $p_min $p_sec $d_min $d_sec
+#       # Build the segments with Arrows (Tokyo Night theme)
+#       # [Icon + Title] > [Bar] > [Time]
+#       segment1="#[bg=#e0af68,fg=#1a1b26,bold] 󰝚  $(echo "$title" | cut -c1-40) #[bg=#24283b,fg=#e0af68]"
+#       segment2="#[bg=#24283b,fg=#7aa2f7] ${bar} #[bg=#1a1b26,fg=#24283b]"
+#       segment3="#[bg=#1a1b26,fg=#9ece6a] %02d:%02d / %02d:%02d "
+#       
+#       printf "%s%s${segment3}" "$segment1" "$segment2" $p_min $p_sec $d_min $d_sec
 #       return
 #     fi
 #   fi
