@@ -33,7 +33,8 @@ This document takes absolute precedence over general workflows. It defines the a
 
 ### Manual Synchronization
 - **`sync.sh`**: Use the dedicated sync script to manually back up local configuration changes into the repository.
-- **Safety**: Always audit files for private tokens or sensitive data before running `sync.sh`.
+- **`symlink.sh`**: For easier development, use this script to selectively symlink files. This allows real-time updates for non-sensitive files (like Zsh) while keeping sensitive files (like Neovim) as isolated copies.
+- **Safety**: Always audit files for private tokens or sensitive data before running `sync.sh` or choosing to symlink a directory.
 
 ### Fastfetch Sync
 - **Logo Resolution**: Fastfetch configs must use a `~` placeholder for logo paths. The installer is responsible for using `sed` to replace this with the actual `$HOME` path during deployment.
