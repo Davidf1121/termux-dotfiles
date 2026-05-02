@@ -4,9 +4,6 @@ return {
     "folke/tokyonight.nvim",
     lazy = false,
     priority = 1000,
-    config = function()
-      vim.cmd([[colorscheme tokyonight]])
-    end,
   },
 
   -- Statusline
@@ -57,7 +54,9 @@ return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     config = function()
-      require("nvim-treesitter.configs").setup({
+      local ok, treesitter = pcall(require, "nvim-treesitter.configs")
+      if not ok then return end
+      treesitter.setup({
         ensure_installed = { "lua", "vim", "vimdoc", "javascript", "typescript", "python" },
         highlight = { enable = true },
       })

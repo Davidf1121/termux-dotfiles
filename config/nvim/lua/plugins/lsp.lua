@@ -13,7 +13,16 @@ return {
       })
 
       local lspconfig = require("lspconfig")
-      lspconfig.lua_ls.setup({})
+      -- Standard setup for lua_ls
+      lspconfig.lua_ls.setup({
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = { "vim" },
+            },
+          },
+        },
+      })
     end,
   },
 
