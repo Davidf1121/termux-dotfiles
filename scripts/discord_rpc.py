@@ -14,7 +14,7 @@ def get_token():
         with open(ENV_FILE, "r") as f:
             for line in f:
                 if line.startswith("TOKEN="):
-                    return line.split("=")[1].strip()
+                    return line.split("=")[1].strip().strip("'").strip('"')
     return None
 
 def get_sys_info():
@@ -55,7 +55,7 @@ def update_status(token, text):
     headers = {
         "Authorization": token,
         "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
     }
     payload = {
         "custom_status": {
@@ -65,12 +65,10 @@ def update_status(token, text):
     }
     try:
         r = requests.patch(url, headers=headers, json=payload)
-        if r.status_code != 200:
-            print(f"❌ Discord API Error {r.status_code}: {r.text}")
-        return r.status_code == 200
+        return r
     except Exception as e:
         print(f"❌ Request failed: {e}")
-        return False
+        return None
 
 def main():
     token = get_token()
@@ -82,10 +80,15 @@ def main():
     print("🚀 Discord RPC Started! Updating status every 60 seconds...")
     while True:
         status_text = get_sys_info()
-        if update_status(token, status_text):
-            print(f"✅ Updated: {status_text}")
+        r = update_status(token, status_text)
+        
+        if r is not None:
+            if r.status_code == 200:
+                print(f"✅ Updated: {status_text}")
+            else:
+                print(f"❌ Discord API Error {r.status_code}: {r.reason}")
         else:
-            print("❌ Failed to update status. Check your token.")
+            print("❌ Failed to update status. Check your connection.")
         
         time.sleep(60)
 
