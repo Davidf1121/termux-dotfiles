@@ -40,10 +40,34 @@ export PATH="$HOME/.local/bin:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
 ZSH_THEME="powerlevel10k/powerlevel10k"
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+
+# Order matters: fzf-tab should be loaded before other plugins that use completion
+plugins=(
+  git 
+  zsh-autosuggestions 
+  zsh-syntax-highlighting 
+  fzf-tab
+)
 
 # Load Oh My Zsh
 source $ZSH/oh-my-zsh.sh
+
+# --- Minecraft-style Completion (fzf-tab) ---
+# Disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# preview directory's content with eza when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
+
+# --- Atuin History ---
+if command -v atuin > /dev/null 2>&1; then
+    eval "$(atuin init zsh)"
+fi
 
 if command -v zoxide > /dev/null 2>&1; then
     eval "$(zoxide init zsh)"

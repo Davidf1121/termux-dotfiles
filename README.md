@@ -16,6 +16,10 @@ A collection of configuration files to set up a modern and functional terminal e
 - **Tools**: Includes `eza` for directory listings, `bat` for file viewing, and `zoxide` for navigation.
 
 ## Key Features
+- **Minecraft-style Completion**: Real-time, fuzzy-searchable tab completion with `fzf-tab`.
+- **Modern History**: Interactive shell history with `atuin`.
+- **Floating Terminals**: Quick-access floating windows in Tmux (press `prefix + g`).
+- **Fancy Greeting**: A custom Neovim startup dashboard with `alpha-nvim`.
 - **Dynamic Identity**: Use the `setname` command to update your user handle across the shell, Fastfetch, and Tmux status bar.
 - **Integrated Navigation**: `y` command opens Yazi and automatically changes the shell directory to the last visited path upon exit.
 - **System Metrics**: The Tmux status bar displays real-time information including battery status, CPU usage, RAM, and temperature.

@@ -66,7 +66,8 @@ pkg upgrade -y
 
 # Force re-installation/update of core tools
 msg "🛠️ Installing/Updating core tools..."
-pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi figlet neovim ripgrep python nodejs
+pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi figlet neovim ripgrep atuin
+ python nodejs
 
 # Refresh command hash
 hash -r
@@ -139,4 +140,6 @@ msg "🐚 Changing default shell to zsh..."
 chsh -s zsh
 
 msg "✨ Termux Deployment Successful!"
+msg "👉 Please restart Termux or type 'zsh' to begin."
+ployment Successful!"
 msg "👉 Please restart Termux or type 'zsh' to begin."

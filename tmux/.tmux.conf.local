@@ -291,6 +291,12 @@ set -g mouse on
 # move status line to top
 set -g status-position top
 
+# -- floating popup windows ---------------------------------------------------
+# Open a floating terminal with prefix + g
+bind g display-popup -E -w 80% -h 80% "zsh"
+# Open a floating btop with prefix + B
+bind B display-popup -E -w 80% -h 80% "btop"
+
 # -- fancy enhancements --------------------------------------------------------
 set -g pane-border-status top
 set -g pane-border-format " [ ###P #W ] "

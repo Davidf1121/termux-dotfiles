@@ -79,6 +79,13 @@ hash -r
 echo "🛠️ Installing essential dependencies..."
 sudo apt-get install -yq zsh git curl wget tmux fzf cmatrix software-properties-common gpg which neovim ripgrep python3 python3-pip nodejs
 
+# Install Atuin
+if ! command -v atuin > /dev/null 2>&1; then
+    echo "📥 Installing atuin..."
+    curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh | sh
+fi
+ python3 python3-pip nodejs
+
 # Install Fastfetch via PPA
 if ! command -v fastfetch > /dev/null 2>&1; then
     echo "📥 Installing Fastfetch via PPA..."
