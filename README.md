@@ -34,7 +34,6 @@ This repository is designed for safe and flexible development:
 - **Integrated Navigation**: `y` command opens Yazi and automatically changes the shell directory to the last visited path upon exit.
 - **System Metrics**: The Tmux status bar displays real-time information including battery status, CPU usage, RAM, and temperature.
 - **Optimized Performance**: Status bar metrics are cached in the background to ensure terminal responsiveness.
-- **Discord Rich Presence**: Show your current Neovim activity on Discord (requires configuration).
 - **Custom Greeting**: The `cls` (or `clear`) command provides a clean screen along with a personalized greeting and system overview.
 - **Cross-Platform**: A unified installer supports both Termux and standard Linux distributions (Debian/Ubuntu).
 
@@ -75,7 +74,6 @@ bash debug-install.sh
 ```
 
 ## Recent Updates
-- **Discord Presence**: Integrated `termuxcord.nvim` for Discord Rich Presence support.
 - **Modular Installer**: Separate scripts for Termux and Linux for better maintenance.
 - **Performance Fixes**: Asynchronous caching for system metrics in Tmux.
 - **Unified Identity**: Improved synchronization for the `setname` system.
