@@ -509,14 +509,14 @@ tmux_conf_uninstall_plugins_on_reload=true
 # music_bar() {
 #   socket="$HOME/.cache/mpv_socket"
 #   if pgrep -f mpv >/dev/null && [ -S "$socket" ]; then
-#     # Get info in one go to be faster
-#     info=$(echo '{"command": ["get_property", "media-title"]}{"command": ["get_property", "time-pos"]}{"command": ["get_property", "duration"]}' | socat - "$socket" 2>/dev/null)
+#     # Send commands on separate lines
+#     info=$(printf '{"command": ["get_property", "media-title"]}\n{"command": ["get_property", "time-pos"]}\n{"command": ["get_property", "duration"]}\n' | socat - "$socket" 2>/dev/null)
 #     
-#     title=$(echo "$info" | jq -r 'select(.request_id == 0 or .command == null) | .data' | head -n 1)
-#     pos_f=$(echo "$info" | jq -r 'select(.request_id == 0 or .command == null) | .data' | sed -n '2p')
-#     dur_f=$(echo "$info" | jq -r 'select(.request_id == 0 or .command == null) | .data' | sed -n '3p')
+#     title=$(echo "$info" | jq -r '.data' | head -n 1)
+#     pos_f=$(echo "$info" | jq -r '.data' | sed -n '2p')
+#     dur_f=$(echo "$info" | jq -r '.data' | sed -n '3p')
 #
-#     if [ "$title" != "null" ] && [ -n "$title" ] && [ "$dur_f" != "null" ]; then
+#     if [ "$title" != "null" ] && [ -n "$title" ] && [ "$dur_f" != "null" ] && [ "$dur_f" != "" ]; then
 #       # Convert to integers for shell math
 #       pos=${pos_f%.*}
 #       dur=${dur_f%.*}
