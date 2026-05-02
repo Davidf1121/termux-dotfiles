@@ -5,7 +5,7 @@ import requests
 import subprocess
 
 # --- Configuration ---
-# To keep your token safe, create a file at ~/.discord_rpc.env with:
+# To keep your token safe, create a file at ~/.env with:
 # TOKEN=your_token_here
 ENV_FILE = os.path.expanduser("~/.env")
 
@@ -46,7 +46,7 @@ def get_sys_info():
         cpu = subprocess.check_output("cut -c3- ~/.tmux.conf.local | sh -s cpu_usage", shell=True).decode().strip()
         cpu = f"⚡ {cpu}"
     except:
-        cpu = "󰻠 ..."
+        cpu = "⚡ ..."
 
     return f"{battery} | {cpu} | {ram} | {temp}"
 
@@ -54,24 +54,28 @@ def update_status(token, text):
     url = "https://discord.com/api/v9/users/@me/settings"
     headers = {
         "Authorization": token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
     }
     payload = {
         "custom_status": {
             "text": text,
-            "emoji_name": "termux", # You can change this to any emoji name
+            "emoji_name": None,
         }
     }
     try:
         r = requests.patch(url, headers=headers, json=payload)
+        if r.status_code != 200:
+            print(f"❌ Discord API Error {r.status_code}: {r.text}")
         return r.status_code == 200
-    except:
+    except Exception as e:
+        print(f"❌ Request failed: {e}")
         return False
 
 def main():
     token = get_token()
     if not token:
-        print("❌ Error: TOKEN not found in ~/.discord_rpc.env")
+        print("❌ Error: TOKEN not found in ~/.env")
         print("Please create the file and add: TOKEN=your_discord_token")
         return
 
