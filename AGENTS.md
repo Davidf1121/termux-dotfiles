@@ -54,5 +54,4 @@ bash debug-install.sh      # prints system info then runs install.sh --verbose
 - **Commands**: `yt` (launch TUI), `mplay <file|URL>` (play), `mpause`/`mnext`/`mprev` (controls)
 - **Config**: `config/mpv/mpv.conf` — music profile with IPC enabled
 - **Dependencies**: `python-yt-dlp`, `yewtube`, `socat` (for socket control)
- - **Dependencies**: `python-yt-dlp`, `yewtube`, `socat` (for socket control)
- - **Tmux**: `now_playing` helper added to `tmux/.tmux.conf.local` and wired into the status-right (shows current track, truncated)
+- **Tmux**: `now_playing` helper added to `tmux/.tmux.conf.local` and wired into the status-right (shows current track, truncated)

@@ -25,6 +25,12 @@ This document takes absolute precedence over general workflows. It defines the a
 - **Identity**: The `setname` function is the source of truth for user identity. It must update `~/.user_name` and export `$MY_USER`.
 - **Guards**: Interactive commands (like `cls` or `fastfetch`) must be gated by `[[ $- == *i* ]]` to avoid breaking non-interactive shell executions.
 
+### Music Player
+- **Backend**: `mpv` with IPC socket at `/tmp/mpvsocket` for remote control.
+- **TUI**: `yewtube` streams YouTube without API keys.
+- **Helper**: Functions in `zsh/.zsh_music` provide `mplay`, `mpause`, `mnext`, `mprev`, `mvol`, `minfo`.
+- **Tmux**: Use caching pattern (like battery) for `now_playing` to avoid blocking status bar.
+
 ## 3. Deployment Protocol
 
 ### Deployment (The `deploy` Function)
