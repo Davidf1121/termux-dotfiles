@@ -1,6 +1,1 @@
-vim.schedule callback: ...m/lazy/telescope.nvim/lua/telescope/previewers/utils.lua:135: attempt to call field 'ft_to_lang' (a nil value)
-stack traceback:
-        ...m/lazy/telescope.nvim/lua/telescope/previewers/utils.lua:135: in function 'ts_highlighter'
-        ...m/lazy/telescope.nvim/lua/telescope/previewers/utils.lua:119: in function 'highlighter'
-        ...scope.nvim/lua/telescope/previewers/buffer_previewer.lua:247: in function 'fn'
-        vim/_core/editor.lua:273: in function <vim/_core/editor.lua:272>
+# Placeholder - last error was MPVSOCKET typo, now fixed
