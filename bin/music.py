@@ -10,7 +10,7 @@ MPV_SOCKET = "/tmp/mpvsocket"
 CACHE_FILE = os.path.expanduser("~/.cache/music_current")
 
 def ensure_pulse():
-    """Start PulseAudio if not running."""
+    """Start PulseAudio if not running, or skip if fails."""
     # Check if already running
     try:
         result = subprocess.run(["pulseaudio", "--check"], capture_output=True, timeout=2)
@@ -23,10 +23,14 @@ def ensure_pulse():
     try:
         subprocess.run(["pulseaudio", "-D", "--exit-idle-time=-1"], capture_output=True, timeout=5)
         time.sleep(1)
+        result = subprocess.run(["pulseaudio", "--check"], capture_output=True, timeout=2)
+        if result.returncode == 0:
+            return True
     except:
-        print("Warning: Could not start PulseAudio")
-        return False
-    return True
+        pass
+    
+    print("PulseAudio not available, using default audio")
+    return False
 
 def get_mpv_title():
     if not os.path.exists(MPV_SOCKET):
@@ -107,8 +111,6 @@ def play(target):
     
     mpv_args = [
         "mpv",
-        "--profile=music",
-        "--input-ipc-server=" + MPV_SOCKET,
         "--no-video",
         "--", target
     ]
