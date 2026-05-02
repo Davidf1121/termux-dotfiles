@@ -132,43 +132,21 @@ if command -v yewtube > /dev/null 2>&1; then
 fi
 
 if command -v mpv > /dev/null 2>&1; then
+    # Ensure PulseAudio is running for sound
+    pulseaudio --start --exit-idle-time=-1 2>/dev/null
     # Source music controls
     [ -f "$HOME/.zsh_music" ] && source "$HOME/.zsh_music"
     
     # Convenience aliases
-    alias mplay='_mplay_wrapper'
-    alias mpause='_mpc pause'
-    alias mnext='_mpc playlist-next'
-    alias mprev='_mpc playlist-prev'
-    alias mstop='_mpc quit'
-    alias mvol='_mvol_wrapper'
-    alias minfo='_mpc get_property media-title'
+    alias mplay='mplay'
+    alias mpause='mpause'
+    alias mnext='mnext'
+    alias mprev='mprev'
+    alias mstop='mstop'
+    alias mvol='mvol'
+    alias minfo='minfo'
 fi
 
-# mpv wrapper functions (lazy-load the socket helper)
-_mpc() {
-    echo "$1" | socat - /tmp/mpvsocket 2>/dev/null
-}
-
-_mplay_wrapper() {
-    if [ -z "$1" ]; then
-        echo "Usage: mplay <file|folder|url>"
-        return 1
-    fi
-    local target="$1"
-    if [ -d "$target" ]; then
-        mpv --profile=music -- "$target"/*
-    elif [ -f "$target" ]; then
-        mpv --profile=music -- "$target"
-    else
-        mpv --profile=music -- "$target"
-    fi
-}
-
-_mvol_wrapper() {
-    local level="${1:-100}"
-    _mpc "set volume $level"
-}
 # Custom clear behavior: clear screen and show welcome + fastfetch
 function cls() {
     command clear

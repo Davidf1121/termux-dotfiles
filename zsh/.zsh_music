@@ -41,7 +41,14 @@ mstop() {
 
 mvol() {
     local level="${1:-100}"
+    # Set mpv internal volume
     mpc_cmd "set volume $level"
+    # Optionally sync with system volume if 'sys' is passed as 2nd arg
+    if [ "$2" = "sys" ]; then
+        if command -v termux-volume > /dev/null; then
+            termux-volume music "$((level / 6))" # Termux volume is usually 0-15
+        fi
+    fi
 }
 
 mseek() {
