@@ -25,19 +25,40 @@ def get_mpv_title():
             capture_output=True, timeout=2
         )
         title = result.stdout.decode().strip()
-        if title and title != "null":
+        if title and title != "null" and len(title) > 3:
             return title
     except:
         pass
     return None
 
+def get_title_from_url(url):
+    """Try to get title using yt-dlp if available."""
+    if not url.startswith("http"):
+        return None
+    try:
+        result = subprocess.run(
+            ["yt-dlp", "--flat-playlist", "--print", "%title", url],
+            capture_output=True, text=True, timeout=10
+        )
+        if result.stdout.strip():
+            return result.stdout.strip()[:50]
+    except:
+        pass
+    return None
+
 def get_title_from_file(path):
-    if not path or path.startswith("http"):
-        return path.split("/")[-1][:50] if path else "Stream"
+    if not path:
+        return "Unknown"
+    if path.startswith("http"):
+        title = get_title_from_url(path)
+        if title:
+            return title
+        return path.split("/")[-1][:50] or "Stream"
     try:
         result = subprocess.run(
             ["ffprobe", "-v", "error", "-show_entries", 
-             "format_tags=title", "-of", "default=noprint_wrappers=1:nokey=1",
+             "format_tags=title",
+             "-of", "default=noprint_wrappers=1:nokey=1",
              path],
             capture_output=True, text=True, timeout=5
         )
@@ -45,6 +66,7 @@ def get_title_from_file(path):
             return result.stdout.strip()[:50]
     except:
         pass
+    # Fallback: use filename
     return Path(path).stem[:50]
 
 def play(target):
@@ -67,22 +89,35 @@ def play(target):
         target = str(files[0])
         path = Path(target)
     
-    title = get_title_from_file(str(path))
+    title = get_title_from_file(str(Path(target).resolve()))
     
+    # Kill existing mpv
     subprocess.run(["pkill", "mpv"], capture_output=True)
+    time.sleep(0.5)
+    
+    # Start mpv with IPC socket
+    mpv_args = [
+        "mpv",
+        "--profile=music",
+        "--input-ipc-server=" + MPV_SOCKET,
+        "--no-video",
+        "--", target
+    ]
     
     proc = subprocess.Popen(
-        ["mpv", "--profile=music", "--input-ipc-server=" + MPV_SOCKET, "--no-video", "--", target],
+        mpv_args,
         stdin=subprocess.DEVNULL,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
     
-    time.sleep(1)
+    # Wait for mpv to load and get metadata
+    time.sleep(2)
     real_title = get_mpv_title()
-    if real_title:
+    if real_title and real_title != title:
         title = real_title
     
+    # Write cache for tmux
     os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
     with open(CACHE_FILE, "w") as f:
         f.write(title)
