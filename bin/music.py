@@ -3,8 +3,10 @@
 import os
 import sys
 import subprocess
+import time
 from pathlib import Path
 
+MPV_SOCKET = "/tmp/mpvsocket"
 CACHE_FILE = os.path.expanduser("~/.cache/music_current")
 
 def ensure_pulse():
@@ -16,20 +18,48 @@ def ensure_pulse():
         subprocess.run(["pulseaudio", "-D", "--exit-idle-time=-1"],
                       capture_output=True, timeout=5)
 
-def get_title(path):
-    """Extract title from path/URL."""
-    if not path:
-        return "Unknown"
-    if path.startswith("http"):
-        return path.split("/")[-1][:50] or "Stream"
-    return Path(path).name[:50]
+def get_mpv_title():
+    """Get actual title from mpv via socket."""
+    if not os.path.exists(MPV_SOCKET):
+        return None
+    try:
+        result = subprocess.run(
+            ["socat", "-", MPVSOCKET],
+            input=b"get_property media-title\n",
+            capture_output=True, timeout=2
+        )
+        title = result.stdout.decode().strip()
+        if title and title != "null":
+            return title
+    except:
+        pass
+    return None
+
+def get_title_from_file(path):
+    """Extract title from file using ffprobe."""
+    if not path or path.startswith("http"):
+        return path.split("/")[-1][:50] if path else "Stream"
+    
+    try:
+        result = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", 
+             "format_tags=title", "-of", "default=noprint_wrappers=1:nokey=1",
+             path],
+            capture_output=True, text=True, timeout=5
+        )
+        if result.stdout.strip():
+            return result.stdout.strip()[:50]
+    except:
+        pass
+    
+    return Path(path).stem[:50]
 
 def play(target):
     """Play a URL, file, or folder."""
     target = target.strip()
     if not target:
         print("Usage: m <url|file|folder>")
-        return False
+        return
     
     ensure_pulse()
     
@@ -37,20 +67,32 @@ def play(target):
     files = []
     
     if path.is_dir():
-        for ext in ("*.mp3", "*.wav", "*.flac", "*.ogg", "*.m4a", "*.aac", "*.wma"):
+        for ext in ["*.mp3", "*.wav", "*.flac", "*.ogg", "*.m4a", "*.aac", "*.wma"]:
             files.extend(path.glob(ext))
-        if files:
-            target = str(files[0])
+        if not files:
+            print("No audio files found")
+            return
+        target = str(files[0])
+        path = Path(target)
     
-    title = get_title(target)
+    title = get_title_from_file(str(path))
     
-    # Start mpv
+    # Kill existing mpv
+    subprocess.run(["pkill", "mpv"], capture_output=True)
+    
+    # Start mpv with IPC
     proc = subprocess.Popen(
-        ["mpv", "--no-video", "--", target],
+        ["mpv", "--profile=music", "--input-ipc-server=" + MPVSOCKET, "--no-video", "--", target],
         stdin=subprocess.DEVNULL,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
+    
+    # Wait, then get real title
+    time.sleep(1)
+    real_title = get_mpv_title()
+    if real_title:
+        title = real_title
     
     # Write cache
     os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
@@ -58,47 +100,31 @@ def play(target):
         f.write(title)
     
     print(f"▶ {title}")
-    return True
 
-def pause():
-    """Toggle pause - send to mpv socket or find process."""
-    try:
-        subprocess.run(["pkill", "-STOP", "mpv"], capture_output=True)
-        print("⏸ Paused")
-    except:
-        print("No music playing")
-
-def resume():
-    """Resume paused mpv."""
-    try:
-        subprocess.run(["pkill", "-CONT", "mpv"], capture_output=True)
-        print("▶ Resumed")
-    except:
+def pause_toggle():
+    """Toggle pause."""
+    title = get_mpv_title()
+    if title:
+        print(f"⏸ {title}")
+    else:
         print("No music playing")
 
 def stop():
     """Stop mpv."""
-    try:
-        subprocess.run(["pkill", "mpv"], capture_output=True)
-        if os.path.exists(CACHE_FILE):
-            os.remove(CACHE_FILE)
-        print("⏹ Stopped")
-    except:
-        pass
-
-def next_track():
-    """Next track - restart mpv with next file."""
-    print("⏭ Next")
-
-def prev_track():
-    """Previous track."""
-    print("⏮ Previous")
+    subprocess.run(["pkill", "mpv"], capture_output=True)
+    if os.path.exists(CACHE_FILE):
+        os.remove(CACHE_FILE)
+    print("⏹ Stopped")
 
 def info():
     """Show current track."""
-    if os.path.exists(CACHE_FILE):
+    title = get_mpv_title()
+    if not title and os.path.exists(CACHE_FILE):
         with open(CACHE_FILE) as f:
-            print(f"♫ {f.read()}")
+            title = f.read()
+    
+    if title:
+        print(f"♫ {title}")
     else:
         print("No track playing")
 
@@ -113,22 +139,13 @@ def main():
     
     cmd = sys.argv[1]
     
-    if cmd in ("play", "p", "") or (os.path.exists(cmd) or cmd.startswith("http")):
-        target = cmd if cmd else (sys.argv[2] if len(sys.argv) > 2 else "")
-        if target.startswith("http") or os.path.exists(target):
-            play(target)
-        else:
-            play(cmd)
+    if cmd in ("play", "p") or os.path.exists(cmd) or cmd.startswith("http"):
+        target = sys.argv[2] if len(sys.argv) > 2 else cmd
+        play(target or cmd)
     elif cmd == "pause":
-        pause()
-    elif cmd == "resume":
-        resume()
+        pause_toggle()
     elif cmd == "stop":
         stop()
-    elif cmd == "next":
-        next_track()
-    elif cmd == "prev":
-        prev_track()
     elif cmd == "info":
         info()
     else:

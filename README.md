@@ -60,20 +60,21 @@ This repository is designed for safe and flexible development:
 | `cls` | Clear terminal and show greeting |
 | `m <url|file>` | Custom Python music player |
 | `p` | Shortcut for music player |
-| `m pause`/`m next`/`m prev` | Music controls |
+| `mpause`/`mstop`/`minfo` | Music controls |
 
 ## Music Player
 
-This dotfiles includes a custom Python music player (`bin/music.py`):
+Custom standalone music player (`bin/music.py`) - just mpv, no pip deps:
 
 - Backend: `mpv` with IPC socket at `/tmp/mpvsocket`
-- Cache: `~/.cache/music_current` for tmux status bar
-- Sources: Local files, folders, YouTube URLs
+- Audio: PulseAudio
+- Cache: `~/.cache/music_current` for tmux display
+- Sources: Local files, folders, URLs (YouTube, direct)
 
-Install dependencies:
+Install:
 
 ```bash
-pkg install mpv socat ffmpeg python
+pkg install mpv pulseaudio ffmpeg python
 ```
 
 Usage:
@@ -81,11 +82,10 @@ Usage:
 ```bash
 m https://youtu.be/...   # Play YouTube
 m /sdcard/Music        # Play folder
+m song.mp3            # Play file
 m pause               # Toggle pause
-m next                # Next track
-m prev                # Previous track
 m stop                # Stop
-m info                # Show current track
+m info                # Show track
 ```
 
 ## Installation

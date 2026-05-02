@@ -36,9 +36,10 @@ To ensure stability and compatibility with Powerlevel10k's instant prompt:
 - **Status Bar Caching**: To prevent UI lag when calling `termux-api` (e.g., for battery or temp), a background caching mechanism is used. The `_update_battery_cache` function runs every 30 seconds as a background process, ensuring the status bar remains responsive.
 
 ### Music Player
-- Custom Python app at `bin/music.py` controls `mpv` via IPC socket.
-- Cache file at `~/.cache/music_current` stores current track for tmux display.
-- Use shorthand aliases: `m` (main), `p` (play), `pause`, `next`, `prev`, `stop`, `info`.
+- Custom Python app at `bin/music.py` with mpv IPC socket.
+- Uses `~/.cache/music_current` for tmux display.
+- Audio via PulseAudio (auto-started).
+- Commands: `m` (play), `m pause`, `m stop`, `m info`.
 
 ## Workflow for Changes
 1. **Hybrid Sync**: Use `symlink.sh` for live development (linking repo to system) and `sync.sh` to back up local changes into the repository.

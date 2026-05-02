@@ -48,9 +48,10 @@ bash debug-install.sh      # prints system info then runs install.sh --verbose
 - `CONTRIBUTING.md` — architecture overview and workflow details.
 - `README.md` — user-facing feature list and alias reference.
 
-## Music Player (Free) - Custom Python
-- **App**: `bin/music.py` - Custom Python + mpv IPC socket
-- **Commands**: `m <url|file>` (play), `m pause`, `m next`, `m prev`, `m stop`, `m info`
-- **Shortcuts**: `p` (play), `mnext`, `mprev`, `minfo`
+## Music Player (Custom Python)
+- **App**: `bin/music.py` - Custom Python + mpv IPC socket, standalone (no pip deps)
+- **Commands**: `m <url|file>` (play), `m pause`, `m stop`, `m info`
+- **Shortcuts**: `p` (play), `minfo`
 - **Config**: `config/mpv/mpv.conf` — music profile with IPC at `/tmp/mpvsocket`
-- **Cache**: `~/.cache/music_current` for tmux status bar (avoids lag)
+- **Audio**: PulseAudio (auto-started)
+- **Cache**: `~/.cache/music_current` for tmux status bar

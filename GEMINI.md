@@ -27,8 +27,9 @@ This document takes absolute precedence over general workflows. It defines the a
 
 ### Music Player
 - **App**: Custom Python at `bin/music.py` with mpv IPC socket.
-- **Caching**: Write to `~/.cache/music_current` for tmux display.
-- **Aliases**: Simple commands (`m`, `p`, `pause`, `next`, `prev`, `stop`, `info`).
+- **No pip deps**: Just mpv + socat + ffprobe.
+- **Audio**: PulseAudio (auto-started on play).
+- **Cache**: Write to `~/.cache/music_current` for tmux.
 
 ## 3. Deployment Protocol
 
