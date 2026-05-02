@@ -288,8 +288,8 @@ set -g history-limit 10000
 # start with mouse mode enabled
 set -g mouse on
 
-# move status line to top
-set -g status-position top
+# move status line to bottom
+set -g status-position bottom
 
 # -- floating popup windows ---------------------------------------------------
 # Open a floating terminal with prefix + g
@@ -298,7 +298,7 @@ bind g display-popup -E -w 80% -h 80% "zsh"
 bind B display-popup -E -w 80% -h 80% "btop"
 
 # -- fancy enhancements --------------------------------------------------------
-set -g pane-border-status top
+set -g pane-border-status bottom
 set -g pane-border-format " [ ###P #W ] "
 set -g pane-active-border-style "fg=#7aa2f7"
 set -g pane-border-style "fg=#24283b"
