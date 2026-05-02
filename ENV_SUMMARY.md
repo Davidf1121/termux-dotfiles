@@ -16,7 +16,7 @@ This document outlines the systematic transformation of a stock Termux installat
 - **File System**: Replaced `ls` with `eza` (including aliases: `ls`, `ll`, `la`, `lt`) and `cat` with `bat` (syntax-highlighted).
 - **Navigation**: Implemented `Zoxide` (intelligent directory jumping) and integrated `FZF` (fuzzy finder) for history and file searching.
 - **File Management**: Installed `ranger` and `yazi` (wrapped with a shell function for automatic directory switching).
-- **Modern Editor**: Transitioned to `neovim` with a custom, modular Lua configuration. Integrated `lazy.nvim` (plugin manager), `tokyonight.nvim` (theme), `nvim-cmp` (autocomplete), and `lspconfig` (intelligent coding features).
+- **Modern Editor**: Transitioned to `neovim` with a custom, modular Lua configuration. Integrated `lazy.nvim` (plugin manager), `tokyonight.nvim` (theme), `nvim-cmp` (autocomplete), and `lspconfig` (intelligent coding features). Added `termuxcord.nvim` for Discord Rich Presence integration.
 - **Multiplexing**: Installed and configured `tmux` with an "Oh My Tmux" dashboard status bar. Enhanced with real-time system metrics (CPU, RAM, Battery, Temp) and background caching for performance.
 - **Environment**: Initialized `starship` as a fallback/secondary prompt engine.
 

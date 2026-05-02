@@ -62,7 +62,7 @@ pkg upgrade -y
 
 # Force re-installation/update of core tools
 msg "🛠️ Installing/Updating core tools..."
-pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi figlet neovim ripgrep
+pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi figlet neovim ripgrep python nodejs
 
 # Refresh command hash
 hash -r

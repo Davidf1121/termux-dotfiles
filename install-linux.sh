@@ -74,7 +74,7 @@ hash -r
 
 # Essential dependencies
 echo "🛠️ Installing essential dependencies..."
-sudo apt-get install -yq zsh git curl wget tmux fzf cmatrix software-properties-common gpg which neovim ripgrep
+sudo apt-get install -yq zsh git curl wget tmux fzf cmatrix software-properties-common gpg which neovim ripgrep python3 python3-pip nodejs
 
 # Install Fastfetch via PPA
 if ! command -v fastfetch > /dev/null 2>&1; then
