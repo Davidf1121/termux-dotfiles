@@ -6,7 +6,7 @@ import subprocess
 import time
 from pathlib import Path
 
-MPV_SOCKET = "/tmp/mpvsocket"
+MPV_SOCKET = os.path.expanduser("~/.cache/mpv_socket")
 CACHE_FILE = os.path.expanduser("~/.cache/music_current")
 
 def ensure_pulse():
