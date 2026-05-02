@@ -1,9 +1,14 @@
 # Logs
 install.log
+error.txt
 
 # Zsh
 .zcompdump*
 .zsh_history
+
+# Local secrets and env files
+.user_name
+.discord_rpc.env
 
 # Fastfetch
 # (None usually needed)
