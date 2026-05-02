@@ -53,6 +53,8 @@ return {
   -- Treesitter for better syntax highlighting
   {
     "nvim-treesitter/nvim-treesitter",
+    lazy = false,
+    priority = 1000,
     build = ":TSUpdate",
     config = function()
       local ok, treesitter = pcall(require, "nvim-treesitter.configs")

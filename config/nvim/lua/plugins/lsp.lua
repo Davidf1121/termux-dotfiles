@@ -44,6 +44,9 @@ return {
     config = function()
       local cmp = require("cmp")
       cmp.setup({
+        experimental = {
+          ghost_text = true, -- Minecraft style suggestion!
+        },
         snippet = {
           expand = function(args)
             require("luasnip").lsp_expand(args.body)
