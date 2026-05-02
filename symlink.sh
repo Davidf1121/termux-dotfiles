@@ -34,6 +34,11 @@ deploy_link() {
 
 msg "Starting Selective Symlinking (Development Mode)"
 echo "------------------------------------------------"
+echo "⚠️  SECURITY WARNING: Symlinking will make your local configuration 
+   edits immediately visible to the repository folder. Ensure you 
+   do not have sensitive data, tokens, or private keys in files 
+   you choose to symlink."
+echo "------------------------------------------------"
 
 # 1. Zsh
 if confirm "Zsh config (.zshrc)"; then
@@ -46,8 +51,6 @@ if confirm "Tmux config (.tmux.conf.local)"; then
 fi
 
 # 3. Neovim
-echo "⚠️  WARNING: Symlinking Neovim will make your local plugins and any 
-   added tokens immediately visible to the repository folder."
 if confirm "Neovim config (~/.config/nvim)"; then
     deploy_link "$DOTFILES_DIR/config/nvim" "$HOME/.config/nvim"
 fi
