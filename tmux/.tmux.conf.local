@@ -288,8 +288,8 @@ set -g history-limit 10000
 # start with mouse mode enabled
 set -g mouse on
 
-# move status line to bottom
-set -g status-position bottom
+# move status line to top
+set -g status-position top
 
 # -- floating popup windows ---------------------------------------------------
 # Open a floating terminal with prefix + g
@@ -298,7 +298,7 @@ bind g display-popup -E -w 80% -h 80% "zsh"
 bind B display-popup -E -w 80% -h 80% "btop"
 
 # -- fancy enhancements --------------------------------------------------------
-set -g pane-border-status bottom
+set -g pane-border-status top
 set -g pane-border-format " [ ###P #W ] "
 set -g pane-active-border-style "fg=#7aa2f7"
 set -g pane-border-style "fg=#24283b"
@@ -312,7 +312,7 @@ set -g status-left-length 50
 set -g status-left "#[bg=#e0af68,fg=#1a1b26,bold] 󰀵 #S #[bg=#1a1b26,fg=#e0af68]"
 
 set -g status-right-length 240
-set -g status-right "#[fg=#24283b]#[bg=#24283b,fg=#7aa2f7] #(cut -c3- ~/.tmux.conf.local | sh -s battery_status) #(cut -c3- ~/.tmux.conf.local | sh -s battery_level)%% #[fg=#414868,bg=#24283b]#[bg=#414868,fg=#bb9af7] 󰻠 #(cut -c3- ~/.tmux.conf.local | sh -s cpu_usage) #[fg=#24283b,bg=#414868]#[bg=#24283b,fg=#c0caf5] 󰍛 #(cut -c3- ~/.tmux.conf.local | sh -s ram_usage) #[fg=#414868,bg=#24283b]#[bg=#414868,fg=#e0af68] 󰏈 #(cut -c3- ~/.tmux.conf.local | sh -s cpu_temp) #[fg=#24283b,bg=#414868]#[bg=#24283b,fg=#7aa2f7] 󰀉 #(cut -c3- ~/.tmux.conf.local | sh -s my_user) #[fg=#414868,bg=#24283b]#[bg=#414868,fg=#c0caf5] 󰒋 #(cut -c3- ~/.tmux.conf.local | sh -s my_host) #(cut -c3- ~/.tmux.conf.local | sh -s now_playing)#[bg=#7aa2f7,fg=#1a1b26,bold] %R "
+set -g status-right "#[fg=#24283b]#[bg=#24283b,fg=#7aa2f7] #(cut -c3- ~/.tmux.conf.local | sh -s battery_status) #(cut -c3- ~/.tmux.conf.local | sh -s battery_level)%% #[fg=#414868,bg=#24283b]#[bg=#414868,fg=#bb9af7] 󰻠 #(cut -c3- ~/.tmux.conf.local | sh -s cpu_usage) #[fg=#24283b,bg=#414868]#[bg=#24283b,fg=#c0caf5] 󰍛 #(cut -c3- ~/.tmux.conf.local | sh -s ram_usage) #[fg=#414868,bg=#24283b]#[bg=#414868,fg=#e0af68] 󰏈 #(cut -c3- ~/.tmux.conf.local | sh -s cpu_temp) #[fg=#24283b,bg=#414868]#[bg=#24283b,fg=#7aa2f7] 󰀉 #(cut -c3- ~/.tmux.conf.local | sh -s my_user) #[fg=#414868,bg=#24283b]#[bg=#414868,fg=#c0caf5] 󰒋 #(cut -c3- ~/.tmux.conf.local | sh -s my_host)#(cut -c3- ~/.tmux.conf.local | sh -s now_playing)#[bg=#7aa2f7,fg=#1a1b26,bold] %R "
 
 # Enable 2 status lines and configure the second one for music
 set -g status 2
