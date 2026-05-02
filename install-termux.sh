@@ -141,5 +141,3 @@ chsh -s zsh
 
 msg "✨ Termux Deployment Successful!"
 msg "👉 Please restart Termux or type 'zsh' to begin."
-ployment Successful!"
-msg "👉 Please restart Termux or type 'zsh' to begin."

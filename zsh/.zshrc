@@ -52,7 +52,12 @@ plugins=(
 # Load Oh My Zsh
 source $ZSH/oh-my-zsh.sh
 
-# --- Minecraft-style Completion (fzf-tab) ---
+# --- Minecraft-style Completion (fzf-tab & autosuggestions) ---
+# Use Right Arrow or End to accept the ghost-text suggestion
+bindkey '^[[C' forward-word
+bindkey '^[[F' end-of-line
+
+# fzf-tab configuration
 # Disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false
 # set descriptions format to enable group support
@@ -66,23 +71,25 @@ zstyle ':fzf-tab:*' switch-group ',' '.'
 
 # --- Atuin History ---
 if command -v atuin > /dev/null 2>&1; then
-    eval "$(atuin init zsh)"
+    # Disable up-arrow so it uses standard Zsh history
+    # This keeps Atuin only for Ctrl-r (Full Search)
+    eval "$(atuin init zsh --disable-up-arrow)"
 fi
 
 if command -v zoxide > /dev/null 2>&1; then
     eval "$(zoxide init zsh)"
 fi
 
+# --- FZF Setup ---
 if command -v fzf > /dev/null 2>&1; then
-    # Use modern fzf initialization if available (fzf 0.48+)
+    # We load fzf but disable its default completion to let fzf-tab take over
     if fzf --zsh > /dev/null 2>&1; then
         source <(fzf --zsh)
     else
-        # Fallback to standard locations
-        [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
-        [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
         [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
     fi
+    # Re-bind Tab to standard completion (which fzf-tab will then intercept)
+    bindkey '^I' expand-or-complete
 fi
 
 # --- Aliases ---
