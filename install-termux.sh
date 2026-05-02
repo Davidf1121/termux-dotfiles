@@ -66,8 +66,11 @@ pkg upgrade -y
 
 # Force re-installation/update of core tools
 msg "🛠️ Installing/Updating core tools..."
-pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi figlet neovim ripgrep atuin
- python nodejs
+pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi figlet neovim ripgrep atuin ffmpeg python python-yt-dlp socat
+
+# Install yt-dlp and yewtube via pip
+msg "🎵 Installing music tools..."
+pip install -q yt-dlp yewtube 2>/dev/null || pip install yt-dlp yewtube
 
 # Refresh command hash
 hash -r
@@ -99,8 +102,10 @@ deploy "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
 # Apply Configs
 msg "⚙️ Applying configurations..."
 deploy "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
+deploy "$DOTFILES_DIR/zsh/.zsh_music" "$HOME/.zsh_music"
 deploy "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
 deploy "$DOTFILES_DIR/config/nvim" "$HOME/.config/nvim"
+deploy "$DOTFILES_DIR/config/mpv" "$HOME/.config/mpv"
 
 # Fastfetch standard location - Handle with loop and sed for logo path
 msg "ℹ️ Configuring Fastfetch..."

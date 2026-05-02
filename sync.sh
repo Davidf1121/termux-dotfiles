@@ -52,6 +52,22 @@ if confirm "Sync Fastfetch config?"; then
     msg "Synced Fastfetch config"
 fi
 
+# 5. MPV (music)
+if confirm "Sync MPV config (~/.config/mpv)?"; then
+    rm -rf "$DOTFILES_DIR/config/mpv"
+    mkdir -p "$DOTFILES_DIR/config/mpv"
+    cp -r "$HOME/.config/mpv"/* "$DOTFILES_DIR/config/mpv/" 2>/dev/null || true
+    msg "Synced MPV config"
+fi
+
+# 6. Zsh music helper
+if confirm "Sync Zsh music helper (~/.zsh_music)?"; then
+    [ -f "$HOME/.zsh_music" ] && cp "$HOME/.zsh_music" "$DOTFILES_DIR/zsh/.zsh_music"
+    # Also allow syncing from the dotfiles path if linked
+    [ -f "$HOME/termux-dotfiles/zsh/.zsh_music" ] && cp "$HOME/termux-dotfiles/zsh/.zsh_music" "$DOTFILES_DIR/zsh/.zsh_music"
+    msg "Synced Zsh music helper"
+fi
+
 # 5. Termux Properties
 if confirm "Sync Termux properties?"; then
     cp "$HOME/.termux/termux.properties" "$DOTFILES_DIR/termux/termux.properties"

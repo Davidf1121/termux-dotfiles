@@ -58,6 +58,34 @@ This repository is designed for safe and flexible development:
 | `zrc` | Reload Zsh configuration |
 | `ezrc` | Edit Zsh configuration |
 | `cls` | Clear terminal and show greeting |
+| `yt` | `yewtube` (YouTube TUI player) |
+| `mplay` | `mpv --profile=music <file|URL>` (play audio) |
+| `mpause`/`mnext`/`mprev` | Control mpv via IPC socket |
+
+## Music Player
+
+This dotfiles set includes a lightweight music setup (YouTube streaming + local files):
+
+- Backend: `mpv` with an IPC socket at `/tmp/mpvsocket` (configured in `config/mpv/mpv.conf`).
+- TUI: `yewtube` for browsing and streaming YouTube without API keys.
+- Controls: helper script at `zsh/.zsh_music` exposes `mplay`, `mpause`, `mnext`, `mprev`, `mvol`, and `minfo`.
+
+Install the player with the installer or manually:
+
+```bash
+pkg install ffmpeg python python-yt-dlp socat
+pip install yt-dlp yewtube
+```
+
+Usage examples:
+
+```bash
+yt                # Launch yewtube TUI
+mplay <url|dir>   # Play a URL or folder
+mpause            # Toggle pause
+mnext             # Next track
+mprev             # Previous track
+```
 
 ## Installation
 To install the dotfiles, run the following command:

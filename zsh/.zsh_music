@@ -1,0 +1,67 @@
+#!/bin/zsh
+# Music control helper scripts
+# Requires: mpv with input-ipc-server running
+
+MPV_SOCKET="/tmp/mpvsocket"
+
+mpc_cmd() {
+    [ -S "$MPV_SOCKET" ] && echo "$1" | socat - "$MPV_SOCKET" 2>/dev/null
+}
+
+mplay() {
+    if [ -z "$1" ]; then
+        echo "Usage: mplay <file|folder|url>"
+        return 1
+    fi
+    local target="$1"
+    if [ -d "$target" ]; then
+        mpv --profile=music -- "$target"/*
+    elif [ -f "$target" ]; then
+        mpv --profile=music -- "$target"
+    else
+        mpv --profile=music -- "$target"
+    fi
+}
+
+mpause() {
+    mpc_cmd "cycle pause"
+}
+
+mnext() {
+    mpc_cmd "playlist-next"
+}
+
+mprev() {
+    mpc_cmd "playlist-prev"
+}
+
+mstop() {
+    mpc_cmd "quit"
+}
+
+mvol() {
+    local level="${1:-100}"
+    mpc_cmd "set volume $level"
+}
+
+mseek() {
+    local pos="${1:-0}"
+    mpc_cmd "seek $pos"
+}
+
+minfo() {
+    local output
+    output=$(mpc_cmd "get_property media-title" 2>/dev/null)
+    if [ -n "$output" ]; then
+        echo "$output"
+    else
+        echo "No track playing"
+    fi
+}
+
+mqueue() {
+    local target="$1"
+    if [ -n "$target" ]; then
+        echo "loadfile \"$target\" append" | socat - "$MPV_SOCKET" 2>/dev/null
+    fi
+}

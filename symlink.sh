@@ -72,6 +72,17 @@ if confirm "Termux properties (colors & keys)"; then
     fi
 fi
 
+# 6. MPV (music)
+if confirm "MPV config (~/.config/mpv)"; then
+    mkdir -p "$HOME/.config/mpv"
+    deploy_link "$DOTFILES_DIR/config/mpv/mpv.conf" "$HOME/.config/mpv/mpv.conf"
+fi
+
+# 7. Zsh music helper
+if confirm "Zsh music helper (~/.zsh_music)"; then
+    deploy_link "$DOTFILES_DIR/zsh/.zsh_music" "$HOME/.zsh_music"
+fi
+
 echo "------------------------------------------------"
 msg "Selective symlinking complete!"
 msg "Files you skipped remain as physical copies (safe from auto-sync)."
