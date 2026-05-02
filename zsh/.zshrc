@@ -126,26 +126,19 @@ alias zrc='source ~/.zshrc'
 alias ezrc='nano ~/.zshrc'
 
 # --- Music Player (Python + mpv) ---
-# Try to find music.py in common locations
-_MUSIC_PATH=""
-for _path in "$HOME/termux-dotfiles/bin/music.py" "$HOME/dotfiles/bin/music.py" "$HOME/bin/music.py"; do
-    [ -f "$_path" ] && _MUSIC_PATH="$_path" && break
-done
+# Always create these aliases - they'll work if music.py exists
+command -v pulseaudio > /dev/null 2>&1 && pulseaudio -D --exit-idle-time=-1 2>/dev/null
 
-if [ -n "$_MUSIC_PATH" ]; then
-    # Ensure PulseAudio is running for audio
-    command -v pulseaudio > /dev/null 2>&1 && pulseaudio -D --exit-idle-time=-1 2>/dev/null
-    
-    alias m="python3 $_MUSIC_PATH"
-    alias p=m
-    alias play="python3 $_MUSIC_PATH play"
-    alias pause="python3 $_MUSIC_PATH pause"
-    alias mnext="python3 $_MUSIC_PATH next"
-    alias mprev="python3 $_MUSIC_PATH prev"
-    alias mstop="python3 $_MUSIC_PATH stop"
-    alias minfo="python3 $_MUSIC_PATH info"
-fi
-unset _MUSIC_PATH
+_MUSIC="$HOME/termux-dotfiles/bin/music.py"
+
+alias m="python3 $_MUSIC"
+alias p=m
+alias mpause="python3 $_MUSIC pause"
+alias mstop="python3 $_MUSIC stop"
+alias minfo="python3 $_MUSIC info"
+
+# Direct play - m by itself shows help
+unset _MUSIC
 
 # Custom clear behavior: clear screen and show welcome + fastfetch
 function cls() {
