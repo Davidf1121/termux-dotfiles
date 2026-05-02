@@ -7,7 +7,7 @@ import subprocess
 # --- Configuration ---
 # To keep your token safe, create a file at ~/.discord_rpc.env with:
 # TOKEN=your_token_here
-ENV_FILE = os.path.expanduser("~/.discord_rpc.env")
+ENV_FILE = os.path.expanduser("~/.env")
 
 def get_token():
     if os.path.exists(ENV_FILE):

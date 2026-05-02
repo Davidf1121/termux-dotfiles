@@ -8,7 +8,7 @@ error.txt
 
 # Local secrets and env files
 .user_name
-.discord_rpc.env
+.env
 
 # Fastfetch
 # (None usually needed)
