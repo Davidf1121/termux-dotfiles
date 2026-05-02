@@ -12,6 +12,8 @@ This document takes absolute precedence over general workflows. It defines the a
 ### Tmux & Status Bar
 - **Custom Functions**: All custom metrics (CPU, RAM, Identity) must be defined as POSIX shell functions at the end of `tmux/.tmux.conf.local`.
 - **Optimization**: Resource-intensive calls (like `termux-api`) **MUST** use the background caching pattern (`_update_battery_cache`) to prevent terminal lag.
+- **Dynamic 2nd Row**: Use `set -g status 2` for the music dashboard. The `now_playing` function MUST safely toggle status rows (checking current state first) to avoid infinite recursion loops.
+- **Shell Functions**: All custom shell functions in `.tmux.conf.local` MUST be commented with `# ` at the start of every line to be parsed correctly by the "Oh My Tmux" framework.
 - **Expansion**: Use `#(shell command)` syntax in `set -g status-right` for live updates.
 
 ### Neovim Configuration

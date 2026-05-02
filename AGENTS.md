@@ -52,6 +52,7 @@ bash debug-install.sh      # prints system info then runs install.sh --verbose
 - **App**: `bin/music.py` - Custom Python + mpv IPC socket, standalone (no pip deps)
 - **Commands**: `m <url|file>` (play), `m pause`, `m stop`, `m info`
 - **Shortcuts**: `p` (play), `minfo`
-- **Config**: `config/mpv/mpv.conf` — music profile with IPC at `/tmp/mpvsocket`
+- **Config**: `config/mpv/mpv.conf` — music profile with IPC at `$HOME/.cache/mpv_socket`
 - **Audio**: PulseAudio (auto-started)
 - **Cache**: `~/.cache/music_current` for tmux status bar
+- **Tmux Integration**: `music_bar` function provides a dynamic 2nd row with a pip-style progress bar and live timer. `now_playing` safely toggles the 2nd row on/off.

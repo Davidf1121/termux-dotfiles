@@ -19,7 +19,7 @@ This document outlines the systematic transformation of a stock Termux installat
 - **History**: Transitioned to `Atuin` for a modern, searchable shell history database.
 - **File Management**: Installed `ranger` and `yazi` (wrapped with a shell function for automatic directory switching).
 - **Modern Editor**: Transitioned to `neovim` with a custom, modular Lua configuration. Integrated `lazy.nvim` (plugin manager), `tokyonight.nvim` (theme), `alpha-nvim` (dashboard), `nvim-cmp` (autocomplete), and `lspconfig` (intelligent coding features).
-- **Multiplexing**: Installed and configured `tmux` with an "Oh My Tmux" dashboard status bar. Enhanced with real-time system metrics, background caching, and floating popup windows for rapid task switching.
+- **Multiplexing**: Installed and configured `tmux` with an "Oh My Tmux" dashboard status bar. Enhanced with real-time system metrics, background caching, and a dynamic 2-row layout featuring pip-style music progress bars.
 
 - **Environment**: Initialized `starship` as a fallback/secondary prompt engine.
 

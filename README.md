@@ -33,6 +33,7 @@ This repository is designed for safe and flexible development:
 - **Dynamic Identity**: Use the `setname` command to update your user handle across the shell, Fastfetch, and Tmux status bar.
 - **Integrated Navigation**: `y` command opens Yazi and automatically changes the shell directory to the last visited path upon exit.
 - **System Metrics**: The Tmux status bar displays real-time information including battery status, CPU usage, RAM, and temperature.
+- **Dynamic Dashboard**: A dedicated second status row appears automatically when playing music, featuring a pip-style progress bar, live track timer, and Tokyo Night themed segments.
 - **Optimized Performance**: Status bar metrics are cached in the background to ensure terminal responsiveness.
 - **Custom Greeting**: The `cls` (or `clear`) command provides a clean screen along with a personalized greeting and system overview.
 - **Cross-Platform**: A unified installer supports both Termux and standard Linux distributions (Debian/Ubuntu).

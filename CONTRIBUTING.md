@@ -34,6 +34,7 @@ To ensure stability and compatibility with Powerlevel10k's instant prompt:
 - The Tokyo Night theme is enforced via direct `set -g` commands in the `user customizations` section of `.tmux.conf.local` to override framework defaults reliably.
 - **Icons**: Uses Nerd Font glyphs (ensure a compatible font is active).
 - **Status Bar Caching**: To prevent UI lag when calling `termux-api` (e.g., for battery or temp), a background caching mechanism is used. The `_update_battery_cache` function runs every 30 seconds as a background process, ensuring the status bar remains responsive.
+- **Dynamic 2rd Row**: A dedicated music dashboard (`status-format[1]`) is enabled automatically when music is playing. This is managed by the `now_playing` helper which dynamically toggles between 1 and 2 status lines.
 
 ### Music Player
 - Custom Python app at `bin/music.py` with mpv IPC socket.
