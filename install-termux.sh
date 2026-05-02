@@ -66,11 +66,7 @@ pkg upgrade -y
 
 # Force re-installation/update of core tools
 msg "🛠️ Installing/Updating core tools..."
-pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi figlet neovim ripgrep atuin ffmpeg python python-yt-dlp socat
-
-# Install yt-dlp and yewtube via pip
-msg "🎵 Installing music tools..."
-pip install -q yt-dlp yewtube 2>/dev/null || pip install yt-dlp yewtube
+pkg install -y --reinstall zsh git curl wget tmux fzf cmatrix fastfetch eza bat zoxide ranger yazi figlet neovim ripgrep atuin ffmpeg python socat pulseaudio mpv
 
 # Refresh command hash
 hash -r

@@ -128,6 +128,11 @@ alias ezrc='nano ~/.zshrc'
 # --- Music Player (Python + mpv) ---
 # Custom music player at ~/termux-dotfiles/bin/music.py
 if [ -f "$HOME/termux-dotfiles/bin/music.py" ]; then
+    # Ensure PulseAudio is running for audio
+    if command -v pulseaudio > /dev/null 2>&1; then
+        pulseaudio -D --exit-idle-time=-1 2>/dev/null
+    fi
+    
     alias m='python3 $HOME/termux-dotfiles/bin/music.py'
     alias p=m
     alias play='python3 $HOME/termux-dotfiles/bin/music.py play'

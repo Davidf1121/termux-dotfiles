@@ -10,6 +10,16 @@ from pathlib import Path
 MPV_SOCKET = "/tmp/mpvsocket"
 CACHE_FILE = os.path.expanduser("~/.cache/music_current")
 
+def ensure_audio():
+    """Ensure PulseAudio is running for audio output"""
+    try:
+        subprocess.run(["pulseaudio", "--check"], 
+                    capture_output=True, timeout=2)
+    except:
+        # Start PulseAudio if not running
+        subprocess.run(["pulseaudio", "-D", "--exit-idle-time=-1"],
+                     capture_output=True, timeout=5)
+
 class MusicPlayer:
     def __init__(self):
         self.player = None
@@ -33,6 +43,8 @@ class MusicPlayer:
             print("Usage: play <url|file|folder>")
             return
             
+        ensure_audio()
+        
         # Handle folder
         path = Path(target)
         if path.is_dir():
