@@ -126,22 +126,26 @@ alias zrc='source ~/.zshrc'
 alias ezrc='nano ~/.zshrc'
 
 # --- Music Player (Python + mpv) ---
-# Custom music player at ~/termux-dotfiles/bin/music.py
-if [ -f "$HOME/termux-dotfiles/bin/music.py" ]; then
+# Try to find music.py in common locations
+_MUSIC_PATH=""
+for _path in "$HOME/termux-dotfiles/bin/music.py" "$HOME/dotfiles/bin/music.py" "$HOME/bin/music.py"; do
+    [ -f "$_path" ] && _MUSIC_PATH="$_path" && break
+done
+
+if [ -n "$_MUSIC_PATH" ]; then
     # Ensure PulseAudio is running for audio
-    if command -v pulseaudio > /dev/null 2>&1; then
-        pulseaudio -D --exit-idle-time=-1 2>/dev/null
-    fi
+    command -v pulseaudio > /dev/null 2>&1 && pulseaudio -D --exit-idle-time=-1 2>/dev/null
     
-    alias m='python3 $HOME/termux-dotfiles/bin/music.py'
+    alias m="python3 $_MUSIC_PATH"
     alias p=m
-    alias play='python3 $HOME/termux-dotfiles/bin/music.py play'
-    alias pause='python3 $HOME/termux-dotfiles/bin/music.py pause'
-    alias mnext='python3 $HOME/termux-dotfiles/bin/music.py next'
-    alias mprev='python3 $HOME/termux-dotfiles/bin/music.py prev'
-    alias mstop='python3 $HOME/termux-dotfiles/bin/music.py stop'
-    alias minfo='python3 $HOME/termux-dotfiles/bin/music.py info'
+    alias play="python3 $_MUSIC_PATH play"
+    alias pause="python3 $_MUSIC_PATH pause"
+    alias mnext="python3 $_MUSIC_PATH next"
+    alias mprev="python3 $_MUSIC_PATH prev"
+    alias mstop="python3 $_MUSIC_PATH stop"
+    alias minfo="python3 $_MUSIC_PATH info"
 fi
+unset _MUSIC_PATH
 
 # Custom clear behavior: clear screen and show welcome + fastfetch
 function cls() {
