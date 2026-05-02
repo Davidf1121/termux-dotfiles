@@ -102,10 +102,11 @@ deploy "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
 # Apply Configs
 msg "⚙️ Applying configurations..."
 deploy "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
-deploy "$DOTFILES_DIR/zsh/.zsh_music" "$HOME/.zsh_music"
 deploy "$DOTFILES_DIR/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
 deploy "$DOTFILES_DIR/config/nvim" "$HOME/.config/nvim"
 deploy "$DOTFILES_DIR/config/mpv" "$HOME/.config/mpv"
+deploy "$DOTFILES_DIR/bin/music.py" "$HOME/termux-dotfiles/bin/music.py"
+chmod +x "$HOME/termux-dotfiles/bin/music.py"
 
 # Fastfetch standard location - Handle with loop and sed for logo path
 msg "ℹ️ Configuring Fastfetch..."

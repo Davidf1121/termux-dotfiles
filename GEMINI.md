@@ -26,10 +26,9 @@ This document takes absolute precedence over general workflows. It defines the a
 - **Guards**: Interactive commands (like `cls` or `fastfetch`) must be gated by `[[ $- == *i* ]]` to avoid breaking non-interactive shell executions.
 
 ### Music Player
-- **Backend**: `mpv` with IPC socket at `/tmp/mpvsocket` for remote control.
-- **TUI**: `yewtube` streams YouTube without API keys.
-- **Helper**: Functions in `zsh/.zsh_music` provide `mplay`, `mpause`, `mnext`, `mprev`, `mvol`, `minfo`.
-- **Tmux**: Use caching pattern (like battery) for `now_playing` to avoid blocking status bar.
+- **App**: Custom Python at `bin/music.py` with mpv IPC socket.
+- **Caching**: Write to `~/.cache/music_current` for tmux display.
+- **Aliases**: Simple commands (`m`, `p`, `pause`, `next`, `prev`, `stop`, `info`).
 
 ## 3. Deployment Protocol
 

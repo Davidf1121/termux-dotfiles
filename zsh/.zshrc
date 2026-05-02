@@ -34,7 +34,7 @@ function setname() {
 }
 
 # --- Startup ---
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/termux-dotfiles/bin:$PATH"
 
 
 
@@ -125,27 +125,17 @@ alias findf='fzf'
 alias zrc='source ~/.zshrc'
 alias ezrc='nano ~/.zshrc'
 
-# --- Functions ---
-# Music Player (yewtube + mpv)
-if command -v yewtube > /dev/null 2>&1; then
-    alias yt='yewtube'
-    alias yts='yewtube search'
-fi
-
-if command -v mpv > /dev/null 2>&1; then
-    # Ensure PulseAudio is running for sound
-    pulseaudio --start --exit-idle-time=-1 2>/dev/null
-    # Source music controls
-    [ -f "$HOME/.zsh_music" ] && source "$HOME/.zsh_music"
-    
-    # Convenience aliases
-    alias mplay='mplay'
-    alias mpause='mpause'
-    alias mnext='mnext'
-    alias mprev='mprev'
-    alias mstop='mstop'
-    alias mvol='mvol'
-    alias minfo='minfo'
+# --- Music Player (Python + mpv) ---
+# Custom music player at ~/termux-dotfiles/bin/music.py
+if [ -f "$HOME/termux-dotfiles/bin/music.py" ]; then
+    alias m='python3 $HOME/termux-dotfiles/bin/music.py'
+    alias p=m
+    alias play='python3 $HOME/termux-dotfiles/bin/music.py play'
+    alias pause='python3 $HOME/termux-dotfiles/bin/music.py pause'
+    alias mnext='python3 $HOME/termux-dotfiles/bin/music.py next'
+    alias mprev='python3 $HOME/termux-dotfiles/bin/music.py prev'
+    alias mstop='python3 $HOME/termux-dotfiles/bin/music.py stop'
+    alias minfo='python3 $HOME/termux-dotfiles/bin/music.py info'
 fi
 
 # Custom clear behavior: clear screen and show welcome + fastfetch

@@ -35,6 +35,11 @@ To ensure stability and compatibility with Powerlevel10k's instant prompt:
 - **Icons**: Uses Nerd Font glyphs (ensure a compatible font is active).
 - **Status Bar Caching**: To prevent UI lag when calling `termux-api` (e.g., for battery or temp), a background caching mechanism is used. The `_update_battery_cache` function runs every 30 seconds as a background process, ensuring the status bar remains responsive.
 
+### Music Player
+- Custom Python app at `bin/music.py` controls `mpv` via IPC socket.
+- Cache file at `~/.cache/music_current` stores current track for tmux display.
+- Use shorthand aliases: `m` (main), `p` (play), `pause`, `next`, `prev`, `stop`, `info`.
+
 ## Workflow for Changes
 1. **Hybrid Sync**: Use `symlink.sh` for live development (linking repo to system) and `sync.sh` to back up local changes into the repository.
 2. **Absolute Paths**: When using symlinks, always use absolute paths to prevent broken references in Termux's unique directory structure.

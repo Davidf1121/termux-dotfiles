@@ -58,33 +58,34 @@ This repository is designed for safe and flexible development:
 | `zrc` | Reload Zsh configuration |
 | `ezrc` | Edit Zsh configuration |
 | `cls` | Clear terminal and show greeting |
-| `yt` | `yewtube` (YouTube TUI player) |
-| `mplay` | `mpv --profile=music <file|URL>` (play audio) |
-| `mpause`/`mnext`/`mprev` | Control mpv via IPC socket |
+| `m <url|file>` | Custom Python music player |
+| `p` | Shortcut for music player |
+| `m pause`/`m next`/`m prev` | Music controls |
 
 ## Music Player
 
-This dotfiles set includes a lightweight music setup (YouTube streaming + local files):
+This dotfiles includes a custom Python music player (`bin/music.py`):
 
-- Backend: `mpv` with an IPC socket at `/tmp/mpvsocket` (configured in `config/mpv/mpv.conf`).
-- TUI: `yewtube` for browsing and streaming YouTube without API keys.
-- Controls: helper script at `zsh/.zsh_music` exposes `mplay`, `mpause`, `mnext`, `mprev`, `mvol`, and `minfo`.
+- Backend: `mpv` with IPC socket at `/tmp/mpvsocket`
+- Cache: `~/.cache/music_current` for tmux status bar
+- Sources: Local files, folders, YouTube URLs
 
-Install the player with the installer or manually:
+Install dependencies:
 
 ```bash
-pkg install ffmpeg python python-yt-dlp socat
-pip install yt-dlp yewtube
+pkg install mpv socat ffmpeg python
 ```
 
-Usage examples:
+Usage:
 
 ```bash
-yt                # Launch yewtube TUI
-mplay <url|dir>   # Play a URL or folder
-mpause            # Toggle pause
-mnext             # Next track
-mprev             # Previous track
+m https://youtu.be/...   # Play YouTube
+m /sdcard/Music        # Play folder
+m pause               # Toggle pause
+m next                # Next track
+m prev                # Previous track
+m stop                # Stop
+m info                # Show current track
 ```
 
 ## Installation

@@ -501,17 +501,20 @@ tmux_conf_uninstall_plugins_on_reload=true
 #   hostname
 # }
 #
-# # usage: #{now_playing}
+# # usage: #{now_playing} - reads from cache
 # now_playing() {
+#   if [ -f "$HOME/.cache/music_current" ]; then
+#     cat "$HOME/.cache/music_current" | cut -c1-25
+#   fi
+# }
+#
+# _update_music_cache() {
+#   cache_file="$HOME/.cache/music_current"
 #   if [ -S /tmp/mpvsocket ]; then
-#     title=$(echo '{ "command": ["get_property", "media-title"] }' | socat - /tmp/mpvsocket 2>/dev/null | jq -r '.data' 2>/dev/null)
-#     if [ "$title" != "null" ] && [ -n "$title" ]; then
-#       printf "󰝚 %s" "$(echo "$title" | cut -c1-20)"
-#     else
-#       printf ""
+#     title=$(echo "get_property media-title" | socat - /tmp/mpvsocket 2>/dev/null | tr -d '\n' | cut -c1-100)
+#     if [ -n "$title" ]; then
+#       echo "$title" > "$cache_file"
 #     fi
-#   else
-#     printf ""
 #   fi
 # }
 

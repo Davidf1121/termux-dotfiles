@@ -48,10 +48,9 @@ bash debug-install.sh      # prints system info then runs install.sh --verbose
 - `CONTRIBUTING.md` — architecture overview and workflow details.
 - `README.md` — user-facing feature list and alias reference.
 
-## Music Player (Free)
-- **TUI**: `yewtube` (YouTube streaming, no Premium needed)
-- **Backend**: `mpv` with IPC socket at `/tmp/mpvsocket`
-- **Commands**: `yt` (launch TUI), `mplay <file|URL>` (play), `mpause`/`mnext`/`mprev` (controls)
-- **Config**: `config/mpv/mpv.conf` — music profile with IPC enabled
-- **Dependencies**: `python-yt-dlp`, `yewtube`, `socat` (for socket control)
-- **Tmux**: `now_playing` helper added to `tmux/.tmux.conf.local` and wired into the status-right (shows current track, truncated)
+## Music Player (Free) - Custom Python
+- **App**: `bin/music.py` - Custom Python + mpv IPC socket
+- **Commands**: `m <url|file>` (play), `m pause`, `m next`, `m prev`, `m stop`, `m info`
+- **Shortcuts**: `p` (play), `mnext`, `mprev`, `minfo`
+- **Config**: `config/mpv/mpv.conf` — music profile with IPC at `/tmp/mpvsocket`
+- **Cache**: `~/.cache/music_current` for tmux status bar (avoids lag)
