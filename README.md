@@ -16,10 +16,20 @@ A collection of configuration files to set up a modern and functional terminal e
 - **Tools**: Includes `eza` for directory listings, `bat` for file viewing, and `zoxide` for navigation.
 
 ## Key Features
-- **Minecraft-style Completion**: Real-time, fuzzy-searchable tab completion with `fzf-tab`.
-- **Modern History**: Interactive shell history with `atuin`.
+- **Minecraft-style Completion**: Real-time ghost-text suggestions and fuzzy-searchable tab completion.
+    - Press **Tab** to open the interactive menu.
+    - Press **Right Arrow** or **End** to accept ghost-text suggestions.
+- **Modern History**: Interactive shell history with `atuin` (press `Ctrl-r`).
 - **Floating Terminals**: Quick-access floating windows in Tmux (press `prefix + g`).
 - **Fancy Greeting**: A custom Neovim startup dashboard with `alpha-nvim`.
+
+... (existing content) ...
+
+## Development Workflow
+This repository is designed for safe and flexible development:
+- **`install-*.sh`**: Default installation method. Copies files to your system (safe from accidental edits).
+- **`symlink.sh`**: Development method. Selectively link files to the repo for real-time updates.
+- **`sync.sh`**: Manual backup. Copy your local configuration changes back into the repository.
 - **Dynamic Identity**: Use the `setname` command to update your user handle across the shell, Fastfetch, and Tmux status bar.
 - **Integrated Navigation**: `y` command opens Yazi and automatically changes the shell directory to the last visited path upon exit.
 - **System Metrics**: The Tmux status bar displays real-time information including battery status, CPU usage, RAM, and temperature.

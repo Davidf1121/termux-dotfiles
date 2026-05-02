@@ -4,7 +4,9 @@ This document outlines the structure and logic of the environment to help mainta
 
 ## Project Structure
 - `install.sh`: The dispatcher script. It detects the OS (Termux vs. Linux) and delegates to the appropriate sub-installer.
-- `install-termux.sh` / `install-linux.sh`: Core installation logic. Uses a `deploy` function for robust symlinking using absolute paths.
+- `install-termux.sh` / `install-linux.sh`: Core installation logic. Uses a `deploy` function that **copies** files by default for safety.
+- `symlink.sh`: A development script for creating selective symlinks between the repo and the system.
+- `sync.sh`: A manual utility to sync local configuration changes back to the repository.
 - `zsh/.zshrc`: The heart of the shell environment. Handles identity, aliases, and tool initializations.
 - `tmux/.tmux.conf.local`: Custom styling for the Oh My Tmux framework. Contains forced overrides for the Tokyo Night theme.
 - `config/fastfetch/`: System information configuration including the JSON schema and custom logo.
@@ -34,6 +36,7 @@ To ensure stability and compatibility with Powerlevel10k's instant prompt:
 - **Status Bar Caching**: To prevent UI lag when calling `termux-api` (e.g., for battery or temp), a background caching mechanism is used. The `_update_battery_cache` function runs every 30 seconds as a background process, ensuring the status bar remains responsive.
 
 ## Workflow for Changes
-1. **Symlinks**: Always use absolute paths for symlinks to prevent broken references in Termux's unique directory structure.
-2. **Commit Style**: Use conventional commit prefixes (`feat:`, `fix:`, `docs:`, `refactor:`).
-3. **Environment Detection**: Always check for the environment before running OS-specific package commands (e.g., `pkg` for Termux, `apt` for Linux).
+1. **Hybrid Sync**: Use `symlink.sh` for live development (linking repo to system) and `sync.sh` to back up local changes into the repository.
+2. **Absolute Paths**: When using symlinks, always use absolute paths to prevent broken references in Termux's unique directory structure.
+3. **Commit Style**: Use conventional commit prefixes (`feat:`, `fix:`, `docs:`, `refactor:`).
+4. **Environment Detection**: Always check for the environment before running OS-specific package commands (e.g., `pkg` for Termux, `apt` for Linux).
