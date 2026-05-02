@@ -52,6 +52,21 @@ def get_title_from_url(url):
     if not url.startswith("http"):
         return None
     try:
+        # Use --simulate first to get title
+        result = subprocess.run(
+            ["yt-dlp", "--dump-json", "--no-playlist", url],
+            capture_output=True, text=True, timeout=15
+        )
+        import json
+        for line in result.stdout.strip().split('\n'):
+            if line:
+                data = json.loads(line)
+                return data.get('title', url.split('/')[-1])[:50]
+    except:
+        pass
+    # Fallback - extract from URL
+    return url.split('/')[-1].replace('-', ' ')[:50] if '/' in url else url[:50]
+    try:
         result = subprocess.run(
             ["yt-dlp", "--flat-playlist", "--print", "%title", url],
             capture_output=True, text=True, timeout=10
