@@ -21,8 +21,15 @@ local function update_cache()
   if now - cache.last_update < 5 then return end
   cache.last_update = now
 
+  -- Trigger background update if cache is older than 30 seconds
+  local cache_path = vim.fn.expand("~/.tmux_battery_cache")
+  local last_mod = vim.fn.getftime(cache_path)
+  if now - last_mod > 30 then
+    vim.fn.jobstart({ "sh", "-c", "termux-battery-status > " .. cache_path }, { detach = true })
+  end
+
   -- Battery & Temp
-  local batt_cache = read_file(vim.fn.expand("~/.tmux_battery_cache"))
+  local batt_cache = read_file(cache_path)
   if batt_cache then
     local ok, data = pcall(vim.fn.json_decode, batt_cache)
     if ok then
