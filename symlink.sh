@@ -78,7 +78,13 @@ if confirm "MPV config (~/.config/mpv)"; then
     deploy_link "$DOTFILES_DIR/config/mpv/mpv.conf" "$HOME/.config/mpv/mpv.conf"
 fi
 
-# 7. Zsh music helper
+# 7. Music player script (bin/music.py)
+if confirm "Music player (bin/music.py)"; then
+    mkdir -p "$HOME/termux-dotfiles/bin"
+    deploy_link "$DOTFILES_DIR/bin/music.py" "$HOME/termux-dotfiles/bin/music.py"
+fi
+
+# 8. Zsh music helper
 if confirm "Zsh music helper (~/.zsh_music)"; then
     deploy_link "$DOTFILES_DIR/zsh/.zsh_music" "$HOME/.zsh_music"
 fi

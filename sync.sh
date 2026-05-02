@@ -60,7 +60,13 @@ if confirm "Sync MPV config (~/.config/mpv)?"; then
     msg "Synced MPV config"
 fi
 
-# 6. Zsh music helper
+# 6. Music player script
+if confirm "Sync music app (bin/music.py)?"; then
+    [ -f "$HOME/termux-dotfiles/bin/music.py" ] && cp "$HOME/termux-dotfiles/bin/music.py" "$DOTFILES_DIR/bin/music.py"
+    msg "Synced music app"
+fi
+
+# 7. Zsh music helper
 if confirm "Sync Zsh music helper (~/.zsh_music)?"; then
     [ -f "$HOME/.zsh_music" ] && cp "$HOME/.zsh_music" "$DOTFILES_DIR/zsh/.zsh_music"
     # Also allow syncing from the dotfiles path if linked
