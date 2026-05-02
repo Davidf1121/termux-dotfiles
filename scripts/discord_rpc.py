@@ -26,25 +26,25 @@ def get_sys_info():
         try:
             with open(cache_path, "r") as f:
                 data = json.load(f)
-                status = "󰁹"
-                if data.get("status") == "CHARGING": status = "󱐋"
-                elif data.get("status") == "DISCHARGING": status = "󰂄"
+                status = "🔋"
+                if data.get("status") == "CHARGING": status = "🔌"
+                elif data.get("status") == "DISCHARGING": status = "🔋"
                 battery = f"{status} {data.get('percentage')}%"
-                temp = f"󰏈 {data.get('temperature')}°C"
+                temp = f"🔥 {data.get('temperature')}°C"
         except:
             pass
 
     # RAM
     try:
         ram = subprocess.check_output("free -m | awk '/Mem:/ { printf \"%dMB\", $3 }'", shell=True).decode().strip()
-        ram = f"󰍛 {ram}"
+        ram = f"💾 {ram}"
     except:
-        ram = "󰍛 ..."
+        ram = "💾 ..."
 
     # CPU (using our tmux helper)
     try:
         cpu = subprocess.check_output("cut -c3- ~/.tmux.conf.local | sh -s cpu_usage", shell=True).decode().strip()
-        cpu = f"󰻠 {cpu}"
+        cpu = f"⚡ {cpu}"
     except:
         cpu = "󰻠 ..."
 
