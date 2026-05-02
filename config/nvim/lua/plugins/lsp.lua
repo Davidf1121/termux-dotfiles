@@ -12,13 +12,20 @@ return {
         ensure_installed = { "lua_ls" },
       })
 
+      -- Using the direct setup through lspconfig
       local lspconfig = require("lspconfig")
-      -- Standard setup for lua_ls
       lspconfig.lua_ls.setup({
         settings = {
           Lua = {
             diagnostics = {
               globals = { "vim" },
+            },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+              checkThirdParty = false,
+            },
+            telemetry = {
+              enable = false,
             },
           },
         },

@@ -1,0 +1,56 @@
+The `require('lspconfig')` "framework" is deprecated, use vim.lsp.config (see :help lspconfig-nvim-0.11) instead.
+Feature will be removed in nvim-lspconfig v3.0.0
+stack traceback:
+        .../.local/share/nvim/lazy/nvim-lspconfig/lua/lspconfig.lua:81: in function '__index'
+        ...a/com.termux/files/home/.config/nvim/lua/plugins/lsp.lua:16: in function 'config'
+        ...local/share/nvim/lazy/lazy.nvim/lua/lazy/core/loader.lua:380: in function <...local/share/nvim/lazy/lazy.nvim/lua/lazy/core/loader.lua:378>
+        [C]: in function 'xpcall'
+        .../.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/util.lua:135: in function 'try'
+        ...local/share/nvim/lazy/lazy.nvim/lua/lazy/core/loader.lua:395: in function 'config'
+        ...local/share/nvim/lazy/lazy.nvim/lua/lazy/core/loader.lua:362: in function '_load'
+        ...local/share/nvim/lazy/lazy.nvim/lua/lazy/core/loader.lua:197: in function 'load'
+        ...local/share/nvim/lazy/lazy.nvim/lua/lazy/core/loader.lua:127: in function 'startup'
+        .../home/.local/share/nvim/lazy/lazy.nvim/lua/lazy/init.lua:112: in function 'setup'
+        ...a/com.termux/files/home/.config/nvim/lua/config/lazy.lua:14: in main chunk
+        [C]: in function 'require'
+
+Failed to run `config` for nvim-treesitter
+
+.../com.termux/files/home/.config/nvim/lua/plugins/core.lua:60: module 'nvim-treesitter.configs' not found:
+        no field package.preload['nvim-treesitter.configs']
+        cache_loader: module 'nvim-treesitter.configs' not found
+        cache_loader_lib: module 'nvim-treesitter.configs' not found
+        no file './nvim-treesitter/configs.lua'
+        no file '/data/data/com.termux/files/usr/share/luajit-2.1/nvim-treesitter/configs.lua'
+        no file '/usr/local/share/lua/5.1/nvim-treesitter/configs.lua'
+        no file '/usr/local/share/lua/5.1/nvim-treesitter/configs/init.lua'
+        no file '/data/data/com.termux/files/usr/share/lua/5.1/nvim-treesitter/configs.lua'
+        no file '/data/data/com.termux/files/usr/share/lua/5.1/nvim-treesitter/configs/init.lua'
+        no file '/data/data/com.termux/files/home/.local/share/nvim/lazy-rocks/telescope.nvim/share/lua/5.1/nvim-treesitter/configs.lua'
+        no file '/data/data/com.termux/files/home/.local/share/nvim/lazy-rocks/telescope.nvim/share/lua/5.1/nvim-treesitter/configs/init.lua'
+        no file './nvim-treesitter/configs.so'
+        no file '/usr/local/lib/lua/5.1/nvim-treesitter/configs.so'
+        no file '/data/data/com.termux/files/usr/lib/lua/5.1/nvim-treesitter/configs.so'
+        no file '/usr/local/lib/lua/5.1/loadall.so'
+        no file '/data/data/com.termux/files/home/.local/share/nvim/lazy-rocks/telescope.nvim/lib/lua/5.1/nvim-treesitter/configs.so'
+        no file '/data/data/com.termux/files/home/.local/share/nvim/lazy-rocks/telescope.nvim/lib64/lua/5.1/nvim-treesitter/configs.so'
+        no file './nvim-treesitter.so'
+        no file '/usr/local/lib/lua/5.1/nvim-treesitter.so'
+        no file '/data/data/com.termux/files/usr/lib/lua/5.1/nvim-treesitter.so'
+        no file '/usr/local/lib/lua/5.1/loadall.so'
+        no file '/data/data/com.termux/files/home/.local/share/nvim/lazy-rocks/telescope.nvim/lib/lua/5.1/nvim-treesitter.so'
+        no file '/data/data/com.termux/files/home/.local/share/nvim/lazy-rocks/telescope.nvim/lib64/lua/5.1/nvim-treesitter.so'
+
+# stacktrace:
+  - ~/.config/nvim/lua/plugins/core.lua:60 _in_ **config**
+  - ~/.config/nvim/lua/config/lazy.lua:14
+  - ~/.config/nvim/init.lua:2
+
+vim.schedule callback: ...share/nvim/lazy/lualine.nvim/lua/lualine/utils/utils.lua:211: lualine: Failed to refresh statusline:
+...e/nvim/lazy/lualine.nvim/lua/lualine/utils/nvim_opts.lua:109: E539: Illegal character < >
+stack traceback:
+        [C]: in function 'error'
+        ...share/nvim/lazy/lualine.nvim/lua/lualine/utils/utils.lua:211: in function 'fn'
+        vim/_core/editor.lua:273: in function <vim/_core/editor.lua:272>
+
+
