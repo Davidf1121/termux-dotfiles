@@ -106,11 +106,18 @@ def play(target):
     
     title = get_title_from_file(str(Path(target).resolve()))
     
+    # Try to get title BEFORE playing (works for URLs)
+    if target.startswith("http"):
+        pre_title = get_title_from_url(target)
+        if pre_title:
+            title = pre_title
+    
     subprocess.run(["pkill", "mpv"], capture_output=True)
     time.sleep(0.5)
     
     mpv_args = [
         "mpv",
+        "--input-ipc-server=" + MPV_SOCKET,
         "--no-video",
         "--", target
     ]
