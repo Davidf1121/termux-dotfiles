@@ -186,11 +186,13 @@ def watch():
     """Watch and display music info in real-time."""
     socket_path = os.path.expanduser("~/.cache/mpv_socket")
     
-    # Tokyo Night colors
-    C_YELLOW = "\033[38;5;220m"  # yellow
-    C_BLUE = "\033[38;5;68m"    # blue  
-    C_GREEN = "\033[38;5;82m"   # green
+    # Tokyo Night theme colors (ANSI 256)
+    C_YELLOW = "\033[38;5;220m"  # #e0af68
+    C_BLUE = "\033[38;5;68m"    # #7aa2f7
+    C_GREEN = "\033[38;5;82m"  # #9ece6a
+    C_PURPLE = "\033[38;5;175m" # #bb9af7
     C_RESET = "\033[0m"
+    C_BOLD = "\033[1m"
     
     if not os.path.exists(socket_path):
         print("No music playing")
@@ -202,7 +204,7 @@ def watch():
         with open(CACHE_FILE) as f:
             title = f.read().strip()
     
-    print(f"{C_YELLOW}󰊄 Watching... Ctrl+C to exit{C_RESET}")
+    print(f"{C_BOLD}{C_YELLOW}Watching... Ctrl+C to exit{C_RESET}")
     print("")
     
     while True:
@@ -246,25 +248,22 @@ def watch():
             p_min, p_sec = int(pos//60), int(pos%60)
             d_min, d_sec = int(dur//60), int(dur%60)
             
-            # Progress bar with segments
-            bar_size = 35
+            # Progress bar
+            bar_size = 30
             filled = int(pos * bar_size / dur) if dur > 0 else 0
             filled = min(filled, bar_size)
-            
-            bar_filled = "━" * filled
-            bar_empty = "─" * (bar_size - filled)
-            bar = bar_filled + bar_empty
+            bar = "━"*filled + "─"*(bar_size-filled)
             if filled < bar_size and filled > 0: bar = bar[:filled] + "╸" + bar[filled+1:]
             
             # Icons
             icon = "󰝚" if not paused else "󰐎"
             
-            # Output with colors
+            # Build line
             line = f"{C_YELLOW}{icon}{C_RESET} {C_BLUE}{title}{C_RESET} "
             line += f"{C_YELLOW}|{C_RESET}{C_YELLOW}{bar}{C_RESET} "
             line += f"{C_GREEN}{p_min:02d}:{p_sec:02d}{C_RESET}/{d_min:02d}:{d_sec:02d}"
             
-            print(f"\r{line}   ", end='', flush=True)
+            print(f"\r{line}     ", end='', flush=True)
             time.sleep(1)
             
         except KeyboardInterrupt: break
