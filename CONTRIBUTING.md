@@ -27,19 +27,19 @@ To ensure stability and compatibility with Powerlevel10k's instant prompt:
 ### Fastfetch Configuration
 - **Version Compatibility**: Avoid using deprecated command-line flags. Prefer passing overrides via environment variables (e.g., `FASTFETCH_TITLE_FQDN`) or the `-S` structure flag.
 - **Logo Paths**: Use the `~` placeholder for logo paths in `config.jsonc` (e.g., `~/.config/fastfetch/logo.txt`).
-- **Config Sync**: The installers use `sed` to replace the `~` placeholder with the actual absolute path to the user's home directory during deployment. This ensures that the logo is correctly resolved regardless of the shell's working directory or the host OS (Termux vs. Linux).
+- **Config Sync**: The installer uses `sed` to replace the `~` placeholder with the actual absolute path to the user's home directory during deployment. This ensures that the logo is correctly resolved regardless of the shell's working directory.
 
 ### Tmux Styling
 - The Tokyo Night theme is enforced via direct `set -g` commands in the `user customizations` section of `.tmux.conf.local` to override framework defaults reliably.
 - **Icons**: Uses Nerd Font glyphs (ensure a compatible font is active).
 - **Status Bar Caching**: To prevent UI lag when calling `termux-api` (e.g., for battery or temp), a background caching mechanism is used. The `_update_battery_cache` function runs every 30 seconds as a background process, ensuring the status bar remains responsive.
-- **Dynamic 2rd Row**: A dedicated music dashboard (`status-format[1]`) is enabled automatically when music is playing. This is managed by the `now_playing` helper which dynamically toggles between 1 and 2 status lines.
+- **Dynamic 2nd Row**: A dedicated music dashboard (`status-format[1]`) is enabled automatically when music is playing. This is managed by the `now_playing` helper which dynamically toggles between 1 and 2 status lines.
 
 ### Music Player
 - Custom Python app at `bin/music.py` with mpv IPC socket.
 - Uses `~/.cache/music_current` for tmux display and `~/.cache/music_history` for history tracking.
 - Audio via PulseAudio (auto-started).
-- **Core commands**: `m <url|file>` (play), `m search <query>`, `m pause`, `m stop`, `m info`, `m watch`
+- **Core commands**: `m <url|file|query>` (play/auto-search), `m search <query>`, `m pause`, `m stop`, `m info`, `m watch`
 - **QoL features**:
   - `m <query>` - Auto-search and play first result
   - `m history` - Show playback history
@@ -52,4 +52,4 @@ To ensure stability and compatibility with Powerlevel10k's instant prompt:
 1. **Hybrid Sync**: Use `symlink.sh` for live development (linking repo to system) and `sync.sh` to back up local changes into the repository.
 2. **Absolute Paths**: When using symlinks, always use absolute paths to prevent broken references in Termux's unique directory structure.
 3. **Commit Style**: Use conventional commit prefixes (`feat:`, `fix:`, `docs:`, `refactor:`).
-4. **Environment Detection**: Always check for the environment before running OS-specific package commands (e.g., `pkg` for Termux, `apt` for Linux).
+4. **Environment Detection**: Always check for the environment before running OS-specific package commands (e.g., `pkg` for Termux).

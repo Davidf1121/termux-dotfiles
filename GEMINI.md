@@ -1,10 +1,10 @@
 # GEMINI.md: Repository Development Mandates
 
-This document takes absolute precedence over general workflows. It defines the architectural standards, system-wide dependencies, and development protocols for the **Termux & Linux Dotfiles** project.
+This document takes absolute precedence over general workflows. It defines the architectural standards, system-wide dependencies, and development protocols for the **Termux Dotfiles** project.
 
 ## 1. Core Philosophy
 - **Aesthetic Performance**: Every tool must be "fancy" (Tokyo Night theme, icons, Powerline symbols) without sacrificing Termux responsiveness.
-- **Modular Deployment**: Configuration must be decoupled from installation logic. Installers handle environment detection and deployment; the `config/` directory holds the logic.
+- **Modular Deployment**: Configuration must be decoupled from installation logic. The installer handles deployment; the `config/` directory holds the logic.
 - **Termux-First**: All configurations are optimized for Termux (ARM/Android). Linux support has been temporarily removed pending full port testing.
 
 ## 2. Technical Standards
@@ -30,7 +30,7 @@ This document takes absolute precedence over general workflows. It defines the a
 ### Music Player
 - **App**: Custom Python at `bin/music.py` with mpv IPC socket.
 - **No pip deps**: Just mpv + socat + ffprobe + yt-dlp.
-- **Core commands**: `m <url|file>` (play), `m search <query>`, `m pause`, `m stop`, `m info`, `m watch`
+- **Core commands**: `m <url|file|query>` (play/auto-search), `m search <query>`, `m pause`, `m stop`, `m info`, `m watch`
 - **QoL features**:
   - `m <query>` - Auto-search and play first result
   - `m history` - Show playback history

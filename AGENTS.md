@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## What this repo is
-Dotfiles for Termux (Android) and Linux. Shell: zsh + Oh My Zsh + Powerlevel10k. Editor: Neovim (lazy.nvim, Lua). Multiplexer: tmux (Oh My Tmux + Tokyo Night). File managers: yazi, ranger.
+Dotfiles for Termux (Android). Shell: zsh + Oh My Zsh + Powerlevel10k. Editor: Neovim (lazy.nvim, Lua). Multiplexer: tmux (Oh My Tmux + Tokyo Night). File managers: yazi, ranger.
 
 ## Install / deploy flow
 ```
@@ -15,7 +15,7 @@ bash debug-install.sh      # prints system info then runs install.sh --verbose
 ## Dev workflow (3 scripts)
 | Script | Purpose |
 |---|---|
-| `install-*.sh` | Copies files to system (production) |
+| `install.sh` | Copies files to system (production) |
 | `symlink.sh` | Interactive selective symlinks for live editing (dev) |
 | `sync.sh` | Copies local changes back into the repo (backup) |
 
@@ -34,12 +34,12 @@ bash debug-install.sh      # prints system info then runs install.sh --verbose
 - **Fastfetch logo paths**: `config.jsonc` uses `~/.config/fastfetch/logo.txt` as placeholder. Installers `sed` this to the real `$HOME` path during deploy. Do not hardcode absolute paths.
 - **Interactive guards**: Greeting/fastfetch calls in `.zshrc` are gated by `[[ $- == *i* ]]` — keep this pattern for any new non-silent init output.
 - **Tmux status bar caching**: Termux API calls (battery, temp) run every 30s in a background process (`_update_battery_cache`) to avoid UI lag. Do not call `termux-api` directly in status-right.
-- **Oh My Tmux base**: `install-*.sh` clones `gpakosz/.tmux` to `~/.tmux` and deploys `~/.tmux.conf`. `.tmux.conf.local` is the repo's customization overlay.
+- **Oh My Tmux base**: `install.sh` clones `gpakosz/.tmux` to `~/.tmux` and deploys `~/.tmux.conf`. `.tmux.conf.local` is the repo's customization overlay.
 - **Oh My Zsh plugins**: Powerlevel10k, zsh-syntax-highlighting, zsh-autosuggestions are git-cloned into `$ZSH_CUSTOM`.
 
 ## Conventions
 - Commits: conventional prefixes (`feat:`, `fix:`, `docs:`, `refactor:`).
-- Always verify environment before OS-specific commands (`pkg` vs `apt`).
+- Always verify environment before OS-specific commands (`pkg` for Termux).
 - Theme: Tokyo Night across all components.
 - Nerd Font required for icons.
 

@@ -27,7 +27,7 @@ A collection of configuration files to set up a modern and functional terminal e
 
 ## Development Workflow
 This repository is designed for safe and flexible development:
-- **`install-*.sh`**: Default installation method. Copies files to your system (safe from accidental edits).
+- **`install.sh`**: Default installation method. Copies files to your system (safe from accidental edits).
 - **`symlink.sh`**: Development method. Selectively link files to the repo for real-time updates.
 - **`sync.sh`**: Manual backup. Copy your local configuration changes back into the repository.
 - **Dynamic Identity**: Use the `setname` command to update your user handle across the shell, Fastfetch, and Tmux status bar.
