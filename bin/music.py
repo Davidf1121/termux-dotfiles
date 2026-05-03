@@ -144,7 +144,7 @@ def play(target):
     with open(CACHE_FILE, "w") as f:
         f.write(title)
     
-    print(f"> {title}")
+    print(f"󰝚 {title}")
 
 def pause_toggle():
     if not os.path.exists(MPV_SOCKET):
@@ -161,7 +161,7 @@ def pause_toggle():
         # Show status
         title = get_mpv_title()
         if title:
-            print(f"|| {title}")
+            print(f"󰐎 {title}")
     except:
         print("Failed to toggle pause")
 
@@ -169,7 +169,7 @@ def stop():
     subprocess.run(["pkill", "mpv"], capture_output=True)
     if os.path.exists(CACHE_FILE):
         os.remove(CACHE_FILE)
-    print("X Stopped")
+    print("󰐎 Stopped")
 
 def info():
     title = get_mpv_title()
@@ -178,13 +178,13 @@ def info():
             title = f.read()
     
     if title:
-        print(f"- {title}")
+        print(f"󰝚 {title}")
     else:
         print("No track playing")
 
 def search(query):
     """Search for music and let user select."""
-    print(f"Search: {query}")
+    print(f"󰊄 Searching for: {query}")
     try:
         result = subprocess.run(
             ["yt-dlp", "--flat-playlist", "--dump-json", 
