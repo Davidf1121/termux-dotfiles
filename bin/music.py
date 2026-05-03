@@ -183,92 +183,113 @@ def info():
         print("No track playing")
 
 def watch():
-    """Watch and display music info in real-time."""
+    """Watch and display music info in real-time.
+
+    Simplified layout: [icon] Title <bar> time
+    Uses Tokyo Night palette (yellow, blue, purple, green) and
+    removes the vertical separator to keep the output compact.
+    """
     socket_path = os.path.expanduser("~/.cache/mpv_socket")
-    
-    # Tokyo Night theme colors (ANSI 256)
+
+    # Tokyo Night theme ANSI colors (256-color escapes)
     C_YELLOW = "\033[38;5;220m"  # #e0af68
-    C_BLUE = "\033[38;5;68m"    # #7aa2f7
-    C_GREEN = "\033[38;5;82m"  # #9ece6a
-    C_PURPLE = "\033[38;5;175m" # #bb9af7
+    C_BLUE = "\033[38;5;68m"     # #7aa2f7
+    C_PURPLE = "\033[38;5;175m"  # #bb9af7
+    C_GREEN = "\033[38;5;82m"    # #9ece6a
     C_RESET = "\033[0m"
     C_BOLD = "\033[1m"
-    
+
     if not os.path.exists(socket_path):
         print("No music playing")
         return
-    
-    # Get title from cache
+
     title = "Unknown"
     if os.path.exists(CACHE_FILE):
         with open(CACHE_FILE) as f:
             title = f.read().strip()
-    
-    print(f"{C_BOLD}{C_YELLOW}Watching... Ctrl+C to exit{C_RESET}")
-    print("")
-    
+
+    print(f"{C_BOLD}{C_PURPLE}▶{C_RESET} {C_BOLD}{C_YELLOW}Watching... Ctrl+C to exit{C_RESET}")
+
     while True:
         try:
-            # Get time, duration, pause
+            # Query mpv for time/duration/pause (responses arrive in order)
             result = subprocess.run(
                 ["socat", "-", socket_path],
                 input=b'{"command":["get_property","time-pos"]}\n{"command":["get_property","duration"]}\n{"command":["get_property","pause"]}\n',
                 capture_output=True, timeout=2
             )
-            
-            lines = [l for l in result.stdout.decode().strip().split('\n') if l.startswith('{')]
-            
+
+            lines = [l for l in result.stdout.decode().split('\n') if l.startswith('{')]
+
             pos = dur = 0
             paused = False
-            
             for i, line in enumerate(lines):
                 try:
                     d = json.loads(line)
                     val = d.get('data')
                     if val is not None:
-                        if i == 0: pos = float(val)
-                        elif i == 1: dur = float(val)
-                        elif i == 2: paused = bool(val)
-                except: pass
-            
-            # Get current title from mpv
+                        if i == 0:
+                            pos = float(val)
+                        elif i == 1:
+                            dur = float(val)
+                        elif i == 2:
+                            paused = bool(val)
+                except Exception:
+                    continue
+
+            # Title may change; ask mpv separately
             try:
-                result = subprocess.run(
+                res = subprocess.run(
                     ["socat", "-", socket_path],
                     input=b'{"command":["get_property","media-title"]}\n',
                     capture_output=True, timeout=2
                 )
-                d = json.loads(result.stdout.decode().strip())
-                if d.get('data'): title = str(d.get('data'))[:35]
-            except: pass
-            
-            if not title: break
-            
-            # Format times
-            p_min, p_sec = int(pos//60), int(pos%60)
-            d_min, d_sec = int(dur//60), int(dur%60)
-            
-            # Progress bar
+                d = json.loads(res.stdout.decode().strip())
+                if d.get('data'):
+                    title = str(d.get('data'))[:40]
+            except Exception:
+                pass
+
+            if not title:
+                print("\nNo track playing")
+                break
+
+            # Times
+            pos = float(pos) if pos else 0
+            dur = float(dur) if dur else 0
+            p_min, p_sec = int(pos // 60), int(pos % 60)
+            d_min, d_sec = int(dur // 60), int(dur % 60)
+
+            # Progress bar (blue filled, yellow tip)
             bar_size = 30
-            filled = int(pos * bar_size / dur) if dur > 0 else 0
-            filled = min(filled, bar_size)
-            bar = "━"*filled + "─"*(bar_size-filled)
-            if filled < bar_size and filled > 0: bar = bar[:filled] + "╸" + bar[filled+1:]
-            
-            # Icons
-            icon = "󰝚" if not paused else "󰐎"
-            
-            # Build line
-            line = f"{C_YELLOW}{icon}{C_RESET} {C_BLUE}{title}{C_RESET} "
-            line += f"{C_YELLOW}|{C_RESET}{C_YELLOW}{bar}{C_RESET} "
-            line += f"{C_GREEN}{p_min:02d}:{p_sec:02d}{C_RESET}/{d_min:02d}:{d_sec:02d}"
-            
-            print(f"\r{line}     ", end='', flush=True)
+            filled = int((pos / dur) * bar_size) if dur > 0 else 0
+            filled = max(0, min(filled, bar_size))
+            filled_part = "━" * filled
+            empty_part = "─" * (bar_size - filled)
+            if filled < bar_size and filled > 0:
+                # place tip in yellow
+                bar = f"{C_BLUE}{filled_part[:max(0,filled-1)]}{C_YELLOW}╸{C_BLUE}{empty_part[1:]}{C_RESET}"
+            else:
+                bar = f"{C_BLUE}{filled_part}{empty_part}{C_RESET}"
+
+            icon = f"{C_YELLOW}󰝚{C_RESET}" if not paused else f"{C_YELLOW}󰐎{C_RESET}"
+
+            # Compose: ICON TITLE [bar] TIME
+            title_display = f"{C_PURPLE}{title}{C_RESET}"
+            time_display = f"{C_GREEN}{p_min:02d}:{p_sec:02d}{C_RESET}/{C_GREEN}{d_min:02d}:{d_sec:02d}{C_RESET}"
+
+            out = f"{icon} {title_display}  {bar}  {time_display}"
+            # Clear line and print
+            print(f"\r{out}\033[K", end='', flush=True)
+
             time.sleep(1)
-            
-        except KeyboardInterrupt: break
-        except: break
-    
+
+        except KeyboardInterrupt:
+            break
+        except Exception:
+            # on any error just exit the watcher loop
+            break
+
     print(f"\n{C_YELLOW}Stopped{C_RESET}")
 
 def search(query):
