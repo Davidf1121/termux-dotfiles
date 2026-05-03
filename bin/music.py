@@ -186,16 +186,16 @@ def watch():
     """Watch and display music info in real-time.
 
     Simplified layout: [icon] Title <bar> time
-    Uses Tokyo Night palette (yellow, blue, purple, green) and
-    removes the vertical separator to keep the output compact.
+    Uses Tokyo Night palette (yellow, blue, purple, green).
     """
     socket_path = os.path.expanduser("~/.cache/mpv_socket")
 
-    # Tokyo Night theme ANSI colors (256-color escapes)
-    C_YELLOW = "\033[38;5;220m"  # #e0af68
-    C_BLUE = "\033[38;5;68m"     # #7aa2f7
-    C_PURPLE = "\033[38;5;175m"  # #bb9af7
-    C_GREEN = "\033[38;5;82m"    # #9ece6a
+    # Tokyo Night theme colors (matching tmux config exactly)
+    # Convert hex to ANSI 256-color approximations
+    C_ICON = "\033[38;5;210m"    # #f7768e - red/pink for icon
+    C_TITLE = "\033[38;5;74m"    # #7aa2f7 - blue for title
+    C_BAR = "\033[38;5;59m"      # #24283b - dark blue for bar
+    C_TIME = "\033[38;5;150m"    # #9ece6a - green for time
     C_RESET = "\033[0m"
     C_BOLD = "\033[1m"
 
@@ -208,11 +208,14 @@ def watch():
         with open(CACHE_FILE) as f:
             title = f.read().strip()
 
-    print(f"{C_BOLD}{C_PURPLE}▶{C_RESET} {C_BOLD}{C_YELLOW}Watching... Ctrl+C to exit{C_RESET}")
+    print(f"{C_BOLD}{C_ICON}󰊄{C_RESET} {C_BOLD}{C_TITLE}Watching... Ctrl+C to exit{C_RESET}")
+    print("")
+    print("")
+    print("")  # Extra space between header and music display
 
     while True:
         try:
-            # Query mpv for time/duration/pause (responses arrive in order)
+            # Query mpv for time/duration/pause
             result = subprocess.run(
                 ["socat", "-", socket_path],
                 input=b'{"command":["get_property","time-pos"]}\n{"command":["get_property","duration"]}\n{"command":["get_property","pause"]}\n',
@@ -228,16 +231,12 @@ def watch():
                     d = json.loads(line)
                     val = d.get('data')
                     if val is not None:
-                        if i == 0:
-                            pos = float(val)
-                        elif i == 1:
-                            dur = float(val)
-                        elif i == 2:
-                            paused = bool(val)
-                except Exception:
-                    continue
+                        if i == 0: pos = float(val)
+                        elif i == 1: dur = float(val)
+                        elif i == 2: paused = bool(val)
+                except: continue
 
-            # Title may change; ask mpv separately
+            # Get title directly from mpv for accuracy
             try:
                 res = subprocess.run(
                     ["socat", "-", socket_path],
@@ -245,52 +244,45 @@ def watch():
                     capture_output=True, timeout=2
                 )
                 d = json.loads(res.stdout.decode().strip())
-                if d.get('data'):
-                    title = str(d.get('data'))[:40]
-            except Exception:
-                pass
+                if d.get('data'): title = str(d.get('data'))[:40]
+            except: pass
 
             if not title:
                 print("\nNo track playing")
                 break
 
-            # Times
-            pos = float(pos) if pos else 0
-            dur = float(dur) if dur else 0
+            # Time formatting
             p_min, p_sec = int(pos // 60), int(pos % 60)
             d_min, d_sec = int(dur // 60), int(dur % 60)
 
-            # Progress bar (blue filled, yellow tip)
+            # Progress bar (gray bar with muted tip)
             bar_size = 30
             filled = int((pos / dur) * bar_size) if dur > 0 else 0
             filled = max(0, min(filled, bar_size))
-            filled_part = "━" * filled
-            empty_part = "─" * (bar_size - filled)
-            if filled < bar_size and filled > 0:
-                # place tip in yellow
-                bar = f"{C_BLUE}{filled_part[:max(0,filled-1)]}{C_YELLOW}╸{C_BLUE}{empty_part[1:]}{C_RESET}"
+            
+            # Build bar cleanly
+            filled_chars = "━" * filled
+            empty_chars = "─" * (bar_size - filled)
+            
+            if 0 < filled < bar_size:
+                # Replace last filled char with tip, color the transition
+                bar = f"{C_BAR}{filled_chars[:-1]}{C_TIME}╸{C_BAR}{empty_chars}{C_RESET}"
             else:
-                bar = f"{C_BLUE}{filled_part}{empty_part}{C_RESET}"
+                bar = f"{C_BAR}{filled_chars}{empty_chars}{C_RESET}"
 
-            icon = f"{C_YELLOW}󰝚{C_RESET}" if not paused else f"{C_YELLOW}󰐎{C_RESET}"
+            icon = f"{C_ICON}󰝚{C_RESET}" if not paused else f"{C_ICON}󰐎{C_RESET}"
 
-            # Compose: ICON TITLE [bar] TIME
-            title_display = f"{C_PURPLE}{title}{C_RESET}"
-            time_display = f"{C_GREEN}{p_min:02d}:{p_sec:02d}{C_RESET}/{C_GREEN}{d_min:02d}:{d_sec:02d}{C_RESET}"
-
-            out = f"{icon} {title_display}  {bar}  {time_display}"
-            # Clear line and print
+            # UI: ICON TITLE [BAR] TIME
+            out = f"{icon} {C_TITLE}{title:40}{C_RESET} {bar}  {C_TIME}{p_min:02d}:{p_sec:02d}/{d_min:02d}:{d_sec:02d}{C_RESET}"
+            
             print(f"\r{out}\033[K", end='', flush=True)
 
             time.sleep(1)
 
-        except KeyboardInterrupt:
-            break
-        except Exception:
-            # on any error just exit the watcher loop
-            break
+        except KeyboardInterrupt: break
+        except: break
 
-    print(f"\n{C_YELLOW}Stopped{C_RESET}")
+    print(f"\n{C_TITLE}Stopped{C_RESET}")
 
 def search(query):
     """Search for music and let user select."""
