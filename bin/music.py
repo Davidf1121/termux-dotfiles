@@ -22,7 +22,7 @@ def ensure_pulse():
     # Try to start PulseAudio
     try:
         subprocess.run(["pulseaudio", "-D", "--exit-idle-time=-1"], capture_output=True, timeout=5)
-        time.sleep(1)
+        time.sleep(2)
         result = subprocess.run(["pulseaudio", "--check"], capture_output=True, timeout=2)
         if result.returncode == 0:
             return True
@@ -125,7 +125,7 @@ def play(target):
         "--input-ipc-server=" + MPV_SOCKET,
         "--no-video",
         "--", target
-    ]
+]
     
     proc = subprocess.Popen(
         mpv_args,
@@ -134,7 +134,7 @@ def play(target):
         stderr=subprocess.DEVNULL
     )
     
-    time.sleep(2)
+    time.sleep(3)
     real_title = get_mpv_title()
     if real_title and real_title != title:
         title = real_title
