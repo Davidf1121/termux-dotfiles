@@ -80,8 +80,8 @@ fi
 
 # 7. Music player script (bin/music.py)
 if confirm "Music player (bin/music.py)"; then
-    mkdir -p "$HOME/termux-dotfiles/bin"
-    deploy_link "$DOTFILES_DIR/bin/music.py" "$HOME/termux-dotfiles/bin/music.py"
+    mkdir -p "$HOME/bin"
+    deploy_link "$DOTFILES_DIR/bin/music.py" "$HOME/bin/music.py"
 fi
 
 echo "------------------------------------------------"

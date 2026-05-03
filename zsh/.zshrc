@@ -129,7 +129,7 @@ alias ezrc='nano ~/.zshrc'
 # Always create these aliases - they'll work if music.py exists
 command -v pulseaudio > /dev/null 2>&1 && pulseaudio -D --exit-idle-time=-1 2>/dev/null
 
-_MUSIC="$HOME/termux-dotfiles/bin/music.py"
+_MUSIC="$HOME/bin/music.py"
 
 alias m="python3 $_MUSIC"
 alias p=m
