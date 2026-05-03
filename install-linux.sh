@@ -149,6 +149,7 @@ if [ -d "$HOME/.oh-my-zsh" ]; then
     echo "📥 Downloading plugins..."
     git_clone_or_update "https://github.com/zsh-users/zsh-syntax-highlighting.git" "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
     git_clone_or_update "https://github.com/zsh-users/zsh-autosuggestions" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+    git_clone_or_update "https://github.com/Aloxaf/fzf-tab" "$ZSH_CUSTOM/plugins/fzf-tab"
     echo "ℹ️  NOTE: Please install a Nerd Font (e.g., MesloLGS NF) on your Linux system to see icons correctly."
 fi
 
