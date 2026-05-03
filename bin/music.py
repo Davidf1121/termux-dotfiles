@@ -4,6 +4,7 @@ import os
 import sys
 import subprocess
 import time
+import json
 from pathlib import Path
 
 MPV_SOCKET = os.path.expanduser("~/.cache/mpv_socket")
@@ -181,10 +182,60 @@ def info():
     else:
         print("No track playing")
 
+def search(query):
+    """Search for music and let user select."""
+    print(f"🔍 Searching for: {query}")
+    try:
+        result = subprocess.run(
+            ["yt-dlp", "--flat-playlist", "--dump-json", 
+             f"ytsearch10:{query}"],
+            capture_output=True, text=True, timeout=30
+        )
+        results = []
+        urls = []
+        for line in result.stdout.strip().split('\n'):
+            if line:
+                try:
+                    data = json.loads(line)
+                    title = data.get('title', 'Unknown')[:50]
+                    duration = data.get('duration')
+                    if duration:
+                        mins = int(duration // 60)
+                        secs = int(duration % 60)
+                        results.append(f"{len(results)+1}. {title} ({mins}:{secs:02d})")
+                    else:
+                        results.append(f"{len(results)+1}. {title}")
+                    urls.append(data.get('url', data.get('webpage_url', '')))
+                except:
+                    pass
+        
+        if not results:
+            print("No results found")
+            return
+        
+        print("\nResults:")
+        for r in results:
+            print(r)
+        print("\nSelect number (or Enter to cancel): ", end='')
+        
+        try:
+            import sys
+            choice = sys.stdin.readline().strip()
+            if not choice:
+                return
+            idx = int(choice) - 1
+            if 0 <= idx < len(results) and idx < len(urls) and urls[idx]:
+                play(urls[idx])
+        except (ValueError, IndexError):
+            print("Cancelled")
+    except Exception as e:
+        print(f"Search failed: {e}")
+
 def main():
     if len(sys.argv) < 2:
         print("Music Player")
         print("Usage: m <url|file|folder>")
+        print("       m search <query>")
         print("       m pause")
         print("       m stop")
         print("       m info")
@@ -201,6 +252,12 @@ def main():
         stop()
     elif cmd == "info":
         info()
+    elif cmd == "search":
+        if len(sys.argv) < 3:
+            print("Usage: m search <query>")
+            return
+        query = " ".join(sys.argv[2:])
+        search(query)
     else:
         play(cmd)
 
