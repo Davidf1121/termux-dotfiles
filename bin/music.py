@@ -6,9 +6,11 @@ import subprocess
 import time
 import json
 from pathlib import Path
+from datetime import datetime
 
 MPV_SOCKET = os.path.expanduser("~/.cache/mpv_socket")
 CACHE_FILE = os.path.expanduser("~/.cache/music_current")
+HISTORY_FILE = os.path.expanduser("~/.cache/music_history")
 
 def ensure_pulse():
     """Start PulseAudio if not running, or skip if fails."""
@@ -144,6 +146,7 @@ def play(target):
     with open(CACHE_FILE, "w") as f:
         f.write(title)
     
+    add_to_history(title, target)
     print(f"󰝚 {title}")
 
 def pause_toggle():
@@ -181,6 +184,85 @@ def info():
         print(f"󰝚 {title}")
     else:
         print("No track playing")
+
+def add_to_history(title, target):
+    """Add played track to history."""
+    os.makedirs(os.path.dirname(HISTORY_FILE), exist_ok=True)
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(HISTORY_FILE, "a") as f:
+        f.write(f"{timestamp} | {title} | {target}\n")
+
+def show_history():
+    """Display playback history."""
+    if not os.path.exists(HISTORY_FILE):
+        print("No history found")
+        return
+    with open(HISTORY_FILE) as f:
+        lines = f.readlines()
+    if not lines:
+        print("History is empty")
+        return
+    print("Recent History (last 20):")
+    for i, line in enumerate(lines[-20:], 1):
+        print(f"{i}. {line.strip()}")
+
+def replay(choice=None):
+    """Replay a track from history."""
+    if not os.path.exists(HISTORY_FILE):
+        print("No history found")
+        return
+    with open(HISTORY_FILE) as f:
+        lines = f.readlines()
+    if not lines:
+        print("History is empty")
+        return
+    
+    if choice is None:
+        # Replay last track
+        last = lines[-1].strip()
+        parts = last.split(" | ")
+        if len(parts) >= 3:
+            target = parts[2]
+            title = parts[1]
+            print(f"Replaying: {title}")
+            play(target)
+        else:
+            print("Invalid history entry")
+        return
+    
+    # If choice is a number, try to play that entry
+    try:
+        idx = int(choice)
+        if 1 <= idx <= len(lines):
+            entry = lines[idx-1].strip()
+            parts = entry.split(" | ")
+            if len(parts) >= 3:
+                target = parts[2]
+                title = parts[1]
+                print(f"Replaying: {title}")
+                play(target)
+            else:
+                print("Invalid history entry")
+        else:
+            print(f"Index out of range (1-{len(lines)})")
+    except ValueError:
+        print("Invalid index")
+
+def seek(seconds):
+    """Seek forward (positive) or backward (negative) by seconds."""
+    if not os.path.exists(MPV_SOCKET):
+        print("No music playing")
+        return
+    try:
+        cmd = json.dumps({"command": ["seek", str(seconds), "relative"]}) + "\n"
+        subprocess.run(
+            ["socat", "-", MPV_SOCKET],
+            input=cmd.encode(),
+            capture_output=True, timeout=2
+        )
+        print(f"Seeked {seconds:+} seconds")
+    except Exception as e:
+        print(f"Seek failed: {e}")
 
 def watch():
     """Watch and display music info in real-time.
@@ -284,7 +366,7 @@ def watch():
 
     print(f"\n{C_TITLE}Stopped{C_RESET}")
 
-def search(query):
+def search(query, auto_select_first=False):
     """Search for music and let user select."""
     print(f"󰊄 Searching for: {query}")
     try:
@@ -315,40 +397,94 @@ def search(query):
             print("No results found")
             return
         
-        print("\nResults:")
-        for r in results:
-            print(r)
-        print("\nSelect number (or Enter to cancel): ", end='')
+        if auto_select_first:
+            print(f"Auto-playing first result: {results[0]}")
+            play(urls[0])
+            return
         
+        # Check if fzf is available for scrolling selection
+        use_fzf = False
         try:
-            import sys
-            choice = sys.stdin.readline().strip()
-            if not choice:
-                return
-            idx = int(choice) - 1
-            if 0 <= idx < len(results) and idx < len(urls) and urls[idx]:
-                play(urls[idx])
-        except (ValueError, IndexError):
-            print("Cancelled")
+            subprocess.run(["which", "fzf"], capture_output=True, check=True)
+            use_fzf = True
+        except:
+            pass
+        
+        if use_fzf:
+            # Use fzf for interactive selection
+            import tempfile
+            with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+                for r in results:
+                    f.write(r + '\n')
+                temp_name = f.name
+            try:
+                fzf_result = subprocess.run(
+                    ["fzf", "--height=40%", "--reverse"],
+                    stdin=open(temp_name),
+                    capture_output=True, text=True
+                )
+                if fzf_result.returncode == 0:
+                    selected = fzf_result.stdout.strip()
+                    try:
+                        idx = int(selected.split('.')[0]) - 1
+                        if 0 <= idx < len(urls) and urls[idx]:
+                            play(urls[idx])
+                    except:
+                        print("Invalid selection")
+                else:
+                    print("Cancelled")
+            finally:
+                os.unlink(temp_name)
+        else:
+            # Fallback to numbered list
+            print("\nResults:")
+            for r in results:
+                print(r)
+            print("\nSelect number (or Enter to cancel): ", end='')
+            try:
+                import sys
+                choice = sys.stdin.readline().strip()
+                if not choice:
+                    return
+                idx = int(choice) - 1
+                if 0 <= idx < len(results) and idx < len(urls) and urls[idx]:
+                    play(urls[idx])
+            except (ValueError, IndexError):
+                print("Cancelled")
     except Exception as e:
         print(f"Search failed: {e}")
 
 def main():
     if len(sys.argv) < 2:
-        print("Music Player")
-        print("Usage: m <url|file|folder>")
-        print("       m search <query>")
-        print("       m watch")
-        print("       m pause")
-        print("       m stop")
-        print("       m info")
+        print("Music Player - QoL Edition")
+        print("Usage:")
+        print("  m <url|file|folder>    - Play directly")
+        print("  m <query>               - Auto-search and play first result")
+        print("  m search <query>        - Search with selection (fzf if available)")
+        print("  m history                - Show playback history")
+        print("  m replay [index]        - Replay from history (last if no index)")
+        print("  m seek <seconds>        - Seek forward/backward")
+        print("  m forward [seconds]     - Seek forward (default 10s)")
+        print("  m backward [seconds]    - Seek backward (default 10s)")
+        print("  m watch                  - Watch with progress bar")
+        print("  m pause                 - Toggle pause")
+        print("  m stop                  - Stop playback")
+        print("  m info                  - Show current track")
         return
     
     cmd = sys.argv[1]
     
-    if cmd in ("play", "p") or os.path.exists(cmd) or cmd.startswith("http"):
-        target = sys.argv[2] if len(sys.argv) > 2 else cmd
-        play(target or cmd)
+    # Check if cmd is a file/directory/URL
+    is_file = os.path.exists(cmd) or cmd.startswith("http")
+    
+    if cmd in ("play", "p"):
+        target = sys.argv[2] if len(sys.argv) > 2 else None
+        if not target:
+            print("Usage: m play <url|file>")
+            return
+        play(target)
+    elif is_file:
+        play(cmd)
     elif cmd == "pause":
         pause_toggle()
     elif cmd == "stop":
@@ -363,8 +499,36 @@ def main():
             return
         query = " ".join(sys.argv[2:])
         search(query)
+    elif cmd == "history":
+        show_history()
+    elif cmd == "replay":
+        choice = sys.argv[2] if len(sys.argv) > 2 else None
+        replay(choice)
+    elif cmd == "seek":
+        if len(sys.argv) < 3:
+            print("Usage: m seek <seconds>")
+            return
+        try:
+            seconds = float(sys.argv[2])
+            seek(seconds)
+        except ValueError:
+            print("Invalid seconds")
+    elif cmd in ("forward", "fwd"):
+        if len(sys.argv) > 2:
+            seconds = float(sys.argv[2])
+        else:
+            seconds = 10
+        seek(seconds)
+    elif cmd in ("backward", "back"):
+        if len(sys.argv) > 2:
+            seconds = -float(sys.argv[2])
+        else:
+            seconds = -10
+        seek(seconds)
     else:
-        play(cmd)
+        # Treat entire argument list as search query
+        query = " ".join(sys.argv[1:])
+        search(query, auto_select_first=True)
 
 if __name__ == "__main__":
     main()

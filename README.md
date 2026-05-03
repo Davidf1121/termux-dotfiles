@@ -59,7 +59,13 @@ This repository is designed for safe and flexible development:
 | `zrc` | Reload Zsh configuration |
 | `ezrc` | Edit Zsh configuration |
 | `cls` | Clear terminal and show greeting |
-| `m <url|file>` | Custom Python music player |
+| `m <url\|file\|query>` | Custom Python music player (auto-search) |
+| `m search <query>` | Interactive search (fzf if available) |
+| `m history` | Show playback history |
+| `m replay [index]` | Replay from history |
+| `m seek <sec>` | Seek forward/backward |
+| `m forward`/`backward` | Quick seek ±10s |
+| `m watch` | Watch with progress bar |
 | `p` | Shortcut for music player |
 | `mpause`/`mstop`/`minfo` | Music controls |
 
@@ -70,6 +76,7 @@ Custom standalone music player (`bin/music.py`) - just mpv, no pip deps:
 - Backend: `mpv` with IPC socket at `~/.cache/mpv_socket`
 - Audio: PulseAudio
 - Cache: `~/.cache/music_current` for tmux display
+- History: `~/.cache/music_history` for playback history
 - Sources: Local files, folders, URLs (YouTube, direct)
 
 Install:
@@ -81,14 +88,38 @@ pkg install mpv pulseaudio ffmpeg python
 Usage:
 
 ```bash
+# Direct play
 m https://youtu.be/...   # Play YouTube
-m /sdcard/Music        # Play folder
-m song.mp3            # Play file
-m search <query>      # Search YouTube and select
-m pause               # Toggle pause
-m stop                # Stop
-m info                # Show track
+m /sdcard/Music          # Play folder
+m song.mp3               # Play file
+
+# Smart search (auto-plays first result)
+m never gonna give you up  # Auto-search and play
+
+# Interactive search (with fzf if available)
+m search <query>         # Search YouTube and select
+
+# History & replay
+m history                # Show playback history
+m replay                 # Replay last track
+m replay 3               # Replay 3rd track from history
+
+# Playback control
+m pause                  # Toggle pause
+m stop                   # Stop
+m info                   # Show current track
+m watch                  # Watch with progress bar (Tokyo Night theme)
+
+# Seek controls
+m seek 30               # Seek forward 30 seconds
+m seek -10              # Seek backward 10 seconds
+m forward                # Seek forward 10s (default)
+m forward 30            # Seek forward 30s
+m backward               # Seek backward 10s (default)
+m backward 20           # Seek backward 20s
 ```
+
+Aliases: `p` (play), `mpause`, `mstop`, `minfo`
 
 ## Installation
 To install the dotfiles, run the following command:
