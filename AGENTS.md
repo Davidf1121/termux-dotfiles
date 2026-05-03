@@ -5,11 +5,11 @@ Dotfiles for Termux (Android) and Linux. Shell: zsh + Oh My Zsh + Powerlevel10k.
 
 ## Install / deploy flow
 ```
-bash install.sh            # dispatcher — auto-detects Termux vs Linux, calls install-*.sh
+bash install.sh            # Termux-only installer (Linux removed)
 bash install.sh --verbose  # enables set -x tracing
 bash debug-install.sh      # prints system info then runs install.sh --verbose
 ```
-- `install-termux.sh` uses `pkg` for packages; `install-linux.sh` uses `apt`/`sudo`.
+- `install.sh` uses `pkg` for packages (Termux only).
 - The `deploy` function **copies** files (not symlinks) and `rm -rf` targets first.
 
 ## Dev workflow (3 scripts)
@@ -50,9 +50,11 @@ bash debug-install.sh      # prints system info then runs install.sh --verbose
 
 ## Music Player (Custom Python)
 - **App**: `bin/music.py` - Custom Python + mpv IPC socket, standalone (no pip deps)
-- **Commands**: `m <url|file>` (play), `m search <query>`, `m pause`, `m stop`, `m info`
+- **Commands**: `m <url|file|query>` (auto-search/play), `m search <query>` (fzf if available), `m pause`, `m stop`, `m info`, `m watch`
+- **QoL**: `m history` (show history), `m replay [index]` (replay from history), `m seek ±sec`, `m forward/backward` (quick seek ±10s)
 - **Shortcuts**: `p` (play), `minfo`
 - **Config**: `config/mpv/mpv.conf` — music profile with IPC at `$HOME/.cache/mpv_socket`
 - **Audio**: PulseAudio (auto-started)
 - **Cache**: `~/.cache/music_current` for tmux status bar
+- **History**: `~/.cache/music_history` - auto-recorded on each play
 - **Tmux Integration**: `music_bar` function provides a dynamic 2nd row with a pip-style progress bar and live timer. `now_playing` safely toggles the 2nd row on/off.

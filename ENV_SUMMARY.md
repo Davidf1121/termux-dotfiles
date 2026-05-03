@@ -20,6 +20,7 @@ This document outlines the systematic transformation of a stock Termux installat
 - **File Management**: Installed `ranger` and `yazi` (wrapped with a shell function for automatic directory switching).
 - **Modern Editor**: Transitioned to `neovim` with a custom, modular Lua configuration. Integrated `lazy.nvim` (plugin manager), `tokyonight.nvim` (theme), `alpha-nvim` (dashboard), `nvim-cmp` (autocomplete), and `lspconfig` (intelligent coding features).
 - **Multiplexing**: Installed and configured `tmux` with an "Oh My Tmux" dashboard status bar. Enhanced with real-time system metrics, background caching, and a dynamic 2-row layout featuring pip-style music progress bars.
+- **Music Player**: Custom Python app (`bin/music.py`) with mpv IPC socket, PulseAudio, and Tokyo Night themed watch display. Features include auto-search, history tracking, replay, seek controls, and fzf integration.
 
 - **Environment**: Initialized `starship` as a fallback/secondary prompt engine.
 
@@ -29,8 +30,8 @@ This document outlines the systematic transformation of a stock Termux installat
 
 ## 5. Automation and Modular Architecture
 - **Dotfiles Repo**: Centralized configuration in `~/termux-dotfiles/` to track settings (`zsh`, `tmux`, `fastfetch`, `termux`).
-- **Modular Installer**: Re-engineered `install.sh` as a dispatcher that detects the environment (Termux vs. standard Linux) and delegates to OS-specific scripts (`install-termux.sh` or `install-linux.sh`).
-- **Robust Deployment**: Enhanced the `deploy` function to use absolute paths and aggressive cleaning, ensuring symlinks are reliable across different directory structures.
+- **Termux-Only Installer**: `install.sh` is optimized for Termux deployment using `pkg` for package management.
+- **Robust Deployment**: Enhanced the `deploy` function to use absolute paths and aggressive cleaning, ensuring reliable installation.
 - **Git Sync**: Integrated `gh` (GitHub CLI) for secure, passwordless authentication and remote repository management.
 
 ## 6. Dynamic Identity

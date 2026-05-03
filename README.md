@@ -1,6 +1,6 @@
-# Termux & Linux Dotfiles
+# Termux Dotfiles
 
-A collection of configuration files to set up a modern and functional terminal environment on Termux and Linux. This setup focuses on providing a clean interface with useful productivity tools.
+A collection of configuration files to set up a modern and functional terminal environment on Termux (Android). This setup focuses on providing a clean interface with useful productivity tools.
 
 ## Preview
 ![Main Terminal](Screenshot_2026-04-25-20-50-34-473-edit_com.termux.jpg)
@@ -36,7 +36,7 @@ This repository is designed for safe and flexible development:
 - **Dynamic Dashboard**: A dedicated second status row appears automatically when playing music, featuring a pip-style progress bar, live track timer, and Tokyo Night themed segments.
 - **Optimized Performance**: Status bar metrics are cached in the background to ensure terminal responsiveness.
 - **Custom Greeting**: The `cls` (or `clear`) command provides a clean screen along with a personalized greeting and system overview.
-- **Cross-Platform**: A unified installer supports both Termux and standard Linux distributions (Debian/Ubuntu).
+- **Termux-Optimized**: Installer and packages are specifically configured for Termux (ARM/Android) environment.
 
 ## Commands and Aliases
 
@@ -136,7 +136,9 @@ bash debug-install.sh
 ```
 
 ## Recent Updates
-- **Modular Installer**: Separate scripts for Termux and Linux for better maintenance.
+- **Termux-Only Installer**: Optimized for Termux deployment (Linux temporarily removed).
+- **Music Player QoL**: Added auto-search, history, replay, seek controls, and fzf integration.
+- **Watch Display**: Tokyo Night themed real-time music progress bar with colored UI.
 - **Performance Fixes**: Asynchronous caching for system metrics in Tmux.
 - **Unified Identity**: Improved synchronization for the `setname` system.
 - **Startup Speed**: Optimized Zsh initialization using interactive shell guards.

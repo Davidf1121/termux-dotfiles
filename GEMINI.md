@@ -4,8 +4,8 @@ This document takes absolute precedence over general workflows. It defines the a
 
 ## 1. Core Philosophy
 - **Aesthetic Performance**: Every tool must be "fancy" (Tokyo Night theme, icons, Powerline symbols) without sacrificing Termux responsiveness.
-- **Modular Deployment**: Configuration must be decoupled from installation logic. Installers (`install-*.sh`) handle environment detection and symlinking; the `config/` directory holds the logic.
-- **Portability**: Maintain compatibility between Termux (ARM/Android) and Linux (x86/Debian).
+- **Modular Deployment**: Configuration must be decoupled from installation logic. Installers handle environment detection and deployment; the `config/` directory holds the logic.
+- **Termux-First**: All configurations are optimized for Termux (ARM/Android). Linux support has been temporarily removed pending full port testing.
 
 ## 2. Technical Standards
 
@@ -30,9 +30,17 @@ This document takes absolute precedence over general workflows. It defines the a
 ### Music Player
 - **App**: Custom Python at `bin/music.py` with mpv IPC socket.
 - **No pip deps**: Just mpv + socat + ffprobe + yt-dlp.
-- **Search**: `m search <query>` for YouTube search.
+- **Core commands**: `m <url|file>` (play), `m search <query>`, `m pause`, `m stop`, `m info`, `m watch`
+- **QoL features**:
+  - `m <query>` - Auto-search and play first result
+  - `m history` - Show playback history
+  - `m replay [index]` - Replay from history (last if no index)
+  - `m seek <seconds>` - Seek forward/backward
+  - `m forward/backward` - Quick seek ±10s
+  - `m search` - Interactive selection with fzf (if available)
 - **Audio**: PulseAudio (auto-started on play).
 - **Cache**: Write to `~/.cache/music_current` for tmux.
+- **History**: Auto-recorded to `~/.cache/music_history` on each play.
 
 ## 3. Deployment Protocol
 
@@ -49,9 +57,9 @@ This document takes absolute precedence over general workflows. It defines the a
 - **Logo Resolution**: Fastfetch configs must use a `~` placeholder for logo paths. The installer is responsible for using `sed` to replace this with the actual `$HOME` path during deployment.
 
 ## 4. Maintenance & Evolution
-- **Package Management**: Use `pkg` for Termux and `apt` for Linux. Always check for tool existence before aliasing.
+- **Package Management**: Use `pkg` for Termux. Always check for tool existence before aliasing.
 - **Version Control**: Use conventional commits (`feat:`, `fix:`, `docs:`). Local commits are the default; **NEVER** push to the remote repository unless explicitly commanded by the user.
-- **Environment Detection**: Always use the dispatcher pattern (`install.sh`) to detect the OS before running sub-installers.
+- **Termux-Only**: The installer (`install.sh`) is Termux-only. Linux support has been temporarily removed.
 
 ---
 *This document is a living mandate. When adding features, update this file to reflect new architectural decisions.*

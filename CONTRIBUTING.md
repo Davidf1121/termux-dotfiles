@@ -3,8 +3,7 @@
 This document outlines the structure and logic of the environment to help maintain consistency during updates or feature additions.
 
 ## Project Structure
-- `install.sh`: The dispatcher script. It detects the OS (Termux vs. Linux) and delegates to the appropriate sub-installer.
-- `install-termux.sh` / `install-linux.sh`: Core installation logic. Uses a `deploy` function that **copies** files by default for safety.
+- `install.sh`: Termux-only installer script. Uses a `deploy` function that **copies** files by default for safety.
 - `symlink.sh`: A development script for creating selective symlinks between the repo and the system.
 - `sync.sh`: A manual utility to sync local configuration changes back to the repository.
 - `zsh/.zshrc`: The heart of the shell environment. Handles identity, aliases, and tool initializations.
@@ -38,9 +37,16 @@ To ensure stability and compatibility with Powerlevel10k's instant prompt:
 
 ### Music Player
 - Custom Python app at `bin/music.py` with mpv IPC socket.
-- Uses `~/.cache/music_current` for tmux display.
+- Uses `~/.cache/music_current` for tmux display and `~/.cache/music_history` for history tracking.
 - Audio via PulseAudio (auto-started).
-- Commands: `m` (play), `m search <query>`, `m pause`, `m stop`, `m info`.
+- **Core commands**: `m <url|file>` (play), `m search <query>`, `m pause`, `m stop`, `m info`, `m watch`
+- **QoL features**:
+  - `m <query>` - Auto-search and play first result
+  - `m history` - Show playback history
+  - `m replay [index]` - Replay from history (last if no index)
+  - `m seek <seconds>` - Seek forward/backward
+  - `m forward/backward` - Quick seek ±10s
+  - `m search` - Interactive selection with fzf (if available)
 
 ## Workflow for Changes
 1. **Hybrid Sync**: Use `symlink.sh` for live development (linking repo to system) and `sync.sh` to back up local changes into the repository.
