@@ -186,6 +186,12 @@ def watch():
     """Watch and display music info in real-time."""
     socket_path = os.path.expanduser("~/.cache/mpv_socket")
     
+    # Tokyo Night colors
+    C_YELLOW = "\033[38;5;220m"  # yellow
+    C_BLUE = "\033[38;5;68m"    # blue  
+    C_GREEN = "\033[38;5;82m"   # green
+    C_RESET = "\033[0m"
+    
     if not os.path.exists(socket_path):
         print("No music playing")
         return
@@ -196,7 +202,7 @@ def watch():
         with open(CACHE_FILE) as f:
             title = f.read().strip()
     
-    print("Watching... Ctrl+C to exit")
+    print(f"{C_YELLOW}󰊄 Watching... Ctrl+C to exit{C_RESET}")
     print("")
     
     while True:
@@ -231,7 +237,7 @@ def watch():
                     capture_output=True, timeout=2
                 )
                 d = json.loads(result.stdout.decode().strip())
-                if d.get('data'): title = str(d.get('data'))[:40]
+                if d.get('data'): title = str(d.get('data'))[:35]
             except: pass
             
             if not title: break
@@ -240,22 +246,31 @@ def watch():
             p_min, p_sec = int(pos//60), int(pos%60)
             d_min, d_sec = int(dur//60), int(dur%60)
             
-            # Progress bar
-            bar_size = 40
+            # Progress bar with segments
+            bar_size = 35
             filled = int(pos * bar_size / dur) if dur > 0 else 0
             filled = min(filled, bar_size)
-            bar = "━"*filled + "─"*(bar_size-filled)
-            if filled < bar_size: bar = bar[:filled] + "╸" + bar[filled+1:]
             
-            status = ">" if not paused else "||"
+            bar_filled = "━" * filled
+            bar_empty = "─" * (bar_size - filled)
+            bar = bar_filled + bar_empty
+            if filled < bar_size and filled > 0: bar = bar[:filled] + "╸" + bar[filled+1:]
             
-            print(f"\r{status} {title:40} |{bar}| {p_min:02d}:{p_sec:02d}/{d_min:02d}:{d_sec:02d}   ", end='', flush=True)
+            # Icons
+            icon = "󰝚" if not paused else "󰐎"
+            
+            # Output with colors
+            line = f"{C_YELLOW}{icon}{C_RESET} {C_BLUE}{title}{C_RESET} "
+            line += f"{C_YELLOW}|{C_RESET}{C_YELLOW}{bar}{C_RESET} "
+            line += f"{C_GREEN}{p_min:02d}:{p_sec:02d}{C_RESET}/{d_min:02d}:{d_sec:02d}"
+            
+            print(f"\r{line}   ", end='', flush=True)
             time.sleep(1)
             
         except KeyboardInterrupt: break
         except: break
     
-    print("\nStopped")
+    print(f"\n{C_YELLOW}Stopped{C_RESET}")
 
 def search(query):
     """Search for music and let user select."""
