@@ -67,7 +67,7 @@ This repository is designed for safe and flexible development:
 
 Custom standalone music player (`bin/music.py`) - just mpv, no pip deps:
 
-- Backend: `mpv` with IPC socket at `/tmp/mpvsocket`
+- Backend: `mpv` with IPC socket at `~/.cache/mpv_socket`
 - Audio: PulseAudio
 - Cache: `~/.cache/music_current` for tmux display
 - Sources: Local files, folders, URLs (YouTube, direct)
@@ -84,6 +84,7 @@ Usage:
 m https://youtu.be/...   # Play YouTube
 m /sdcard/Music        # Play folder
 m song.mp3            # Play file
+m search <query>      # Search YouTube and select
 m pause               # Toggle pause
 m stop                # Stop
 m info                # Show track

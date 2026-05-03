@@ -29,7 +29,8 @@ This document takes absolute precedence over general workflows. It defines the a
 
 ### Music Player
 - **App**: Custom Python at `bin/music.py` with mpv IPC socket.
-- **No pip deps**: Just mpv + socat + ffprobe.
+- **No pip deps**: Just mpv + socat + ffprobe + yt-dlp.
+- **Search**: `m search <query>` for YouTube search.
 - **Audio**: PulseAudio (auto-started on play).
 - **Cache**: Write to `~/.cache/music_current` for tmux.
 

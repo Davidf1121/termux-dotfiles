@@ -50,7 +50,7 @@ bash debug-install.sh      # prints system info then runs install.sh --verbose
 
 ## Music Player (Custom Python)
 - **App**: `bin/music.py` - Custom Python + mpv IPC socket, standalone (no pip deps)
-- **Commands**: `m <url|file>` (play), `m pause`, `m stop`, `m info`
+- **Commands**: `m <url|file>` (play), `m search <query>`, `m pause`, `m stop`, `m info`
 - **Shortcuts**: `p` (play), `minfo`
 - **Config**: `config/mpv/mpv.conf` — music profile with IPC at `$HOME/.cache/mpv_socket`
 - **Audio**: PulseAudio (auto-started)

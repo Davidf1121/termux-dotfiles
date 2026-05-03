@@ -40,7 +40,7 @@ To ensure stability and compatibility with Powerlevel10k's instant prompt:
 - Custom Python app at `bin/music.py` with mpv IPC socket.
 - Uses `~/.cache/music_current` for tmux display.
 - Audio via PulseAudio (auto-started).
-- Commands: `m` (play), `m pause`, `m stop`, `m info`.
+- Commands: `m` (play), `m search <query>`, `m pause`, `m stop`, `m info`.
 
 ## Workflow for Changes
 1. **Hybrid Sync**: Use `symlink.sh` for live development (linking repo to system) and `sync.sh` to back up local changes into the repository.
