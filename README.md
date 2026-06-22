@@ -16,7 +16,7 @@ A collection of configuration files to set up a modern and functional terminal e
 - **Tools**: Includes `eza` for directory listings, `bat` for file viewing, and `zoxide` for navigation.
 
 ## Key Features
-- **Minecraft-style Completion**: Real-time ghost-text suggestions and fuzzy-searchable tab completion.
+- **Ghost syntax**: a real time suggestion command(currently broken)
     - Press **Tab** to open the interactive menu.
     - Press **Right Arrow** or **End** to accept ghost-text suggestions.
 - **Modern History**: Interactive shell history with `atuin` (press `Ctrl-r`).
